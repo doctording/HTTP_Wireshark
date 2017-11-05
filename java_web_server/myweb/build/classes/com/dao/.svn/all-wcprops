@@ -1,0 +1,371 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/jiamu_hn/!svn/ver/258/trunk/project/jiamu_hn/src/jdbc
+END
+Table_Month_target.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/jiamu_hn/!svn/ver/187/trunk/project/jiamu_hn/src/jdbc/Table_Month_target.java
+END
+Table_Lashou.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Lashou.java
+END
+Table_Door_y.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/jiamu_hn/!svn/ver/26/trunk/project/jiamu_hn/src/jdbc/Table_Door_y.java
+END
+Table_HeTongFanBen.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/jiamu_hn/!svn/ver/99/trunk/project/jiamu_hn/src/jdbc/Table_HeTongFanBen.java
+END
+Table_Diaohua.class
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Diaohua.class
+END
+Table_Con_pro.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/jiamu_hn/!svn/ver/258/trunk/project/jiamu_hn/src/jdbc/Table_Con_pro.java
+END
+Table_Paint.class
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Paint.class
+END
+Table_Pro_addition.class
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Pro_addition.class
+END
+Table_Contract.class
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Contract.class
+END
+Table_Work_order.class
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Work_order.class
+END
+Table_Order_contract.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/jiamu_hn/!svn/ver/253/trunk/project/jiamu_hn/src/jdbc/Table_Order_contract.java
+END
+Table_Message.class
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Message.class
+END
+Table_Wood.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/jiamu_hn/!svn/ver/23/trunk/project/jiamu_hn/src/jdbc/Table_Wood.java
+END
+Table_Boli.class
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Boli.class
+END
+Table_Paint.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/jiamu_hn/!svn/ver/23/trunk/project/jiamu_hn/src/jdbc/Table_Paint.java
+END
+Table_Pro_addition.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Pro_addition.java
+END
+Table_Contract.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/254/trunk/project/jiamu_hn/src/jdbc/Table_Contract.java
+END
+Table_Work_order.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/jiamu_hn/!svn/ver/186/trunk/project/jiamu_hn/src/jdbc/Table_Work_order.java
+END
+Table_Month_worker.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/jiamu_hn/!svn/ver/243/trunk/project/jiamu_hn/src/jdbc/Table_Month_worker.java
+END
+Table_Construction_re.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/jiamu_hn/!svn/ver/31/trunk/project/jiamu_hn/src/jdbc/Table_Construction_re.java
+END
+Table_Product.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/jiamu_hn/!svn/ver/23/trunk/project/jiamu_hn/src/jdbc/Table_Product.java
+END
+Table_Huagui.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Huagui.java
+END
+Table_Pro_name_detail.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Pro_name_detail.java
+END
+Table_RevertMess.class
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_RevertMess.class
+END
+Table_Month_sailer.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/jiamu_hn/!svn/ver/243/trunk/project/jiamu_hn/src/jdbc/Table_Month_sailer.java
+END
+Table_Quanxian.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/210/trunk/project/jiamu_hn/src/jdbc/Table_Quanxian.java
+END
+Table_Boli.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Boli.java
+END
+Table_Postinfo.class
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Postinfo.class
+END
+Table_Door_t.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/jiamu_hn/!svn/ver/26/trunk/project/jiamu_hn/src/jdbc/Table_Door_t.java
+END
+Table_Workteam.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/jiamu_hn/!svn/ver/99/trunk/project/jiamu_hn/src/jdbc/Table_Workteam.java
+END
+Table_Order_con_pro.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/jiamu_hn/!svn/ver/253/trunk/project/jiamu_hn/src/jdbc/Table_Order_con_pro.java
+END
+Table_Construction.java
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/jiamu_hn/!svn/ver/234/trunk/project/jiamu_hn/src/jdbc/Table_Construction.java
+END
+Table_Userinfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/190/trunk/project/jiamu_hn/src/jdbc/Table_Userinfo.java
+END
+Table_Month_team.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/jiamu_hn/!svn/ver/243/trunk/project/jiamu_hn/src/jdbc/Table_Month_team.java
+END
+Table_Factory_workers_add.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/jiamu_hn/!svn/ver/243/trunk/project/jiamu_hn/src/jdbc/Table_Factory_workers_add.java
+END
+Table_Order_contract.class
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Order_contract.class
+END
+Table_Store.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/jiamu_hn/!svn/ver/46/trunk/project/jiamu_hn/src/jdbc/Table_Store.java
+END
+Table_Wood.class
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Wood.class
+END
+Table_RevertMess.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_RevertMess.java
+END
+Table_Style.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/jiamu_hn/!svn/ver/23/trunk/project/jiamu_hn/src/jdbc/Table_Style.java
+END
+Table_work_team_add.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/jiamu_hn/!svn/ver/186/trunk/project/jiamu_hn/src/jdbc/Table_work_team_add.java
+END
+DataBaseConnection.class
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/DataBaseConnection.class
+END
+Table_Postinfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Postinfo.java
+END
+Table_Price_addition.class
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Price_addition.class
+END
+Table_Peijian.class
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Peijian.class
+END
+Table_Product.class
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Product.class
+END
+Table_Huagui.class
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Huagui.class
+END
+Table_Bear.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/jiamu_hn/!svn/ver/165/trunk/project/jiamu_hn/src/jdbc/Table_Bear.java
+END
+Table_Diaohua.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Diaohua.java
+END
+Table_sales_design_system_add.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/jiamu_hn/!svn/ver/243/trunk/project/jiamu_hn/src/jdbc/Table_sales_design_system_add.java
+END
+DataBaseConnection.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/DataBaseConnection.java
+END
+Table_Price_addition.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/jiamu_hn/!svn/ver/186/trunk/project/jiamu_hn/src/jdbc/Table_Price_addition.java
+END
+Table_Order_con_pro.class
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Order_con_pro.class
+END
+Table_Userinfo.class
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Userinfo.class
+END
+Table_Lashou.class
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Lashou.class
+END
+Table_Peijian.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/jiamu_hn/!svn/ver/9/trunk/project/jiamu_hn/src/jdbc/Table_Peijian.java
+END
+Table_TiCheng.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/jiamu_hn/!svn/ver/186/trunk/project/jiamu_hn/src/jdbc/Table_TiCheng.java
+END
+Table_Kaoqin.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/jiamu_hn/!svn/ver/170/trunk/project/jiamu_hn/src/jdbc/Table_Kaoqin.java
+END
+Table_Con_pro.class
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Con_pro.class
+END
+Table_Message.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/jiamu_hn/!svn/ver/133/trunk/project/jiamu_hn/src/jdbc/Table_Message.java
+END
+Table_Style.class
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/jiamu_hn/!svn/ver/154/trunk/project/jiamu_hn/src/jdbc/Table_Style.class
+END

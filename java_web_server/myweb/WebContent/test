@@ -1,0 +1,5 @@
+ <form action="<%=basePath%>/servlet/LoginServlet" method="post">
+   	ÕËºÅ£º<input class="login" id="userID" name="userID" ></br>
+   	ÃÜÂë£º<input class="login" id="pass" name="password" type="password"></br>
+   	<button type="submit">µÇÂ¼</button>
+   </form>

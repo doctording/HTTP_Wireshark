@@ -1,0 +1,94 @@
+package Table_bean;
+
+public class RevertMessage {
+
+	private int revertID;
+
+	private int messageID;
+
+	private String content;
+
+	private String writer;
+
+	private String writeDate;
+
+	public RevertMessage(){
+		super();
+	}
+	
+	/**
+	 * @return content
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * @return messageID
+	 */
+	public int getMessageID() {
+		return messageID;
+	}
+
+	/**
+	 * @return revertID
+	 */
+	public int getRevertID() {
+		return revertID;
+	}
+
+	/**
+	 * @return writeDate
+	 */
+	public String getWriteDate() {
+		return writeDate;
+	}
+
+	/**
+	 * @return writer
+	 */
+	public String getWriter() {
+		return writer;
+	}
+
+	/**
+	 * @param content
+	 *            要设置的 content
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	/**
+	 * @param messageID
+	 *            要设置的 messageID
+	 */
+	public void setMessageID(int messageID) {
+		this.messageID = messageID;
+	}
+
+	/**
+	 * @param revertID
+	 *            要设置的 revertID
+	 */
+	public void setRevertID(int revertID) {
+		this.revertID = revertID;
+	}
+
+	/**
+	 * @param writeDate
+	 *            要设置的 writeDate
+	 */
+	public void setWriteDate(String writeDate) {
+		this.writeDate = writeDate;
+	}
+
+	/**
+	 * @param writer
+	 *            要设置的 writer
+	 */
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+
+}

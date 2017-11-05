@@ -1,0 +1,784 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Peijian {
+	
+	public Table_Peijian()
+	{
+		super();
+	}
+	
+	//添加配件种类   peijian_sign字段为1
+	public int insertPeijian(String peijian_name,String item_1,String unit_1,float price_1,float cost_1,float wujin_1,String item_2,String unit_2,float price_2,float cost_2,float wujin_2,String item_3,String unit_3,float price_3,float cost_3,float wujin_3,int peijian_sign)throws Exception  {
+		//注意：要先判断该配件名是否已经存在
+		String sql = "INSERT INTO peijian(peijian_name,item_1,unit_1,price_1,cost_1,wujin_1,item_2,unit_2,price_2,cost_2,wujin_2,item_3,unit_3,cost_3,price_3,wujin_3,peijian_sign) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, peijian_name);
+		pstmt.setString(2, item_1);
+		pstmt.setString(3, unit_1);
+		pstmt.setFloat(4, price_1);
+		pstmt.setFloat(5, cost_1);
+		pstmt.setFloat(6, wujin_1);
+		
+		pstmt.setString(7, item_2);
+		pstmt.setString(8, unit_2);
+		pstmt.setFloat(9, price_2);
+		pstmt.setFloat(10, cost_2);
+		pstmt.setFloat(11, wujin_2);
+		
+		pstmt.setString(12, item_3);
+		pstmt.setString(13, unit_3);
+		pstmt.setFloat(14,  cost_3);
+		pstmt.setFloat(15,price_3);
+		pstmt.setFloat(16, wujin_3);
+		pstmt.setInt(17, peijian_sign);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有柜门安装件信息peijian_sign字段为1
+	public ArrayList findTotalAnzhuang(String pageNo)throws Exception 
+	{
+		ArrayList peijianlist = new ArrayList();
+		String sql = "SELECT * FROM peijian WHERE peijian_sign='1' order by(peijianID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpPeijianID=rs.getInt(1);
+				
+				String tmpPeijian_name=rs.getString(2);
+				// 进行编码转换
+				tmpPeijian_name=new String(tmpPeijian_name.getBytes("GBK"));
+				
+				String tmpItem_1=rs.getString(3);
+				// 进行编码转换
+				tmpItem_1=new String(tmpItem_1.getBytes("GBK"));
+				String tmpUnit_1=rs.getString(4);
+				// 进行编码转换
+				tmpUnit_1=new String(tmpUnit_1.getBytes("GBK"));
+				float tmpPrice_1=rs.getFloat(5);
+				float tmpCost_1=rs.getFloat(6);
+				float tmpWujin_1=rs.getFloat(7);
+				String tmpItem_2=rs.getString(8);
+				// 进行编码转换
+				tmpItem_2=new String(tmpItem_2.getBytes("GBK"));
+				String tmpUnit_2=rs.getString(9);
+				// 进行编码转换
+				tmpUnit_2=new String(tmpUnit_2.getBytes("GBK"));
+				float tmpPrice_2=rs.getFloat(10);
+				float tmpCost_2=rs.getFloat(11);
+				float tmpWujin_2=rs.getFloat(12);
+				String tmpItem_3=rs.getString(13);
+				// 进行编码转换
+				tmpItem_3=new String(tmpItem_3.getBytes("GBK"));
+				String tmpUnit_3=rs.getString(14);
+				// 进行编码转换
+				tmpUnit_3=new String(tmpUnit_3.getBytes("GBK"));
+				float tmpCost_3=rs.getFloat(15);
+				float tmpPrice_3=rs.getFloat(16);
+				float tmpWujin_3=rs.getFloat(17);
+				int tmpPeijian_sign=rs.getInt(18);
+				
+			
+			
+				PeijianBean peijian = new PeijianBean();
+				peijian.setPeijianID(tmpPeijianID);
+				peijian.setPeijian_name(tmpPeijian_name);
+				peijian.setItem_1(tmpItem_1);
+				peijian.setUnit_1(tmpUnit_1);
+				peijian.setPrice_1(tmpPrice_1);
+				peijian.setCost_1(tmpCost_1);
+				peijian.setWujin_1(tmpWujin_1);
+				
+				peijian.setItem_2(tmpItem_2);
+				peijian.setUnit_2(tmpUnit_2);
+				peijian.setPrice_2(tmpPrice_2);
+				peijian.setCost_2(tmpCost_2);
+				peijian.setWujin_2(tmpWujin_2);
+				
+				peijian.setItem_3(tmpItem_3);
+				peijian.setUnit_3(tmpUnit_3);
+				peijian.setCost_3(tmpCost_3);
+				peijian.setPrice_3(tmpPrice_3);
+				peijian.setWujin_3(tmpWujin_3);
+
+				peijian.setPeijian_sign(tmpPeijian_sign);
+				// 把对象添加到集合中
+				peijianlist.add(peijian);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return peijianlist;
+	}	
+	
+	//获取所有推拉门配件信息peijian_sign字段为2
+	public ArrayList findTotalPeijian(String pageNo)throws Exception 
+	{
+		ArrayList peijianlist = new ArrayList();
+		String sql = "SELECT * FROM peijian WHERE peijian_sign='2' order by(peijianID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpPeijianID=rs.getInt(1);
+				
+				String tmpPeijian_name=rs.getString(2);
+				// 进行编码转换
+				tmpPeijian_name=new String(tmpPeijian_name.getBytes("GBK"));
+				
+				String tmpItem_1=rs.getString(3);
+				// 进行编码转换
+				tmpItem_1=new String(tmpItem_1.getBytes("GBK"));
+				String tmpUnit_1=rs.getString(4);
+				// 进行编码转换
+				tmpUnit_1=new String(tmpUnit_1.getBytes("GBK"));
+				float tmpPrice_1=rs.getFloat(5);
+				float tmpCost_1=rs.getFloat(6);
+				float tmpWujin_1=rs.getFloat(7);
+				String tmpItem_2=rs.getString(8);
+				// 进行编码转换
+				tmpItem_2=new String(tmpItem_2.getBytes("GBK"));
+				String tmpUnit_2=rs.getString(9);
+				// 进行编码转换
+				tmpUnit_2=new String(tmpUnit_2.getBytes("GBK"));
+				float tmpPrice_2=rs.getFloat(10);
+				float tmpCost_2=rs.getFloat(11);
+				float tmpWujin_2=rs.getFloat(12);
+				String tmpItem_3=rs.getString(13);
+				// 进行编码转换
+				tmpItem_3=new String(tmpItem_3.getBytes("GBK"));
+				String tmpUnit_3=rs.getString(14);
+				// 进行编码转换
+				tmpUnit_3=new String(tmpUnit_3.getBytes("GBK"));
+				float tmpPrice_3=rs.getFloat(15);
+				float tmpCost_3=rs.getFloat(16);
+				float tmpWujin_3=rs.getFloat(17);
+				int tmpPeijian_sign=rs.getInt(18);
+				
+			
+			
+				PeijianBean peijian = new PeijianBean();
+				peijian.setPeijianID(tmpPeijianID);
+				peijian.setPeijian_name(tmpPeijian_name);
+				peijian.setItem_1(tmpItem_1);
+				peijian.setUnit_1(tmpUnit_1);
+				peijian.setPrice_1(tmpPrice_1);
+				peijian.setCost_1(tmpCost_1);
+				peijian.setWujin_1(tmpWujin_1);
+				peijian.setItem_2(tmpItem_2);
+				peijian.setUnit_2(tmpUnit_2);
+				peijian.setPrice_2(tmpPrice_2);
+				peijian.setCost_2(tmpCost_2);
+				peijian.setWujin_2(tmpWujin_2);
+				peijian.setItem_3(tmpItem_3);
+				peijian.setUnit_3(tmpUnit_3);
+				peijian.setPrice_3(tmpPrice_3);
+				peijian.setCost_3(tmpCost_3);
+				peijian.setWujin_3(tmpWujin_3);
+				peijian.setPeijian_sign(tmpPeijian_sign);
+
+				// 把对象添加到集合中
+				peijianlist.add(peijian);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return peijianlist;
+	}	
+	
+	public boolean hasExist(String peijian_name,int peijian_sign) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from peijian where peijian_name='");
+	sql1.append(peijian_name);
+	sql1.append("' AND peijian_sign='");
+	sql1.append(peijian_sign);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	//获取柜门安装件或者推拉门配件(柜门安装件peijian_sign字段=1;推拉门配件peijian_sign字段=2)
+	public PeijianBean selectPeijianBySign(int peijian_sign) throws Exception  {
+		
+		PeijianBean peijian = new PeijianBean();
+		String sql = new String();
+		sql="select * from peijian where peijian_sign='"+peijian_sign+"' ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				peijian.setPeijianID(rs.getInt("peijianID"));
+				peijian.setPeijian_name(rs.getString("peijian_name"));
+				peijian.setItem_1(rs.getString("item_1"));
+				peijian.setUnit_1(rs.getString("unit_1"));
+				peijian.setPrice_1(rs.getFloat("price_1"));
+				peijian.setCost_1(rs.getFloat("cost_1"));
+				peijian.setWujin_1(rs.getFloat("wujin_1"));
+				peijian.setItem_2(rs.getString("item_2"));
+				peijian.setUnit_2(rs.getString("unit_2"));
+				peijian.setPrice_2(rs.getFloat("price_2"));
+				peijian.setCost_2(rs.getFloat("cost_2"));
+				peijian.setWujin_2(rs.getFloat("wujin_2"));
+				peijian.setItem_3(rs.getString("item_3"));
+				peijian.setUnit_3(rs.getString("unit_3"));
+				peijian.setPrice_3(rs.getFloat("price_3"));
+				peijian.setCost_3(rs.getFloat("cost_3"));
+				peijian.setWujin_3(rs.getFloat("wujin_3"));
+				peijian.setPeijian_sign(rs.getInt("peijian_sign"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return peijian;	
+	}
+
+	//修改与更新配件数据表数据(配件名不允许修改)
+	public int UpdatePeijian(String peijian_name,String item_1,String unit_1,float price_1,float cost_1,float hardware_1,String item_2,String unit_2,float price_2,float cost_2,float hardware_2,String item_3,String unit_3,float price_3,float cost_3,float hardware_3,int peijian_sign)throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("UPDATE peijian SET item_1='");
+		sql1.append(item_1);
+		sql1.append("'AND unit_1='");
+		sql1.append(unit_1);
+		sql1.append("'AND price_1='");
+		sql1.append(price_1);
+		sql1.append("'AND cost_1='");
+		sql1.append(cost_1);
+		sql1.append("'AND wujin_1='");
+		sql1.append(hardware_1);
+		sql1.append("'AND item_2='");
+		sql1.append(item_2);
+		sql1.append("'AND unit_2='");
+		sql1.append(unit_2);
+		sql1.append("'AND price_2='");
+		sql1.append(price_2);
+		sql1.append("'AND cost_2='");
+		sql1.append(cost_2);
+		sql1.append("'AND wujin_2='");
+		sql1.append(hardware_2);
+		sql1.append("'AND item_3='");
+		sql1.append(item_3);
+		sql1.append("'AND unit_3='");
+		sql1.append(unit_3);
+		sql1.append("'AND price_3='");
+		sql1.append(price_3);
+		sql1.append("'AND cost_3='");
+		sql1.append(cost_3);
+		sql1.append("'AND wujin_3='");
+		sql1.append(hardware_3);
+		sql1.append("'WHERE peijian_name='");
+		sql1.append(peijian_name);
+		sql1.append("'AND peijian_sign='");
+		sql1.append(peijian_sign);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+public PeijianBean selectPeijianName(String peijian_name) throws Exception  {
+		
+		PeijianBean peijian = new PeijianBean();
+		String sql = new String();
+		sql="select * from peijian where peijian_name='"+peijian_name+"' ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				peijian.setPeijianID(rs.getInt("peijianID"));
+				peijian.setPeijian_name(rs.getString("peijian_name"));
+				peijian.setItem_1(rs.getString("item_1"));
+				peijian.setUnit_1(rs.getString("unit_1"));
+				peijian.setPrice_1(rs.getFloat("price_1"));
+				peijian.setCost_1(rs.getFloat("cost_1"));
+				peijian.setWujin_1(rs.getFloat("wujin_1"));
+				peijian.setItem_2(rs.getString("item_2"));
+				peijian.setUnit_2(rs.getString("unit_2"));
+				peijian.setPrice_2(rs.getFloat("price_2"));
+				peijian.setCost_2(rs.getFloat("cost_2"));
+				peijian.setWujin_2(rs.getFloat("wujin_2"));
+				peijian.setItem_3(rs.getString("item_3"));
+				peijian.setUnit_3(rs.getString("unit_3"));
+				peijian.setPrice_3(rs.getFloat("price_3"));
+				peijian.setCost_3(rs.getFloat("cost_3"));
+				peijian.setWujin_3(rs.getFloat("wujin_3"));
+				peijian.setPeijian_sign(rs.getInt("peijian_sign"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return peijian;	
+	}
+public ArrayList findTotalPeijian1(String pageNo)throws Exception 
+{
+	ArrayList peijianlist = new ArrayList();
+	String sql = "SELECT * FROM peijian order by(peijianID)" ;
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;
+	
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 循环计数器
+		int index = 0;
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+			// 循环到第index条
+			index++;
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+			// 获取结果集中的信息
+			int tmpPeijianID=rs.getInt(1);
+			
+			String tmpPeijian_name=rs.getString(2);
+			// 进行编码转换
+			tmpPeijian_name=new String(tmpPeijian_name.getBytes("GBK"));
+			
+			String tmpItem_1=rs.getString(3);
+			// 进行编码转换
+			tmpItem_1=new String(tmpItem_1.getBytes("GBK"));
+			String tmpUnit_1=rs.getString(4);
+			// 进行编码转换
+			tmpUnit_1=new String(tmpUnit_1.getBytes("GBK"));
+			float tmpPrice_1=rs.getFloat(5);
+			float tmpCost_1=rs.getFloat(6);
+			float tnpWujin_1=rs.getFloat(7);
+			
+			String tmpItem_2=rs.getString(8);
+			// 进行编码转换
+			tmpItem_2=new String(tmpItem_2.getBytes("GBK"));
+			String tmpUnit_2=rs.getString(9);
+			// 进行编码转换
+			tmpUnit_2=new String(tmpUnit_2.getBytes("GBK"));
+			float tmpPrice_2=rs.getFloat(10);
+			float tmpCost_2=rs.getFloat(11);
+			float tnpWujin_2=rs.getFloat(12);
+			
+			String tmpItem_3=rs.getString(13);
+			// 进行编码转换
+			tmpItem_3=new String(tmpItem_3.getBytes("GBK"));
+			String tmpUnit_3=rs.getString(14);
+			// 进行编码转换
+			tmpUnit_3=new String(tmpUnit_3.getBytes("GBK"));
+			float tmpPrice_3=rs.getFloat(15);
+			float tmpCost_3=rs.getFloat(16);
+			float tnpWujin_3=rs.getFloat(17);
+			
+			int tmpPeijian_sign=rs.getInt(18);
+			
+		
+		
+			PeijianBean peijian = new PeijianBean();
+			peijian.setPeijianID(tmpPeijianID);
+			peijian.setPeijian_name(tmpPeijian_name);
+			peijian.setItem_1(tmpItem_1);
+			peijian.setUnit_1(tmpUnit_1);
+			peijian.setPrice_1(tmpPrice_1);
+			peijian.setCost_1(tmpCost_1);
+			peijian.setWujin_1(tnpWujin_1);
+			peijian.setItem_2(tmpItem_2);
+			peijian.setUnit_2(tmpUnit_2);
+			peijian.setPrice_2(tmpPrice_2);
+			peijian.setCost_2(tmpCost_2);
+			peijian.setWujin_2(tnpWujin_2);
+			peijian.setItem_3(tmpItem_3);
+			peijian.setUnit_3(tmpUnit_3);
+			peijian.setPrice_3(tmpPrice_3);
+			peijian.setCost_3(tmpCost_3);
+			peijian.setWujin_3(tnpWujin_3);
+			peijian.setPeijian_sign(tmpPeijian_sign);
+
+			// 把对象添加到集合中
+			peijianlist.add(peijian);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return peijianlist;
+}	
+	
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM peijian ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	public int DeletePeijian(String peijian_name,int peijian_sign)throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from peijian where peijian_name='");
+		sql1.append(peijian_name);
+		sql1.append("'AND peijian_sign='");
+		sql1.append(peijian_sign);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	//通过id来长爪bean
+	public PeijianBean selectPeijianByID(int peijianID) throws Exception  {
+			
+			PeijianBean peijian = new PeijianBean();
+			String sql = new String();
+			sql="select * from peijian where peijianID='"+peijianID+"' ";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			ResultSet rs=null;
+			
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs= pstmt.executeQuery();
+				
+				if(rs.next()){
+					peijian.setPeijianID(rs.getInt("peijianID"));
+					peijian.setPeijian_name(rs.getString("peijian_name"));
+					peijian.setItem_1(rs.getString("item_1"));
+					peijian.setUnit_1(rs.getString("unit_1"));
+					peijian.setPrice_1(rs.getFloat("price_1"));
+					peijian.setCost_1(rs.getFloat("cost_1"));
+					peijian.setWujin_1(rs.getFloat("wujin_1"));
+					peijian.setItem_2(rs.getString("item_2"));
+					peijian.setUnit_2(rs.getString("unit_2"));
+					peijian.setPrice_2(rs.getFloat("price_2"));
+					peijian.setCost_2(rs.getFloat("cost_2"));
+					peijian.setWujin_2(rs.getFloat("wujin_2"));
+					peijian.setItem_3(rs.getString("item_3"));
+					peijian.setUnit_3(rs.getString("unit_3"));
+					peijian.setPrice_3(rs.getFloat("price_3"));
+					peijian.setCost_3(rs.getFloat("cost_3"));
+					peijian.setWujin_3(rs.getFloat("wujin_3"));
+					peijian.setPeijian_sign(rs.getInt("peijian_sign"));
+				}
+			}
+			catch (Exception e) {
+					e.printStackTrace();
+				}
+			finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();	
+				}
+	        return peijian;	
+		}
+		
+		
+		
+	//根据id进行更新
+	public int updatepeijian(int peijianID,String peijian_name,String item_1,String unit_1,float price_1,float cost_1,float wujin_1,String item_2,String unit_2,float cost_2,float price_2,float wujin_2,String item_3,String unit_3,float price_3,float wujin_3,float cost_3,int peijian_sign)throws Exception{
+		String sql = "UPDATE  peijian SET peijian_name=?,item_1=?,unit_1=?,price_1=?,cost_1=?,wujin_1=?,item_2=?,unit_2=?,price_2=?,cost_2=?,wujin_2=?,item_3=?,unit_3=?,price_3=?,cost_3=? , wujin_3=?,peijian_sign=?  where peijianID=? ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		try{
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			pstmt.setString(1,peijian_name);
+			pstmt.setString(2, item_1);
+			pstmt.setString(3, unit_1);
+			
+			pstmt.setFloat(4, price_1);
+			pstmt.setFloat(5,cost_1);
+			pstmt.setFloat(6, wujin_1);
+			
+			pstmt.setString(7,item_2);			
+			pstmt.setString(8,unit_2);
+			pstmt.setFloat(9,price_2);
+			pstmt.setFloat(10,cost_2);
+			pstmt.setFloat(11, wujin_2);
+			
+			pstmt.setString(12, item_3);
+			pstmt.setString(13, unit_3);
+			pstmt.setFloat(14, cost_3);
+			pstmt.setFloat(15, price_3);
+			pstmt.setFloat(16, wujin_3);
+			
+			pstmt.setInt(17, peijian_sign);
+			pstmt.setInt(18, peijianID);
+			
+			
+			
+			
+			
+			
+			// 进行数据库插入操作
+		 int count1=pstmt.executeUpdate();
+		 return count1;
+		}
+		catch(Exception e){
+			throw new Exception("出现异常");
+		}
+		finally{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();}
+		}
+
+		
+		//根据id进行删除
+	public int DeletePeijianById(int peijianID)throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from peijian where peijianID='");
+		sql1.append(peijianID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+}

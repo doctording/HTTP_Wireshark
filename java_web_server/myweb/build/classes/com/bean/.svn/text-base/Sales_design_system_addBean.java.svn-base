@@ -1,0 +1,82 @@
+package Table_bean;
+
+public class Sales_design_system_addBean {
+
+	private int id;
+	private String sales_design_system;//销售设计系统 
+	private String name;//姓名
+	private String rank;//职位，取自账户权限
+	private float gongling;//工龄
+	private float basic_wage;//基本工资
+	private float allowance;//补助
+	private float month_holidays;//月规定假期
+	
+	public Sales_design_system_addBean(){
+		super();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getSales_design_system() {
+		return sales_design_system;
+	}
+
+	public void setSales_design_system(String sales_design_system) {
+		this.sales_design_system = sales_design_system;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getRank() {
+		return rank;
+	}
+
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+
+	public float getGongling() {
+		return gongling;
+	}
+
+	public void setGongling(float gongling) {
+		this.gongling = gongling;
+	}
+
+	public float getBasic_wage() {
+		return basic_wage;
+	}
+
+	public void setBasic_wage(float basic_wage) {
+		this.basic_wage = basic_wage;
+	}
+
+	public float getAllowance() {
+		return allowance;
+	}
+
+	public void setAllowance(float allowance) {
+		this.allowance = allowance;
+	}
+
+	public float getMonth_holidays() {
+		return month_holidays;
+	}
+
+	public void setMonth_holidays(float month_holidays) {
+		this.month_holidays = month_holidays;
+	}
+	
+}

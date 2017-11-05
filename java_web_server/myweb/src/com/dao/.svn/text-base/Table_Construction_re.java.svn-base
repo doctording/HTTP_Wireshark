@@ -1,0 +1,611 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Construction_re {
+	
+	public Table_Construction_re()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取油漆个数
+	public int getlastWoodID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM wood order by(woodID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加返修单种类     
+	public int insertConstruction_re(String con_proID,String apply_name,float wood_price,float paint_price,
+			float peijian_price,float yunfei,float gongfei,float guanlifei,float suanliao_bas,
+			float suanliao_add,String suanliao_date,String suanliao_team,String suanliao_pre,
+			float kailiao_bas,float kailiao_add,String kailiao_date,String kailiao_team,
+			String kailiao_pre,float mugong_bas,float mugong_add,String mugong_date,String mugong_team,
+			String mugong_pre,float diqi_bas,float diqi_add,String diqi_date,String diqi_team,
+			String diqi_pre,float penqi_bas,float penqi_add,String penqi_date,String penqi_team,
+			String penqi_pre,float mianqi_bas,float mianqi_add,String mianqi_date,String mianqi_team,
+			String mianqi_pre,float wujin_bas,float wujin_add,String wujin_date,String wujin_team,String wujin_pre,
+			float anzhuang_bas,float anzhuang_add,String anzhuang_date,String anzhuang_team,String anzhuang_pre)throws Exception  {
+		
+		String sql = "INSERT INTO construction_re(con_proID,apply_name,wood_price,paint_price,peijian_price,yunfei,gongfei,guanlifei,suanliao_bas,suanliao_add,suanliao_date,suanliao_team,suanliao_pre,kailiao_bas,kailiao_add,kailiao_date,kailiao_team,kailiao_pre,mugong_bas,mugong_add,mugong_date,mugong_team,mugong_pre,diqi_bas,diqi_add,diqi_date,diqi_team,diqi_pre,penqi_bas,penqi_add,penqi_date,penqi_team,penqi_pre,mianqi_bas,mianqi_add,mianqi_date,mianqi_team,mianqi_pre,wujin_bas,wujin_add,wujin_date,wujin_team,wujin_pre,anzhuang_bas,anzhuang_add,anzhuang_date,anzhuang_team,anzhuang_pre) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, con_proID);
+		pstmt.setString(2, apply_name);
+		pstmt.setFloat(3,wood_price);
+		pstmt.setFloat(4,paint_price);
+		pstmt.setFloat(5,peijian_price);
+		pstmt.setFloat(6,yunfei);
+		pstmt.setFloat(7,gongfei);
+		pstmt.setFloat(8,guanlifei);
+		pstmt.setFloat(9,suanliao_bas);
+		pstmt.setFloat(10,suanliao_add);
+		pstmt.setString(11,suanliao_date);
+		pstmt.setString(12,suanliao_team);
+		pstmt.setString(13,suanliao_pre);
+		pstmt.setFloat(14,kailiao_bas);
+		pstmt.setFloat(15,kailiao_add);
+		pstmt.setString(16,kailiao_date);
+		pstmt.setString(17,kailiao_team);
+		pstmt.setString(18,kailiao_pre);
+		pstmt.setFloat(19,mugong_bas);
+		pstmt.setFloat(20,mugong_add);
+		pstmt.setString(21,mugong_date);
+		pstmt.setString(22,mugong_team);
+		pstmt.setString(23,mugong_pre);
+		pstmt.setFloat(24,diqi_bas);
+		pstmt.setFloat(25,diqi_add);
+		pstmt.setString(26,diqi_date);
+		pstmt.setString(27,diqi_team);
+		pstmt.setString(28,diqi_pre);
+		pstmt.setFloat(29,penqi_bas);
+		pstmt.setFloat(30,penqi_add);
+		pstmt.setString(31,penqi_date);
+		pstmt.setString(32,penqi_team);
+		pstmt.setString(33,penqi_pre);
+		pstmt.setFloat(34,mianqi_bas);
+		pstmt.setFloat(35,mianqi_add);
+		pstmt.setString(36,mianqi_date);
+		pstmt.setString(37,mianqi_team);
+		pstmt.setString(38,mianqi_pre);
+		pstmt.setFloat(39,wujin_bas);
+		pstmt.setFloat(40,wujin_add);
+		pstmt.setString(41,wujin_date);
+		pstmt.setString(42,wujin_team);
+		pstmt.setString(43,wujin_pre);
+		pstmt.setFloat(44,anzhuang_bas);
+		pstmt.setFloat(45,anzhuang_add);
+		pstmt.setString(46,anzhuang_date);
+		pstmt.setString(47,anzhuang_team);
+		pstmt.setString(48,anzhuang_pre);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有信息
+	public ArrayList findTotalConstruction_re(String pageNo)throws Exception 
+	{
+		ArrayList list = new ArrayList();
+		String sql = "SELECT * FROM construction_re order by(con_proID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpWoodID=rs.getInt(1);
+				
+				String tmpWood_name=rs.getString(2);
+				// 进行编码转换
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				Construction_reBean rework = new Construction_reBean();
+				
+				rework.setCon_proID(rs.getString(1));
+				rework.setApply_name(rs.getString(2));
+				rework.setWood_price(rs.getFloat(3));
+				rework.setPaint_price(rs.getFloat(4));
+				rework.setPeijian_price(rs.getFloat(5));
+				rework.setYunfei(rs.getFloat(6));
+				rework.setGongfei(rs.getFloat(7));
+				rework.setGuanlifei(rs.getFloat(8));
+				
+				rework.setSuanliao_bas(rs.getFloat(9));
+				rework.setSuanliao_add(rs.getFloat(10));
+				rework.setSuanliao_date(rs.getString(11));
+				rework.setSuanliao_team(rs.getString(12));
+				rework.setSuanliao_pre(rs.getString(13));
+				
+				rework.setKailiao_bas(rs.getFloat(14));
+				rework.setKailiao_add(rs.getFloat(15));
+				rework.setKailiao_date(rs.getString(16));
+				rework.setKailiao_team(rs.getString(17));
+				rework.setKailiao_pre(rs.getString(18));
+				
+				rework.setMugong_bas(rs.getFloat(19));
+				rework.setMugong_add(rs.getFloat(20));
+				rework.setMugong_date(rs.getString(21));
+				rework.setMugong_team(rs.getString(22));
+				rework.setMugong_pre(rs.getString(23));
+				
+				rework.setDiqi_bas(rs.getFloat(24));
+				rework.setDiqi_add(rs.getFloat(25));
+				rework.setDiqi_date(rs.getString(26));
+				rework.setDiqi_team(rs.getString(27));
+				rework.setDiqi_pre(rs.getString(28));
+				
+				rework.setPenqi_bas(rs.getFloat(29));
+				rework.setPenqi_add(rs.getFloat(30));
+				rework.setPenqi_date(rs.getString(31));
+				rework.setPenqi_team(rs.getString(32));
+				rework.setPenqi_pre(rs.getString(33));
+				
+				rework.setMianqi_bas(rs.getFloat(34));
+				rework.setMianqi_add(rs.getFloat(35));
+				rework.setMianqi_date(rs.getString(36));
+				rework.setMianqi_team(rs.getString(37));
+				rework.setMianqi_pre(rs.getString(38));
+				
+				rework.setWujin_bas(rs.getFloat(39));
+				rework.setWujin_add(rs.getFloat(40));
+				rework.setWujin_date(rs.getString(41));
+				rework.setWujin_team(rs.getString(42));
+				rework.setWujin_pre(rs.getString(43));
+				
+				rework.setAnzhuang_bas(rs.getFloat(44));
+				rework.setSuanliao_add(rs.getFloat(45));
+				rework.setSuanliao_date(rs.getString(46));
+				rework.setSuanliao_team(rs.getString(47));
+				rework.setSuanliao_pre(rs.getString(48));
+
+				// 把对象添加到集合中
+				list.add(rework);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}	
+	
+	
+
+	
+	public Construction_reBean selectConstructionByID(String con_proID) throws Exception  {
+		
+		Construction_reBean rework = new Construction_reBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from construction_re where con_proID='");
+		sql1.append(con_proID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				rework.setCon_proID(rs.getString(1));
+				rework.setApply_name(rs.getString(2));
+				rework.setWood_price(rs.getFloat(3));
+				rework.setPaint_price(rs.getFloat(4));
+				rework.setPeijian_price(rs.getFloat(5));
+				rework.setYunfei(rs.getFloat(6));
+				rework.setGongfei(rs.getFloat(7));
+				rework.setGuanlifei(rs.getFloat(8));
+				
+				rework.setSuanliao_bas(rs.getFloat(9));
+				rework.setSuanliao_add(rs.getFloat(10));
+				rework.setSuanliao_date(rs.getString(11));
+				rework.setSuanliao_team(rs.getString(12));
+				rework.setSuanliao_pre(rs.getString(13));
+				
+				rework.setKailiao_bas(rs.getFloat(14));
+				rework.setKailiao_add(rs.getFloat(15));
+				rework.setKailiao_date(rs.getString(16));
+				rework.setKailiao_team(rs.getString(17));
+				rework.setKailiao_pre(rs.getString(18));
+				
+				rework.setMugong_bas(rs.getFloat(19));
+				rework.setMugong_add(rs.getFloat(20));
+				rework.setMugong_date(rs.getString(21));
+				rework.setMugong_team(rs.getString(22));
+				rework.setMugong_pre(rs.getString(23));
+				
+				rework.setDiqi_bas(rs.getFloat(24));
+				rework.setDiqi_add(rs.getFloat(25));
+				rework.setDiqi_date(rs.getString(26));
+				rework.setDiqi_team(rs.getString(27));
+				rework.setDiqi_pre(rs.getString(28));
+				
+				rework.setPenqi_bas(rs.getFloat(29));
+				rework.setPenqi_add(rs.getFloat(30));
+				rework.setPenqi_date(rs.getString(31));
+				rework.setPenqi_team(rs.getString(32));
+				rework.setPenqi_pre(rs.getString(33));
+				
+				rework.setMianqi_bas(rs.getFloat(34));
+				rework.setMianqi_add(rs.getFloat(35));
+				rework.setMianqi_date(rs.getString(36));
+				rework.setMianqi_team(rs.getString(37));
+				rework.setMianqi_pre(rs.getString(38));
+				
+				rework.setWujin_bas(rs.getFloat(39));
+				rework.setWujin_add(rs.getFloat(40));
+				rework.setWujin_date(rs.getString(41));
+				rework.setWujin_team(rs.getString(42));
+				rework.setWujin_pre(rs.getString(43));
+				
+				rework.setAnzhuang_bas(rs.getFloat(44));
+				rework.setAnzhuang_add(rs.getFloat(45));
+				rework.setAnzhuang_date(rs.getString(46));
+				rework.setAnzhuang_team(rs.getString(47));
+				rework.setAnzhuang_pre(rs.getString(48));
+				
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return rework;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM wood ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}*/
+	
+	public int DeleteRConstruction_re(String con_proID)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from construction_re where con_proID='");
+		sql1.append(con_proID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+		
+	public int insertRework(Construction_reBean bean) throws Exception {
+
+		String sql = "INSERT INTO construction_re(apply_name,wood_price,paint_price,peijian_price,yunfei,gongfei,"
+				+ "guanlifei,suanliao_bas,suanliao_add,suanliao_date,suanliao_team,suanliao_pre,"
+				+ "kailiao_bas,kailiao_add,kailiao_date,kailiao_team,kailiao_pre,mugong_bas,mugong_add,"
+				+ "mugong_date,mugong_team,mugong_pre,diqi_bas,diqi_add,diqi_date,diqi_team,diqi_pre,penqi_bas,"
+				+ "penqi_add,penqi_date,penqi_team,penqi_pre,mianqi_bas,mianqi_add,mianqi_date,mianqi_team,mianqi_pre,"
+				+ "wujin_bas,wujin_add,wujin_date,wujin_team,wujin_pre,anzhuang_bas,anzhuang_add,anzhuang_date,"
+				+ "anzhuang_team,anzhuang_pre,con_proID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, bean.getApply_name());
+			pstmt.setFloat(2, bean.getWood_price());
+			pstmt.setFloat(3, bean.getPaint_price());
+			pstmt.setFloat(4, bean.getPeijian_price());
+			pstmt.setFloat(5, bean.getYunfei());
+			pstmt.setFloat(6, bean.getGongfei());
+			pstmt.setFloat(7, bean.getGuanlifei());
+			pstmt.setFloat(8, bean.getSuanliao_bas());
+			pstmt.setFloat(9, bean.getSuanliao_add());
+			pstmt.setString(10, bean.getSuanliao_date());
+			pstmt.setString(11, bean.getSuanliao_team());
+			pstmt.setString(12, bean.getSuanliao_pre());
+			pstmt.setFloat(13, bean.getKailiao_bas());
+			pstmt.setFloat(14, bean.getKailiao_add());
+			pstmt.setString(15, bean.getKailiao_date());
+			pstmt.setString(16, bean.getKailiao_team());
+			pstmt.setString(17, bean.getKailiao_pre());
+			pstmt.setFloat(18, bean.getMugong_bas());
+			pstmt.setFloat(19, bean.getMugong_add());
+			pstmt.setString(20, bean.getMugong_date());
+			pstmt.setString(21, bean.getMugong_team());
+			pstmt.setString(22, bean.getMugong_pre());
+			pstmt.setFloat(23, bean.getDiqi_bas());
+			pstmt.setFloat(24, bean.getDiqi_add());
+			pstmt.setString(25, bean.getDiqi_date());
+			pstmt.setString(26, bean.getDiqi_team());
+			pstmt.setString(27, bean.getDiqi_pre());
+			pstmt.setFloat(28, bean.getPenqi_bas());
+			pstmt.setFloat(29, bean.getPenqi_add());
+			pstmt.setString(30, bean.getPenqi_date());
+			pstmt.setString(31, bean.getPenqi_team());
+			pstmt.setString(32, bean.getPenqi_pre());
+			pstmt.setFloat(33, bean.getMianqi_bas());
+			pstmt.setFloat(34, bean.getMianqi_add());
+			pstmt.setString(35, bean.getMianqi_date());
+			pstmt.setString(36, bean.getMianqi_team());
+			pstmt.setString(37, bean.getMianqi_pre());
+			pstmt.setFloat(38, bean.getWujin_bas());
+			pstmt.setFloat(39, bean.getWujin_add());
+			pstmt.setString(40, bean.getWujin_date());
+			pstmt.setString(41, bean.getWujin_team());
+			pstmt.setString(42, bean.getWujin_pre());
+			pstmt.setFloat(43, bean.getAnzhuang_bas());
+			pstmt.setFloat(44, bean.getAnzhuang_add());
+			pstmt.setString(45, bean.getAnzhuang_date());
+			pstmt.setString(46, bean.getAnzhuang_team());
+			pstmt.setString(47, bean.getAnzhuang_pre());
+			pstmt.setString(48, bean.getCon_proID());
+			// 进行数据库插入操作
+			insert_count = pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+			throw new Exception("操作出现异常", e);
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+	public void UpdateConstruction_re(String con_proID,int state,String date,String team,String pre_date)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		String place="suanliao_date,suanliao_team,suanliao_pre,kailiao_date,kailiao_team,kailiao_pre," +
+		"mugong_date,mugong_team,mugong_pre,diqi_date,diqi_team,diqi_pre," +
+		"penqi_date,penqi_team,penqi_pre,mianqi_date,mianqi_team,mianqi_pre," +
+		"wujin_date,wujin_team,wujin_pre,anzhuang_date,anzhuang_team,anzhuang_pre";
+		String p[]=place.split(",");
+		String sql = " UPDATE construction_re SET `"+p[3*(state-18)]+"`=?, `"+p[3*(state-18)+1]+"`=?, `"+p[3*(state-18)+2]+"`=? WHERE `con_proID`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+	
+		
+		pstmt.setString(1, date);
+		pstmt.setString(2, team);
+		pstmt.setString(3, pre_date);
+		pstmt.setString(4, con_proID);
+		
+		// 进行数据库插入操作
+		pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		
+	}
+	public String selectConstruction_reByIDandState(String con_proID,int state)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		String place="suanliao_date,suanliao_team,suanliao_pre,kailiao_date,kailiao_team,kailiao_pre," +
+		"mugong_date,mugong_team,mugong_pre,diqi_date,diqi_team,diqi_pre," +
+		"penqi_date,penqi_team,penqi_pre,mianqi_date,mianqi_team,mianqi_pre," +
+		"wujin_date,wujin_team,wujin_pre,anzhuang_date,anzhuang_team,anzhuang_pre";
+		String p[]=place.split(",");
+		String sql = " SELECT  `"+p[3*(state-18)]+"`, `"+p[3*(state-18)+1]+"`, `"+p[3*(state-18)+2]+"` FROM construction_re WHERE `con_proID`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		String str="";ResultSet rs=null;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, con_proID);
+		
+		// 进行数据库插入操作
+		rs= pstmt.executeQuery();
+		while(rs.next())
+		{
+			
+			
+
+			// 获取结果集中的信息
+			String tmpdate=rs.getString(1);
+			// 进行编码转换
+			tmpdate=new String(tmpdate.getBytes("GBK"));
+			String tmpteam=rs.getString(2);
+			// 进行编码转换
+			tmpteam=new String(tmpteam.getBytes("GBK"));
+			String tmppre=rs.getString(3);
+			// 进行编码转换
+			tmppre=new String(tmppre.getBytes("GBK"));
+			str=tmpdate+","+tmpteam+","+tmppre;
+
+		}
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return str;
+	}
+
+}

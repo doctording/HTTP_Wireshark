@@ -1,0 +1,84 @@
+package Table_bean;
+
+public class UserInfoBean {
+
+	//~{PBTvR;8vJtPT~} store
+	private String username;//~{SC;'C{~}
+	private String realname;//~{UfJ5C{~}
+	private String password;//~{C\Bk~}
+	private String rank;//~{V0N;~}
+	private String manager;	//~{OzJ[4z1mR*6TS&~} ~{R;8vOzJ[>-@m~}
+	private String store; //~{OzJ[>-@mR*6TS&~} ~{R;8v5j~} ~{#(R;R;6TS&#)~}
+	private String regtime;//~{W"2aJ1<d~}
+	private int state;//~{W4L,~}
+
+	public UserInfoBean()
+	{
+	   super();	
+	}
+	
+		
+	public UserInfoBean(String username, String password, String rank) {
+		super();
+		this.username = username;
+		//this.realname = realname;
+		this.password = password;
+		this.rank = rank;
+		//this.manager = manager;
+		this.regtime="0-0-0";
+		this.state = 0;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public String getRealname() {
+		return realname;
+	}
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getRank() {
+		return rank;
+	}
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+	
+	public String getManager() {
+		return manager;
+	}
+	public void setManager(String manager) {
+		this.manager = manager;
+	}
+	public String getStore() {
+		return store;
+	}
+	public void setStore(String store) {
+		this.store = store;
+	}
+	public String getRegtime() {
+		return regtime;
+	}
+	public void setRegtime(String regtime) {
+		this.regtime = regtime;
+	}
+	public int getState() {
+		return state;
+	}
+	public void setState(int state) {
+		this.state = state;
+	}
+}

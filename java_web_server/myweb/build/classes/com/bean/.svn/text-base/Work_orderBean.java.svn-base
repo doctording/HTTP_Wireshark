@@ -1,0 +1,703 @@
+package Table_bean;
+
+public class Work_orderBean {
+
+	//53个字段
+	private String con_proID;
+	private String pro_name;
+	private String pro_item;
+	private String lashou_1_style;
+	private int lashou_1_num;
+	private float lashou_1_price;
+	private String lashou_2_style;
+	private int lashou_2_num;
+	private float lashou_2_price;
+	private String peijian_style;
+	private float item_1_num;
+	private float item_1_price;
+	private float item_2_num;
+	private float item_2_price;
+	private float item_3_num;
+	private float item_3_price;
+	private String huagui_1_style;
+	private int huagui_1_num;
+	private float huagui_1_price;
+	private String huagui_2_style;
+	private int huagui_2_num;
+	private float huagui_2_price;
+	private int chouti_num;
+	private float chouti_price;
+	private String boli_1_style;
+	private int boli_1_num;
+	private float boli_1_price;
+	private String boli_2_style;
+	private int boli_2_num;
+	private float boli_2_price;
+	private String boli_3_style;
+	private int boli_3_num;
+	private float boli_3_price;
+	private String diaohua_1_style;
+	private int diaohua_1_num;
+	private float diaohua_1_price;
+	private String diaohua_2_style;
+	private int diaohua_2_num;
+	private float diaohua_2_price;
+	private String diaohua_3_style;
+	private int diaohua_3_num;
+	private float diaohua_3_price;
+	private String qita_1_style;
+	private int qita_1_num;
+	private float qita_1_price;
+	private String qita_2_style;
+	private int qita_2_num;
+	private float qita_2_price;
+	private String qita_3_style;
+	private int qita_3_num;
+	private float qita_3_price;
+	private float add_price;
+	private int check;
+	
+	public Work_orderBean()
+	{
+		super();
+	}
+	/**
+	 * @return con_proID
+	 */
+	public String getCon_proID() {
+		return con_proID;
+	}
+	/**
+	 * @param con_proID 要设置的con_proID
+	 */
+	public void setCon_proID(String con_proID) {
+		this.con_proID = con_proID;
+	}
+	/**
+	 * @return pro_name
+	 */
+	public String getPro_name() {
+		return pro_name;
+	}
+	/**
+	 * @param pro_name 要设置的pro_name
+	 */
+	public void setPro_name(String pro_name) {
+		this.pro_name = pro_name;
+	}
+	/**
+	 * @return pro_item
+	 */
+	public String getPro_item() {
+		return pro_item;
+	}
+	/**
+	 * @param pro_item 要设置的pro_item
+	 */
+	public void setPro_item(String pro_item) {
+		this.pro_item = pro_item;
+	}
+	/**
+	 * @return lashou_1_style
+	 */
+	public String getLashou_1_style() {
+		return lashou_1_style;
+	}
+	/**
+	 * @param lashou_1_style 要设置的 lashou_1_style
+	 */
+	public void setLashou_1_style(String lashou_1_style) {
+		this.lashou_1_style = lashou_1_style;
+	}
+	/**
+	 * @return lashou_1_num
+	 */
+	public int getLashou_1_num() {
+		return lashou_1_num;
+	}
+	/**
+	 * @param lashou_1_num 要设置的 lashou_1_num
+	 */
+	public void setLashou_1_num(int lashou_1_num) {
+		this.lashou_1_num = lashou_1_num;
+	}
+	/**
+	 * @return lashou_1_price
+	 */
+	public float getLashou_1_price() {
+		return lashou_1_price;
+	}
+	/**
+	 * @param lashou_1_price 要设置的lashou_1_price
+	 */
+	public void setLashou_1_price(float lashou_1_price) {
+		this.lashou_1_price = lashou_1_price;
+	}
+	/**
+	 * @return lashou_2_style
+	 */
+	public String getLashou_2_style() {
+		return lashou_2_style;
+	}
+	/**
+	 * @param lashou_2_style 要设置的 lashou_2_style
+	 */
+	public void setLashou_2_style(String lashou_2_style) {
+		this.lashou_2_style = lashou_2_style;
+	}
+	/**
+	 * @return lashou_2_num
+	 */
+	public int getLashou_2_num() {
+		return lashou_2_num;
+	}
+	/**
+	 * @param lashou_2_num 要设置的 lashou_2_num
+	 */
+	public void setLashou_2_num(int lashou_2_num) {
+		this.lashou_2_num = lashou_2_num;
+	}
+	/**
+	 * @return lashou_2_price
+	 */
+	public float getLashou_2_price() {
+		return lashou_2_price;
+	}
+	/**
+	 * @param lashou_2_price 要设置的lashou_2_price
+	 */
+	public void setLashou_2_price(float lashou_2_price) {
+		this.lashou_2_price = lashou_2_price;
+	}
+	/**
+	 * @return peijian_style
+	 */
+	public String getPeijian_style() {
+		return peijian_style;
+	}
+	/**
+	 * @param peijian_style 要设置的 peijian_style
+	 */
+	public void setPeijian_style(String peijian_style) {
+		this.peijian_style = peijian_style;
+	}
+	/**
+	 * @return item_1_num
+	 */
+	public float getItem_1_num() {
+		return item_1_num;
+	}
+	/**
+	 * @param tmpItem_1Num 要设置的 item_1_num
+	 */
+	public void setItem_1_num(float tmpItem_1Num) {
+		this.item_1_num = tmpItem_1Num;
+	}
+	/**
+	 * @return item_1_price
+	 */
+	public float getItem_1_price() {
+		return item_1_price;
+	}
+	/**
+	 * @param item_1_price 要设置的item_1_price
+	 */
+	public void setItem_1_price(float item_1_price) {
+		this.item_1_price = item_1_price;
+	}
+	/**
+	 * @return item_2_num
+	 */
+	public float getItem_2_num() {
+		return item_2_num;
+	}
+	/**
+	 * @param tmpItem_2Num 要设置的 item_2_num
+	 */
+	public void setItem_2_num(float tmpItem_2Num) {
+		this.item_2_num = tmpItem_2Num;
+	}
+	/**
+	 * @return item_2_price
+	 */
+	public float getItem_2_price() {
+		return item_2_price;
+	}
+	/**
+	 * @param item_2_price 要设置的item_2_price
+	 */
+	public void setItem_2_price(float item_2_price) {
+		this.item_2_price = item_2_price;
+	}
+	
+	/**
+	 * @return item_3_num
+	 */
+	public float getItem_3_num() {
+		return item_3_num;
+	}
+	/**
+	 * @param tmpItem_3Num 要设置的 item_3_num
+	 */
+	public void setItem_3_num(float tmpItem_3Num) {
+		this.item_3_num = tmpItem_3Num;
+	}
+	/**
+	 * @return item_3_price
+	 */
+	public float getItem_3_price() {
+		return item_3_price;
+	}
+	/**
+	 * @param item_3_price 要设置的item_3_price
+	 */
+	public void setItem_3_price(float item_3_price) {
+		this.item_3_price = item_3_price;
+	}
+	
+	/**
+	 * @return huagui_1_style
+	 */
+	public String getHuagui_1_style() {
+		return huagui_1_style;
+	}
+	/**
+	 * @param huagui_1_style 要设置的 huagui_1_style
+	 */
+	public void setHuagui_1_style(String huagui_1_style) {
+		this.huagui_1_style = huagui_1_style;
+	}
+	/**
+	 * @return huagui_1_num
+	 */
+	public int getHuagui_1_num() {
+		return huagui_1_num;
+	}
+	/**
+	 * @param huagui_1_num 要设置的 huagui_1_num
+	 */
+	public void setHuagui_1_num(int huagui_1_num) {
+		this.huagui_1_num = huagui_1_num;
+	}
+	/**
+	 * @return huagui_1_price
+	 */
+	public float getHuagui_1_price() {
+		return huagui_1_price;
+	}
+	/**
+	 * @param huagui_1_price 要设置的huagui_1_price
+	 */
+	public void setHuagui_1_price(float huagui_1_price) {
+		this.huagui_1_price = huagui_1_price;
+	}
+	/**
+	 * @return huagui_2_style
+	 */
+	public String getHuagui_2_style() {
+		return huagui_2_style;
+	}
+	/**
+	 * @param huagui_2_style 要设置的 huagui_2_style
+	 */
+	public void setHuagui_2_style(String huagui_2_style) {
+		this.huagui_2_style = huagui_2_style;
+	}
+	/**
+	 * @return huagui_2_num
+	 */
+	public int getHuagui_2_num() {
+		return huagui_2_num;
+	}
+	/**
+	 * @param huagui_2_num 要设置的 huagui_2_num
+	 */
+	public void setHuagui_2_num(int huagui_2_num) {
+		this.huagui_2_num = huagui_2_num;
+	}
+	/**
+	 * @return huagui_2_price
+	 */
+	public float getHuagui_2_price() {
+		return huagui_2_price;
+	}
+	/**
+	 * @param huagui_2_price 要设置的huagui_2_price
+	 */
+	public void setHuagui_2_price(float huagui_2_price) {
+		this.huagui_2_price = huagui_2_price;
+	}
+	
+	/**
+	 * @return chouti_num
+	 */
+	public int getChouti_num() {
+		return chouti_num;
+	}
+	/**
+	 * @param chouti_num 要设置的 chouti_num
+	 */
+	public void setChouti_num(int chouti_num) {
+		this.chouti_num = chouti_num;
+	}
+	/**
+	 * @return chouti_price
+	 */
+	public float getChouti_price() {
+		return chouti_price;
+	}
+	/**
+	 * @param chouti_price 要设置的chouti_price
+	 */
+	public void setChouti_price(float chouti_price) {
+		this.chouti_price = chouti_price;
+	}
+	/**
+	 * @return boli_1_style
+	 */
+	public String getBoli_1_style() {
+		return boli_1_style;
+	}
+	/**
+	 * @param boli_1_style 要设置的 boli_1_style
+	 */
+	public void setBoli_1_style(String boli_1_style) {
+		this.boli_1_style = boli_1_style;
+	}
+	/**
+	 * @return boli_1_num
+	 */
+	public int getBoli_1_num() {
+		return boli_1_num;
+	}
+	/**
+	 * @param boli_1_num 要设置的 boli_1_num
+	 */
+	public void setBoli_1_num(int boli_1_num) {
+		this.boli_1_num = boli_1_num;
+	}
+	/**
+	 * @return boli_1_price
+	 */
+	public float getBoli_1_price() {
+		return boli_1_price;
+	}
+	/**
+	 * @param boli_1_price 要设置的boli_1_price
+	 */
+	public void setBoli_1_price(float boli_1_price) {
+		this.boli_1_price = boli_1_price;
+	}
+	/**
+	 * @return boli_2_style
+	 */
+	public String getBoli_2_style() {
+		return boli_2_style;
+	}
+	/**
+	 * @param boli_2_style 要设置的 boli_2_style
+	 */
+	public void setBoli_2_style(String boli_2_style) {
+		this.boli_2_style = boli_2_style;
+	}
+	/**
+	 * @return boli_2_num
+	 */
+	public int getBoli_2_num() {
+		return boli_2_num;
+	}
+	/**
+	 * @param boli_2_num 要设置的 boli_2_num
+	 */
+	public void setBoli_2_num(int boli_2_num) {
+		this.boli_2_num = boli_2_num;
+	}
+	/**
+	 * @return boli_2_price
+	 */
+	public float getBoli_2_price() {
+		return boli_2_price;
+	}
+	/**
+	 * @param boli_2_price 要设置的boli_2_price
+	 */
+	public void setBoli_2_price(float boli_2_price) {
+		this.boli_2_price = boli_2_price;
+	}
+	/**
+	 * @return boli_3_style
+	 */
+	public String getBoli_3_style() {
+		return boli_3_style;
+	}
+	/**
+	 * @param boli_3_style 要设置的 boli_3_style
+	 */
+	public void setBoli_3_style(String boli_3_style) {
+		this.boli_3_style = boli_3_style;
+	}
+	/**
+	 * @return boli_3_num
+	 */
+	public int getBoli_3_num() {
+		return boli_3_num;
+	}
+	/**
+	 * @param boli_3_num 要设置的 boli_3_num
+	 */
+	public void setBoli_3_num(int boli_3_num) {
+		this.boli_3_num = boli_3_num;
+	}
+	/**
+	 * @return boli_3_price
+	 */
+	public float getBoli_3_price() {
+		return boli_3_price;
+	}
+	/**
+	 * @param boli_3_price 要设置的boli_3_price
+	 */
+	public void setBoli_3_price(float boli_3_price) {
+		this.boli_3_price = boli_3_price;
+	}
+	/**
+	 * @return diaohua_1_style
+	 */
+	public String getDiaohua_1_style() {
+		return diaohua_1_style;
+	}
+	/**
+	 * @param diaohua_1_style 要设置的 diaohua_1_style
+	 */
+	public void setDiaohua_1_style(String diaohua_1_style) {
+		this.diaohua_1_style = diaohua_1_style;
+	}
+	/**
+	 * @return diaohua_1_num
+	 */
+	public int getDiaohua_1_num() {
+		return diaohua_1_num;
+	}
+	/**
+	 * @param diaohua_1_num 要设置的 diaohua_1_num
+	 */
+	public void setDiaohua_1_num(int diaohua_1_num) {
+		this.diaohua_1_num = diaohua_1_num;
+	}
+	/**
+	 * @return diaohua_1_price
+	 */
+	public float getDiaohua_1_price() {
+		return diaohua_1_price;
+	}
+	/**
+	 * @param diaohua_1_price 要设置的diaohua_1_price
+	 */
+	public void setDiaohua_1_price(float diaohua_1_price) {
+		this.diaohua_1_price = diaohua_1_price;
+	}
+	/**
+	 * @return diaohua_2_style
+	 */
+	public String getDiaohua_2_style() {
+		return diaohua_2_style;
+	}
+	/**
+	 * @param diaohua_2_style 要设置的 diaohua_2_style
+	 */
+	public void setDiaohua_2_style(String diaohua_2_style) {
+		this.diaohua_2_style = diaohua_2_style;
+	}
+	/**
+	 * @return diaohua_2_num
+	 */
+	public int getDiaohua_2_num() {
+		return diaohua_2_num;
+	}
+	/**
+	 * @param diaohua_2_num 要设置的 diaohua_2_num
+	 */
+	public void setDiaohua_2_num(int diaohua_2_num) {
+		this.diaohua_2_num = diaohua_2_num;
+	}
+	/**
+	 * @return diaohua_2_price
+	 */
+	public float getDiaohua_2_price() {
+		return diaohua_2_price;
+	}
+	/**
+	 * @param diaohua_2_price 要设置的diaohua_2_price
+	 */
+	public void setDiaohua_2_price(float diaohua_2_price) {
+		this.diaohua_2_price = diaohua_2_price;
+	}
+	/**
+	 * @return diaohua_3_style
+	 */
+	public String getDiaohua_3_style() {
+		return diaohua_3_style;
+	}
+	/**
+	 * @param diaohua_3_style 要设置的 diaohua_3_style
+	 */
+	public void setDiaohua_3_style(String diaohua_3_style) {
+		this.diaohua_3_style = diaohua_3_style;
+	}
+	/**
+	 * @return diaohua_3_num
+	 */
+	public int getDiaohua_3_num() {
+		return diaohua_3_num;
+	}
+	/**
+	 * @param diaohua_3_num 要设置的 diaohua_3_num
+	 */
+	public void setDiaohua_3_num(int diaohua_3_num) {
+		this.diaohua_3_num = diaohua_3_num;
+	}
+	/**
+	 * @return diaohua_3_price
+	 */
+	public float getDiaohua_3_price() {
+		return diaohua_3_price;
+	}
+	/**
+	 * @param diaohua_3_price 要设置的diaohua_3_price
+	 */
+	public void setDiaohua_3_price(float diaohua_3_price) {
+		this.diaohua_3_price = diaohua_3_price;
+	}
+	/**
+	 * @return qita_1_style
+	 */
+	public String getQita_1_style() {
+		return qita_1_style;
+	}
+	/**
+	 * @param qita_1_style 要设置的 qita_1_style
+	 */
+	public void setQita_1_style(String qita_1_style) {
+		this.qita_1_style = qita_1_style;
+	}
+	/**
+	 * @return qita_1_num
+	 */
+	public int getQita_1_num() {
+		return qita_1_num;
+	}
+	/**
+	 * @param qita_1_num 要设置的 qita_1_num
+	 */
+	public void setQita_1_num(int qita_1_num) {
+		this.qita_1_num = qita_1_num;
+	}
+	/**
+	 * @return qita_1_price
+	 */
+	public float getQita_1_price() {
+		return qita_1_price;
+	}
+	/**
+	 * @param qita_1_price 要设置的qita_1_price
+	 */
+	public void setQita_1_price(float qita_1_price) {
+		this.qita_1_price = qita_1_price;
+	}
+	/**
+	 * @return qita_2_style
+	 */
+	public String getQita_2_style() {
+		return qita_2_style;
+	}
+	/**
+	 * @param qita_2_style 要设置的 qita_2_style
+	 */
+	public void setQita_2_style(String qita_2_style) {
+		this.qita_2_style = qita_2_style;
+	}
+	/**
+	 * @return qita_2_num
+	 */
+	public int getQita_2_num() {
+		return qita_2_num;
+	}
+	/**
+	 * @param qita_2_num 要设置的 qita_2_num
+	 */
+	public void setQita_2_num(int qita_2_num) {
+		this.qita_2_num = qita_2_num;
+	}
+	/**
+	 * @return qita_2_price
+	 */
+	public float getQita_2_price() {
+		return qita_2_price;
+	}
+	/**
+	 * @param qita_2_price 要设置的qita_2_price
+	 */
+	public void setQita_2_price(float qita_2_price) {
+		this.qita_2_price = qita_2_price;
+	}
+	/**
+	 * @return qita_3_style
+	 */
+	public String getQita_3_style() {
+		return qita_3_style;
+	}
+	/**
+	 * @param qita_3_style 要设置的 qita_3_style
+	 */
+	public void setQita_3_style(String qita_3_style) {
+		this.qita_3_style = qita_3_style;
+	}
+	/**
+	 * @return qita_3_num
+	 */
+	public int getQita_3_num() {
+		return qita_3_num;
+	}
+	/**
+	 * @param qita_3_num 要设置的 qita_3_num
+	 */
+	public void setQita_3_num(int qita_3_num) {
+		this.qita_3_num = qita_3_num;
+	}
+	/**
+	 * @return qita_3_price
+	 */
+	public float getQita_3_price() {
+		return qita_3_price;
+	}
+	/**
+	 * @param qita_3_price 要设置的qita_3_price
+	 */
+	public void setQita_3_price(float qita_3_price) {
+		this.qita_3_price = qita_3_price;
+	}
+	/**
+	 * @return add_price
+	 */
+	public float getAdd_price() {
+		return add_price;
+	}
+	/**
+	 * @param add_price 要设置的add_price
+	 */
+	public void setAdd_price(float add_price) {
+		this.add_price = add_price;
+	}
+	/**
+	 * @return check
+	 */
+	public int getCheck() {
+		return check;
+	}
+	/**
+	 * @param check 要设置的 check
+	 */
+	public void setcheck(int check) {
+		this.check = check;
+	}
+}

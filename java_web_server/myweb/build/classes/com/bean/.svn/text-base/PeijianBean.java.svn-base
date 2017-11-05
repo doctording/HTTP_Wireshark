@@ -1,0 +1,285 @@
+package Table_bean;
+
+public class PeijianBean {
+
+	//18¸ö×Ö¶Î
+	private int peijianID;
+	private String peijian_name;
+	private String item_1;
+	private String unit_1;
+	private float price_1;
+	private float cost_1;
+	private float wujin_1;
+	
+	private String item_2;
+	private String unit_2;
+	private float price_2;
+	private float cost_2;
+	private float wujin_2;
+	
+	private String item_3;
+	private String unit_3;
+	private float price_3;
+	private float cost_3;
+	private float wujin_3;
+	
+	private int peijian_sign;
+	
+	public PeijianBean()
+	{
+		super();
+	}
+
+	/**
+	 * @return the peijianID
+	 */
+	public int getPeijianID() {
+		return peijianID;
+	}
+
+	/**
+	 * @param peijianID the peijianID to set
+	 */
+	public void setPeijianID(int peijianID) {
+		this.peijianID = peijianID;
+	}
+
+	/**
+	 * @return the peijian_name
+	 */
+	public String getPeijian_name() {
+		return peijian_name;
+	}
+
+	/**
+	 * @param peijian_name the peijian_name to set
+	 */
+	public void setPeijian_name(String peijian_name) {
+		this.peijian_name = peijian_name;
+	}
+
+	/**
+	 * @return the item_1
+	 */
+	public String getItem_1() {
+		return item_1;
+	}
+
+	/**
+	 * @param item_1 the item_1 to set
+	 */
+	public void setItem_1(String item_1) {
+		this.item_1 = item_1;
+	}
+
+	/**
+	 * @return the unit_1
+	 */
+	public String getUnit_1() {
+		return unit_1;
+	}
+
+	/**
+	 * @param unit_1 the unit_1 to set
+	 */
+	public void setUnit_1(String unit_1) {
+		this.unit_1 = unit_1;
+	}
+
+	/**
+	 * @return the price_1
+	 */
+	public float getPrice_1() {
+		return price_1;
+	}
+
+	/**
+	 * @param price_1 the price_1 to set
+	 */
+	public void setPrice_1(float price_1) {
+		this.price_1 = price_1;
+	}
+
+	/**
+	 * @return the cost_1
+	 */
+	public float getCost_1() {
+		return cost_1;
+	}
+
+	/**
+	 * @param cost_1 the cost_1 to set
+	 */
+	public void setCost_1(float cost_1) {
+		this.cost_1 = cost_1;
+	}
+
+	/**
+	 * @return the wujin_1
+	 */
+	public float getWujin_1() {
+		return wujin_1;
+	}
+
+	/**
+	 * @param wujin_1 the wujin_1 to set
+	 */
+	public void setWujin_1(float wujin_1) {
+		this.wujin_1 = wujin_1;
+	}
+
+	/**
+	 * @return the item_2
+	 */
+	public String getItem_2() {
+		return item_2;
+	}
+
+	/**
+	 * @param item_2 the item_2 to set
+	 */
+	public void setItem_2(String item_2) {
+		this.item_2 = item_2;
+	}
+
+	/**
+	 * @return the unit_2
+	 */
+	public String getUnit_2() {
+		return unit_2;
+	}
+
+	/**
+	 * @param unit_2 the unit_2 to set
+	 */
+	public void setUnit_2(String unit_2) {
+		this.unit_2 = unit_2;
+	}
+
+	/**
+	 * @return the price_2
+	 */
+	public float getPrice_2() {
+		return price_2;
+	}
+
+	/**
+	 * @param price_2 the price_2 to set
+	 */
+	public void setPrice_2(float price_2) {
+		this.price_2 = price_2;
+	}
+
+	/**
+	 * @return the cost_2
+	 */
+	public float getCost_2() {
+		return cost_2;
+	}
+
+	/**
+	 * @param cost_2 the cost_2 to set
+	 */
+	public void setCost_2(float cost_2) {
+		this.cost_2 = cost_2;
+	}
+
+	/**
+	 * @return the wujin_2
+	 */
+	public float getWujin_2() {
+		return wujin_2;
+	}
+
+	/**
+	 * @param wujin_2 the wujin_2 to set
+	 */
+	public void setWujin_2(float wujin_2) {
+		this.wujin_2 = wujin_2;
+	}
+
+	/**
+	 * @return the item_3
+	 */
+	public String getItem_3() {
+		return item_3;
+	}
+
+	/**
+	 * @param item_3 the item_3 to set
+	 */
+	public void setItem_3(String item_3) {
+		this.item_3 = item_3;
+	}
+
+	/**
+	 * @return the unit_3
+	 */
+	public String getUnit_3() {
+		return unit_3;
+	}
+
+	/**
+	 * @param unit_3 the unit_3 to set
+	 */
+	public void setUnit_3(String unit_3) {
+		this.unit_3 = unit_3;
+	}
+
+	/**
+	 * @return the price_3
+	 */
+	public float getPrice_3() {
+		return price_3;
+	}
+
+	/**
+	 * @param price_3 the price_3 to set
+	 */
+	public void setPrice_3(float price_3) {
+		this.price_3 = price_3;
+	}
+
+	/**
+	 * @return the cost_3
+	 */
+	public float getCost_3() {
+		return cost_3;
+	}
+
+	/**
+	 * @param cost_3 the cost_3 to set
+	 */
+	public void setCost_3(float cost_3) {
+		this.cost_3 = cost_3;
+	}
+
+	/**
+	 * @return the wujin_3
+	 */
+	public float getWujin_3() {
+		return wujin_3;
+	}
+
+	/**
+	 * @param wujin_3 the wujin_3 to set
+	 */
+	public void setWujin_3(float wujin_3) {
+		this.wujin_3 = wujin_3;
+	}
+
+	/**
+	 * @return the peijian_sign
+	 */
+	public int getPeijian_sign() {
+		return peijian_sign;
+	}
+
+	/**
+	 * @param peijian_sign the peijian_sign to set
+	 */
+	public void setPeijian_sign(int peijian_sign) {
+		this.peijian_sign = peijian_sign;
+	}
+	
+}

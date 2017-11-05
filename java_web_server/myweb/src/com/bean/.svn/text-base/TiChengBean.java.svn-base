@@ -1,0 +1,40 @@
+package Table_bean;
+
+public class TiChengBean {
+	private int ratioID;
+	private float low_percent;
+	private float high_percent;
+	private float ratio;
+	private int sign;
+	public int getRatioID() {
+		return ratioID;
+	}
+	public void setRatioID(int ratioID) {
+		this.ratioID = ratioID;
+	}
+	public float getLow_percent() {
+		return low_percent;
+	}
+	public void setLow_percent(float lowPercent) {
+		low_percent = lowPercent;
+	}
+	public float getHigh_percent() {
+		return high_percent;
+	}
+	public void setHigh_percent(float highPercent) {
+		high_percent = highPercent;
+	}
+	public float getRatio() {
+		return ratio;
+	}
+	public void setRatio(float ratio) {
+		this.ratio = ratio;
+	}
+	public int getSign() {
+		return sign;
+	}
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+
+}

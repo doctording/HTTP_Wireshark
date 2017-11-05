@@ -1,0 +1,68 @@
+package Table_bean;
+
+public class Factory_workers_addBean {
+	
+	private int id;
+	private String factory_workers;//工厂职工
+	private String rank;//职位
+	private float gongling;//工龄
+	private float basic_wage;//基本工资
+	private float allowance;//补助
+	private float living_expenses;//生活费
+	private float month_holidays;//月规定假期
+	
+	public Factory_workers_addBean(){
+		super();
+	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getFactory_workers() {
+		return factory_workers;
+	}
+	public void setFactory_workers(String factory_workers) {
+		this.factory_workers = factory_workers;
+	}
+	public String getRank() {
+		return rank;
+	}
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+	public float getGongling() {
+		return gongling;
+	}
+	public void setGongling(float gongling) {
+		this.gongling = gongling;
+	}
+	public float getBasic_wage() {
+		return basic_wage;
+	}
+	public void setBasic_wage(float basic_wage) {
+		this.basic_wage = basic_wage;
+	}
+	public float getAllowance() {
+		return allowance;
+	}
+	public void setAllowance(float allowance) {
+		this.allowance = allowance;
+	}
+	public float getLiving_expenses() {
+		return living_expenses;
+	}
+	public void setLiving_expenses(float living_expenses) {
+		this.living_expenses = living_expenses;
+	}
+	public float getMonth_holidays() {
+		return month_holidays;
+	}
+	public void setMonth_holidays(float month_holidays) {
+		this.month_holidays = month_holidays;
+	}
+
+	
+}

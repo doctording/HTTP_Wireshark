@@ -1,0 +1,153 @@
+package Table_bean;
+
+public class Pro_additionBean {
+
+	private int proID;
+	private String pro_name;
+	private String pro_item;
+	private int lashou;
+	private int guimen;
+	private int yuanmumen;
+	private int huagui;
+	private int boli;
+	private int diaohua;
+	private int chouti;
+	private int set_cht;//抽屉设置选项
+	
+	public Pro_additionBean()
+	{
+		super();
+	}
+	/**
+	 * @return proID
+	 */
+	public int getProID() {
+		return proID;
+	}
+	/**
+	 * @param proID 要设置的proID
+	 */
+	public void setProID(int proID) {
+		this.proID = proID;
+	}
+	/**
+	 * @return pro_name
+	 */
+	public String getPro_name() {
+		return pro_name;
+	}
+	/**
+	 * @param pro_name 要设置的pro_name
+	 */
+	public void setPro_name(String pro_name) {
+		this.pro_name = pro_name;
+	}
+	/**
+	 * @return pro_item
+	 */
+	public String getPro_item() {
+		return pro_item;
+	}
+	/**
+	 * @param pro_item 要设置的 pro_item
+	 */
+	public void setPro_item(String pro_item) {
+		this.pro_item = pro_item;
+	}
+	/**
+	 * @return lashou
+	 */
+	public int getLashou() {
+		return lashou;
+	}
+	/**
+	 * @param lashou 要设置的  'lashou'
+	 */
+	public void setLashou(int lashou) {
+		this.lashou = lashou;
+	}
+	/**
+	 * @return guimen
+	 */
+	public int getGuimen() {
+		return guimen;
+	}
+	/**
+	 * @param guimen 要设置的  'guimen'
+	 */
+	public void setGuimen(int guimen) {
+		this.guimen = guimen;
+	}
+	/**
+	 * @return yuanmumen
+	 */
+	public int getYuanmumen() {
+		return yuanmumen;
+	}
+	/**
+	 * @param yuanmumen 要设置的  'yuanmumen'
+	 */
+	public void setYuanmumen(int yuanmumen) {
+		this.yuanmumen = yuanmumen;
+	}
+	/**
+	 * @return huagui
+	 */
+	public int getHuagui() {
+		return huagui;
+	}
+	/**
+	 * @param huagui 要设置的  'huagui'
+	 */
+	public void setHuagui(int huagui) {
+		this.huagui = huagui;
+	}
+	/**
+	 * @return boli
+	 */
+	public int getBoli() {
+		return boli;
+	}
+	/**
+	 * @param boli 要设置的  'boli'
+	 */
+	public void setBoli(int boli) {
+		this.boli = boli;
+	}
+	/**
+	 * @return diaohua
+	 */
+	public int getDiaohua() {
+		return diaohua;
+	}
+	/**
+	 * @param diaohua 要设置的  'diaohua'
+	 */
+	public void setDiaohua(int diaohua) {
+		this.diaohua = diaohua;
+	}
+	/**
+	 * @return chouti
+	 */
+	public int getChouti() {
+		return chouti;
+	}
+	/**
+	 * @param chouti 要设置的  'chouti'
+	 */
+	public void setChouti(int chouti) {
+		this.chouti = chouti;
+	}
+	/**
+	 * @return set_cht
+	 */
+	public int getSet_cht() {
+		return set_cht;
+	}
+	/**
+	 * @param set_cht 要设置的  'set_cht'
+	 */
+	public void setSet_cht(int set_cht) {
+		this.set_cht = set_cht;
+	}
+}

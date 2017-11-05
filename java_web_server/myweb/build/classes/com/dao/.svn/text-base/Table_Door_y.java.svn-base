@@ -1,0 +1,528 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Door_y {
+	
+	public Table_Door_y()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取款式个数
+	public int getlastID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM style order by(door_yid) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加套款式种类     
+	public int insertDoor_y(String door_ystyle,float door_yfloatnum,float price_discount,float lowest_discount,String ymm_style_num,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin,float anzhuang)throws Exception  {
+		//注意：要先判断该款式名是否已经存在
+		String sql = "INSERT INTO door_y(door_ystyle,door_yfloatnum,price_discount,lowest_discount,ymm_style_num,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin,anzhuang) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, door_ystyle);
+		pstmt.setFloat(2,door_yfloatnum);
+		pstmt.setFloat(3,price_discount);
+		pstmt.setFloat(4,lowest_discount);
+		pstmt.setString(5, ymm_style_num);
+		pstmt.setFloat(6,suanliao);
+		pstmt.setFloat(7,kailiao);
+		pstmt.setFloat(8,mugong);
+		pstmt.setFloat(9,diqi);
+		pstmt.setFloat(10,pendi);
+		pstmt.setFloat(11,penmian);
+		pstmt.setFloat(12,wujin);
+		pstmt.setFloat(13,anzhuang);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有款式信息
+	public ArrayList findTotaldoor_y(String pageNo)throws Exception 
+	{
+		ArrayList stylelist = new ArrayList();
+		String sql = "SELECT * FROM door_y order by(door_yid)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpDoor_yid=rs.getInt(1);
+				
+				String tmpDoor_ystyle=rs.getString(2);
+				// 进行编码转换
+				tmpDoor_ystyle=new String(tmpDoor_ystyle.getBytes("GBK"));
+				
+				float tmpDoor_yfloatnum=rs.getFloat(3);
+				float tmpPrice_discount=rs.getFloat(4);
+				float tmpLowest_discount=rs.getFloat(5);
+				String tmpYmm_style_num=rs.getString(6);
+				// 进行编码转换
+				tmpYmm_style_num=new String(tmpYmm_style_num.getBytes("GBK"));
+				float tmpSuanliao=rs.getFloat(7);
+                float tmpKailiao=rs.getFloat(8);
+                float tmpMugong=rs.getFloat(9);
+                float tmpDiqi=rs.getFloat(10);
+                float tmpPendi=rs.getFloat(11);
+                float tmpPenmian=rs.getFloat(12);
+                float tmpWujin=rs.getFloat(13);
+                float tmpAnzhuang=rs.getFloat(14);
+				
+			
+				Door_yBean door_y = new Door_yBean();
+				door_y.setDoor_yid(tmpDoor_yid);
+				door_y.setDoor_ystyle(tmpDoor_ystyle);
+				door_y.setDoor_yfloatnum(tmpDoor_yfloatnum);
+				door_y.setPrice_discount(tmpPrice_discount);
+				door_y.setLowest_discount(tmpLowest_discount);
+				door_y.setYmm_style_num(tmpYmm_style_num);
+				door_y.setSuanliao(tmpSuanliao);
+				door_y.setKailiao(tmpKailiao);
+				door_y.setMugong(tmpMugong);
+				door_y.setDiqi(tmpDiqi);
+				door_y.setPendi(tmpPendi);
+				door_y.setPenmian(tmpPenmian);
+				door_y.setWujin(tmpWujin);
+				door_y.setAnzhuang(tmpAnzhuang);
+				// 把对象添加到集合中
+				stylelist.add(door_y);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return stylelist;
+	}	
+	
+	
+	public boolean hasExist(String door_ystyle) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from door_y where door_ystyle='");
+	sql1.append(door_ystyle);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	public Door_yBean selectDoorByName(String door_ystyle) throws Exception  {
+		
+		Door_yBean door_y = new Door_yBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from door_y where door_ystyle='");
+		sql1.append(door_ystyle);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				door_y.setDoor_yid(rs.getInt("Door_yid"));
+				door_y.setDoor_ystyle(rs.getString("Door_ystyle"));
+				door_y.setDoor_yfloatnum(rs.getFloat("door_yfloatnum"));
+				door_y.setPrice_discount(rs.getFloat("Price_discount"));
+				door_y.setLowest_discount(rs.getFloat("Lowest_discount"));
+				door_y.setYmm_style_num(rs.getString("Ymm_style_num"));
+				door_y.setSuanliao(rs.getFloat("suanliao"));
+				door_y.setKailiao(rs.getFloat("kailiao"));
+				door_y.setMugong(rs.getFloat("mugong"));
+				door_y.setDiqi(rs.getFloat("diqi"));
+				door_y.setPendi(rs.getFloat("pendi"));
+				door_y.setPenmian(rs.getFloat("penmian"));
+				door_y.setWujin(rs.getFloat("wujin"));
+				door_y.setAnzhuang(rs.getFloat("anzhuang"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return door_y;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM style ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	public int deletedoor_ystyle(String door_ystyle)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from door_y where door_ystyle='");
+		sql1.append(door_ystyle);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	
+public Door_yBean selectDoortByID(int door_yid) throws Exception  {
+		
+		Door_yBean doorybean=new Door_yBean();
+		String sql = "select * from door_y where door_yid = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,door_yid);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				doorybean.setDoor_yid(rs.getInt(1));
+				doorybean.setDoor_ystyle(rs.getString(2));
+				doorybean.setDoor_yfloatnum(rs.getFloat(3));
+				doorybean.setPrice_discount(rs.getFloat(4));
+				doorybean.setLowest_discount(rs.getFloat(5));
+				doorybean.setYmm_style_num(rs.getString(6));
+				doorybean.setSuanliao(rs.getFloat(7));
+				doorybean.setKailiao(rs.getFloat(8));
+				doorybean.setMugong(rs.getFloat(9));
+				doorybean.setDiqi(rs.getFloat(10));
+				doorybean.setPendi(rs.getFloat(11));
+				doorybean.setPenmian(rs.getFloat(12));
+				doorybean.setWujin(rs.getFloat(13));
+				doorybean.setAnzhuang(rs.getFloat(14));
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+			
+				
+        return doorybean;
+		
+	}
+
+
+//根据id进行更新
+public int updateDoory(int door_yid	,String door_ystyle,float door_yfloatnum,float price_discount,float lowest_discount,float suanliao,float kailiao,float mugong ,float diqi,float pendi ,float penmian,float wujin ,float anzhuang  )throws Exception{
+	String sql = "UPDATE  door_y SET  door_ystyle=?,door_yfloatnum=?,price_discount=?,lowest_discount=? ,suanliao=?,kailiao=?,mugong=?,diqi=?,pendi=?,penmian=?,wujin=?,anzhuang=? where door_yid=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,door_ystyle);
+		pstmt.setFloat(2, door_yfloatnum);
+		pstmt.setFloat(3, price_discount);
+		pstmt.setFloat(4, lowest_discount);
+		pstmt.setFloat(5,suanliao );
+		pstmt.setFloat(6, kailiao);
+		pstmt.setFloat(7, mugong);
+		pstmt.setFloat(8, diqi);
+		
+		pstmt.setFloat(9, pendi);
+		pstmt.setFloat(10,penmian );
+		pstmt.setFloat(11, wujin);
+		pstmt.setFloat(12, anzhuang);
+		pstmt.setInt(13, door_yid);
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+
+//根据id进行款式系列的更新
+public int updateDoory_series(int door_yid,String ymm_style_num)throws Exception{
+	String sql = "UPDATE  door_y SET  ymm_style_num=?where door_yid=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,ymm_style_num);
+		pstmt.setInt(2, door_yid);
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+	
+
+//根据id进行删除
+public int deleteDoor_yById(int door_yid)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from door_y where door_yid='");
+	sql1.append(door_yid);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+	
+public int insertDoor_y1(int door_yid	,String door_ystyle,float door_yfloatnum,float price_discount,float lowest_discount, String ymm_style_num )throws Exception  {
+	//注意：要先判断该款式名是否已经存在
+	String sql = "INSERT INTO door_y(door_ystyle,door_yfloatnum,price_discount,lowest_discount,ymm_style_num) VALUES (?,?,?,?,?,?)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int insert_count=0;
+	int door_yID = 0;
+			// 下面是针对数据库的具体操作
+	try {
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	pstmt.setInt(1, door_yID);
+	pstmt.setString(2, door_ystyle);
+	pstmt.setFloat(3,door_yfloatnum);
+	pstmt.setFloat(4,price_discount);
+	pstmt.setFloat(5,lowest_discount);
+	pstmt.setString(6, ymm_style_num);
+	// 进行数据库插入操作
+	insert_count=pstmt.executeUpdate();
+	}
+
+	catch (Exception e) {
+	throw new Exception("操作出现异常");
+	} finally 
+	{
+	// 关闭数据库连接
+	pstmt.close();
+	dbc.close();
+	}
+	return insert_count;		
+}		
+	
+}

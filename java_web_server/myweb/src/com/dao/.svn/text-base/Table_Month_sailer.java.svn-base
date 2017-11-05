@@ -1,0 +1,666 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Month_sailer {
+	
+	public Table_Month_sailer()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取油漆个数
+	public int getlastWoodID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM wood order by(woodID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+  
+	public int insertMonth(String name,String date,float rework,float count,float money,float year_money,float takeoff,float onduty,float absence,float absence_add,float total,float expend,float remain)throws Exception  {
+
+		String sql = "INSERT INTO month_sailer(name,date,rework,count,money,year_money,takeoff,onduty,absence,absence_add,total,expend,remain) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, name);
+		pstmt.setString(2,date);
+		pstmt.setFloat(3,rework);
+		pstmt.setFloat(4,count);
+		pstmt.setFloat(5,money);
+		pstmt.setFloat(6,year_money);
+		pstmt.setFloat(7,takeoff);
+		pstmt.setFloat(8,onduty);
+		pstmt.setFloat(9,absence);
+		pstmt.setFloat(10,absence_add);
+		pstmt.setFloat(11,total);
+		pstmt.setFloat(12,expend);
+		pstmt.setFloat(13,remain);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有油漆信息
+	public ArrayList findTotalWood(String pageNo)throws Exception 
+	{
+		ArrayList woodlist = new ArrayList();
+		String sql = "SELECT * FROM wood order by(woodID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpWoodID=rs.getInt(1);
+				
+				String tmpWood_name=rs.getString(2);
+				// 进行编码转换
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				float tmpWood_ratio=rs.getFloat(3);
+				float tmpWood_disc_ratio=rs.getFloat(4);
+				float tmpWood_warning=rs.getFloat(5);
+				float tmpSuanliao=rs.getFloat(6);
+				float tmpKailiao=rs.getFloat(7);
+				float tmpMugong=rs.getFloat(8);
+				float tmpDiqi=rs.getFloat(9);
+				float tmpPendi=rs.getFloat(10);
+				float tmpPenmian=rs.getFloat(11);
+				float tmpWujin=rs.getFloat(12);
+				float tmpAnzhuang=rs.getFloat(13);
+			
+			
+				WoodBean wood = new WoodBean();
+				wood.setWoodID(tmpWoodID);
+				wood.setWood_name(tmpWood_name);
+				wood.setWood_ratio(tmpWood_ratio);
+				wood.setWood_disc_ratio(tmpWood_disc_ratio);
+				wood.setWood_warning(tmpWood_warning);
+				wood.setSuanliao(tmpSuanliao);
+				wood.setKailiao(tmpKailiao);
+				wood.setMugong(tmpMugong);
+				wood.setDiqi(tmpDiqi);
+				wood.setPendi(tmpPendi);
+				wood.setPenmian(tmpPenmian);
+				wood.setWujin(tmpWujin);
+				wood.setAnzhuang(tmpAnzhuang);
+
+				// 把对象添加到集合中
+				woodlist.add(wood);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return woodlist;
+	}	
+	
+	
+	public boolean hasExist(String wood_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from wood where wood_name='");
+	sql1.append(wood_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	public ArrayList selectByName(String name) throws Exception  {
+		ArrayList list =new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from month_sailer where name='");
+		sql1.append(name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				Month_sailerBean month_sailerbean = new Month_sailerBean();
+				month_sailerbean.setMonthID(rs.getInt(1));
+				month_sailerbean.setName(rs.getString(2));
+				month_sailerbean.setDate(rs.getString(3));
+				month_sailerbean.setRework(rs.getFloat(4));
+				month_sailerbean.setCount(rs.getFloat(5));
+				month_sailerbean.setMoney(rs.getFloat(6));
+				month_sailerbean.setYear_money(rs.getFloat(7));
+				month_sailerbean.setTakeoff(rs.getFloat(8));
+				month_sailerbean.setOnduty(rs.getFloat(9));
+				month_sailerbean.setAbsence(rs.getFloat(10));
+				month_sailerbean.setAbsence_add(rs.getFloat(11));
+				month_sailerbean.setTotal(rs.getFloat(12));
+				month_sailerbean.setExpend(rs.getFloat(13));
+				month_sailerbean.setRemain(rs.getFloat(14));
+				list.add(month_sailerbean);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return list;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM wood ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}*/
+	
+	public int DeleteWood(String wood_name)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from wood where wood_name='");
+		sql1.append(wood_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+public Month_sailerBean selectByDateAndName(String name,String date) throws Exception  {
+		
+	    Month_sailerBean month_sailerbean = new Month_sailerBean();
+		String sql = "select * from month_sailer where name = ? and date=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,name);
+			pstmt.setString(2,date);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				month_sailerbean.setMonthID(rs.getInt(1));
+				month_sailerbean.setName(rs.getString(2));
+				month_sailerbean.setDate(rs.getString(3));
+				month_sailerbean.setRework(rs.getFloat(4));
+				month_sailerbean.setCount(rs.getFloat(5));
+				month_sailerbean.setMoney(rs.getFloat(6));
+				month_sailerbean.setYear_money(rs.getFloat(7));
+				month_sailerbean.setTakeoff(rs.getFloat(8));
+				month_sailerbean.setOnduty(rs.getFloat(9));
+				month_sailerbean.setAbsence(rs.getFloat(10));
+				month_sailerbean.setAbsence_add(rs.getFloat(11));
+				month_sailerbean.setTotal(rs.getFloat(12));
+				month_sailerbean.setExpend(rs.getFloat(13));
+				month_sailerbean.setRemain(rs.getFloat(14));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+			
+				
+        return month_sailerbean;
+		
+	}
+	
+public ArrayList selectByYearAndName(String name,String date) throws Exception  {
+	ArrayList list =new ArrayList();
+	String sql = "select * from month_sailer where name = ? and date like '"+date+"%'";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;
+	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,name);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		
+		if(rs.next()){
+			Month_sailerBean month_sailerbean = new Month_sailerBean();
+			month_sailerbean.setMonthID(rs.getInt(1));
+			month_sailerbean.setName(rs.getString(2));
+			month_sailerbean.setDate(rs.getString(3));
+			month_sailerbean.setRework(rs.getFloat(4));
+			month_sailerbean.setCount(rs.getFloat(5));
+			month_sailerbean.setMoney(rs.getFloat(6));
+			month_sailerbean.setYear_money(rs.getFloat(7));
+			month_sailerbean.setTakeoff(rs.getFloat(8));
+			month_sailerbean.setOnduty(rs.getFloat(9));
+			month_sailerbean.setAbsence(rs.getFloat(10));
+			month_sailerbean.setAbsence_add(rs.getFloat(11));
+			month_sailerbean.setTotal(rs.getFloat(12));
+			month_sailerbean.setExpend(rs.getFloat(13));
+			month_sailerbean.setRemain(rs.getFloat(14));
+			list.add(month_sailerbean);
+		}
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();	
+		}
+		
+			
+    return list;
+	
+}
+
+
+public Month_sailerBean selectByYearAndName2(String name,String date) throws Exception  {
+
+	Month_sailerBean month_sailerbean = new Month_sailerBean();
+	String sql = "select sum(rework),sum(money),sum(year_money),sum(onduty),sum(absence_add),sum(total) from month_sailer where name = ? and date like '"+date+"%'";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;
+	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,name);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		
+		if(rs.next()){
+			
+			month_sailerbean.setRework(rs.getFloat(1));
+			month_sailerbean.setMoney(rs.getFloat(2));
+			month_sailerbean.setYear_money(rs.getFloat(3));
+			month_sailerbean.setOnduty(rs.getFloat(4));
+			month_sailerbean.setAbsence_add(rs.getFloat(5));
+			month_sailerbean.setTotal(rs.getFloat(6));
+			
+		
+		}
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();	
+		}
+		
+			
+    return month_sailerbean;
+	
+}
+
+	
+	
+//根据id进行更新
+public void updaterework(int monthID,float rework)throws Exception{
+	String sql = "UPDATE  month_sailer SET  rework=?where monthID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,rework);
+		pstmt.setInt(2,monthID);
+        pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+public void updatemoney(int monthID,float money)throws Exception{
+	String sql = "UPDATE  month_sailer SET  money=?where monthID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,money);
+		pstmt.setInt(2,monthID);
+        pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+public void updateYear_money(int monthID,float year_money)throws Exception{
+	String sql = "UPDATE  month_sailer SET  year_money=?where monthID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,year_money);
+		pstmt.setInt(2,monthID);
+        pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+public void updatecount(int monthID,float count)throws Exception{
+	String sql = "UPDATE  month_sailer SET  count=?where monthID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,count);
+		pstmt.setInt(2,monthID);
+        pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+public void updateonduty(String name,String date,float onduty,float absence ,float absence_add,float takeoff)throws Exception{
+	String sql = "UPDATE  month_sailer SET  onduty=? ,absence=? ,absence_add=? ,takeoff=? where name=? and date=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,onduty);
+		pstmt.setFloat(2,absence);
+		pstmt.setFloat(3,absence_add);
+		pstmt.setFloat(4,takeoff);
+		pstmt.setString(5,name);
+		pstmt.setString(6,date);
+
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+       pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}	
+	
+public int deleteByDate(String date,String name)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from month_sailer where Date='");
+	sql1.append(date);
+	sql1.append("'and name='");
+	sql1.append(name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+		
+	
+}

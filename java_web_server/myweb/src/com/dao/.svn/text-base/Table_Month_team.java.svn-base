@@ -1,0 +1,829 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Month_team {
+	
+	public Table_Month_team()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取油漆个数
+	public int getlastWoodID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM wood order by(woodID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加油漆种类     
+	public int insertWood(String wood_name,float wood_ratio,float wood_disc_ratio,float wood_warning,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin,float anzhuang)throws Exception  {
+		//注意：要先判断该油漆名是否已经存在
+		String sql = "INSERT INTO wood(wood_name,wood_ratio,wood_disc_ratio,wood_warning,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin,anzhuang) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, wood_name);
+		pstmt.setFloat(2,wood_ratio);
+		pstmt.setFloat(3,wood_disc_ratio);
+		pstmt.setFloat(4,wood_warning);
+		pstmt.setFloat(5,suanliao);
+		pstmt.setFloat(6,kailiao);
+		pstmt.setFloat(7,mugong);
+		pstmt.setFloat(8,diqi);
+		pstmt.setFloat(9,pendi);
+		pstmt.setFloat(10,penmian);
+		pstmt.setFloat(11,wujin);
+		pstmt.setFloat(12,anzhuang);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有油漆信息
+	public ArrayList findTotalWood(String pageNo)throws Exception 
+	{
+		ArrayList woodlist = new ArrayList();
+		String sql = "SELECT * FROM wood order by(woodID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpWoodID=rs.getInt(1);
+				
+				String tmpWood_name=rs.getString(2);
+				// 进行编码转换
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				float tmpWood_ratio=rs.getFloat(3);
+				float tmpWood_disc_ratio=rs.getFloat(4);
+				float tmpWood_warning=rs.getFloat(5);
+				float tmpSuanliao=rs.getFloat(6);
+				float tmpKailiao=rs.getFloat(7);
+				float tmpMugong=rs.getFloat(8);
+				float tmpDiqi=rs.getFloat(9);
+				float tmpPendi=rs.getFloat(10);
+				float tmpPenmian=rs.getFloat(11);
+				float tmpWujin=rs.getFloat(12);
+				float tmpAnzhuang=rs.getFloat(13);
+			
+			
+				WoodBean wood = new WoodBean();
+				wood.setWoodID(tmpWoodID);
+				wood.setWood_name(tmpWood_name);
+				wood.setWood_ratio(tmpWood_ratio);
+				wood.setWood_disc_ratio(tmpWood_disc_ratio);
+				wood.setWood_warning(tmpWood_warning);
+				wood.setSuanliao(tmpSuanliao);
+				wood.setKailiao(tmpKailiao);
+				wood.setMugong(tmpMugong);
+				wood.setDiqi(tmpDiqi);
+				wood.setPendi(tmpPendi);
+				wood.setPenmian(tmpPenmian);
+				wood.setWujin(tmpWujin);
+				wood.setAnzhuang(tmpAnzhuang);
+
+				// 把对象添加到集合中
+				woodlist.add(wood);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return woodlist;
+	}	
+	public int insertMonth(String team,String name,String date,float gongfei,float income,float rework,float dai_shang,float onduty,float daigong,float gongshang,float absence,float absence_add,float total,float expend,float month_daily,float remain)throws Exception  {
+
+		String sql = "INSERT INTO month_team(team,name,date,gongfei,income,rework,dai_shang,onduty,daigong,gongshang,absence,absence_add,total,expend,month_daily,remain) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, team);
+		pstmt.setString(2,name);
+		pstmt.setString(3,date);
+		pstmt.setFloat(4,gongfei);
+		pstmt.setFloat(5,income);
+		pstmt.setFloat(6,rework);
+		pstmt.setFloat(7,dai_shang);
+		pstmt.setFloat(8,onduty);
+		pstmt.setFloat(9,daigong);
+		pstmt.setFloat(10,gongshang);
+		pstmt.setFloat(11,absence);
+		pstmt.setFloat(12,absence_add);
+		pstmt.setFloat(13,total);
+		pstmt.setFloat(14,expend);
+		pstmt.setFloat(15,month_daily);
+		pstmt.setFloat(16,remain);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+	
+	public boolean hasExist(String wood_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from wood where wood_name='");
+	sql1.append(wood_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	public WoodBean selectWoodByName(String wood_name) throws Exception  {
+		
+		WoodBean wood = new WoodBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from wood where wood_name='");
+		sql1.append(wood_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				wood.setWoodID(rs.getInt("woodID"));
+				wood.setWood_name(rs.getString("wood_name"));
+				wood.setWood_ratio(rs.getFloat("wood_ratio"));
+				wood.setWood_disc_ratio(rs.getFloat("wood_disc_ratio"));
+				wood.setWood_warning(rs.getFloat("wood_warning"));
+				wood.setSuanliao(rs.getFloat("suanliao"));
+				wood.setKailiao(rs.getFloat("kailiao"));
+				wood.setMugong(rs.getFloat("mugong"));
+				wood.setDiqi(rs.getFloat("diqi"));
+				wood.setPendi(rs.getFloat("pendi"));
+				wood.setPenmian(rs.getFloat("penmian"));
+				wood.setWujin(rs.getFloat("wujin"));
+				wood.setAnzhuang(rs.getFloat("anzhuang"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return wood;
+		
+	}
+
+	
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}*/
+	
+	
+public WoodBean selectWoodByID(int woodID) throws Exception  {
+		
+		WoodBean woodbean = new WoodBean();
+		String sql = "select * from wood where woodID = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,woodID);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				woodbean.setWoodID(rs.getInt(1));
+				woodbean.setWood_name(rs.getString(2));
+				woodbean.setWood_ratio(rs.getFloat(3));
+				woodbean.setWood_disc_ratio(rs.getFloat(4));
+				woodbean.setWood_warning(rs.getFloat(5));
+				woodbean.setSuanliao(rs.getFloat(6));
+				woodbean.setKailiao(rs.getFloat(7));
+				woodbean.setMugong(rs.getFloat(8));
+				woodbean.setDiqi(rs.getFloat(9));
+				woodbean.setPendi(rs.getFloat(10));
+				woodbean.setPenmian(rs.getFloat(11));
+				woodbean.setWujin(rs.getFloat(12));
+				woodbean.setAnzhuang(rs.getFloat(13));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+			
+				
+        return woodbean;
+		
+	}
+	
+	
+	
+//根据id进行更新
+public int updateWood(int woodID,String wood_name,float wood_ratio,float wood_disc_ratio,float wood_warning,float suanliao,float kailiao,float mugong ,float diqi,float pendi ,float penmian,float wujin ,float anzhuang)throws Exception{
+	String sql = "UPDATE  wood SET  wood_name=?,wood_ratio=?,wood_disc_ratio=?,wood_warning=?,suanliao=?,kailiao=?,mugong=?,diqi=?,pendi=?,penmian=?,wujin=?,anzhuang=? where woodID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,wood_name);
+		pstmt.setFloat(2, wood_ratio);
+		pstmt.setFloat(3, wood_disc_ratio);
+		pstmt.setFloat(4, wood_warning);
+		
+		pstmt.setFloat(5,suanliao );
+		pstmt.setFloat(6, kailiao);
+		pstmt.setFloat(7, mugong);
+		pstmt.setFloat(8, diqi);
+		
+		pstmt.setFloat(9, pendi);
+		pstmt.setFloat(10,penmian );
+		pstmt.setFloat(11, wujin);
+		pstmt.setFloat(12, anzhuang);
+		pstmt.setInt(13, woodID);
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+	
+	
+public int deleteWoodById(int woodID)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from wood where woodID='");
+	sql1.append(woodID);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+public ArrayList selectByName(String name) throws Exception  {
+	ArrayList list =new ArrayList();
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("select * from month_team where name='");
+	sql1.append(name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;
+	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		
+		if(rs.next()){
+			Month_teamBean month_teambean =new Month_teamBean();
+			month_teambean.setMonthID(rs.getInt(1));
+			month_teambean.setTeam(rs.getString(2));
+			month_teambean.setName(rs.getString(3));
+			month_teambean.setDate(rs.getString(4));
+			month_teambean.setGongfei(rs.getFloat(5));
+			month_teambean.setIncome(rs.getFloat(6));
+			month_teambean.setRework(rs.getFloat(7));
+			month_teambean.setDai_shang(rs.getFloat(8));
+			month_teambean.setOnduty(rs.getFloat(9));
+			month_teambean.setDaigong(rs.getFloat(10));
+			month_teambean.setGongshang(rs.getFloat(11));
+			month_teambean.setAbsence(rs.getFloat(12));
+			month_teambean.setAbsence_add(rs.getFloat(13));
+			month_teambean.setTotal(rs.getFloat(14));
+			month_teambean.setExpend(rs.getFloat(15));
+			month_teambean.setMonth_daily(rs.getFloat(16));
+			month_teambean.setRemain(rs.getFloat(17));
+			list.add(month_teambean);
+		}
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();	
+		}
+    return list;
+	
+}
+
+public Integer getPageCount()throws Exception 
+{
+	int pageCount=1;
+	String sql = "SELECT * FROM wood ";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;
+
+	
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		// 获取用户的个数
+		int count=0;
+		while(rs.next()){
+			count++;
+		}
+					
+		// 计算总页数
+		pageCount = (count-1)/10+1;
+		
+	} 
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	
+	return new Integer(pageCount);
+	
+}
+
+
+/* 回复数更新 ,回复数删除
+ * public int updateCount(String contractID)throws Exception  {
+	
+	int update_count=0;
+	
+	String sql="update message set count=count+1 where messageID= ? ";
+
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库		
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	pstmt.setInt(1, Integer.parseInt(messageID));
+	update_count=pstmt.executeUpdate();
+
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+	// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+    }	
+	return update_count;
+}*/
+
+public int DeleteWood(String wood_name)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from wood where wood_name='");
+	sql1.append(wood_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+public Month_teamBean selectByDateAndName(String name,String date) throws Exception  {
+	
+    Month_teamBean month_teambean = new Month_teamBean();
+	String sql = "select * from month_team where name = ? and date=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;
+	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,name);
+		pstmt.setString(2,date);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		
+		if(rs.next()){
+			month_teambean.setMonthID(rs.getInt(1));
+			month_teambean.setTeam(rs.getString(2));
+			month_teambean.setName(rs.getString(3));
+			month_teambean.setDate(rs.getString(4));
+			month_teambean.setGongfei(rs.getFloat(5));
+			month_teambean.setIncome(rs.getFloat(6));
+			month_teambean.setRework(rs.getFloat(7));
+			month_teambean.setDai_shang(rs.getFloat(8));
+			month_teambean.setOnduty(rs.getFloat(9));
+			month_teambean.setDaigong(rs.getFloat(10));
+			month_teambean.setGongshang(rs.getFloat(11));
+			month_teambean.setAbsence(rs.getFloat(12));
+			month_teambean.setAbsence_add(rs.getFloat(13));
+			month_teambean.setTotal(rs.getFloat(14));
+			month_teambean.setExpend(rs.getFloat(15));
+			month_teambean.setMonth_daily(rs.getFloat(16));
+			month_teambean.setRemain(rs.getFloat(17));
+		}
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();	
+		}
+		
+			
+    return month_teambean;
+	
+}
+
+public Month_teamBean selectByDateAndName2(String name,String date) throws Exception  {
+	
+    Month_teamBean month_teambean = new Month_teamBean();
+	String sql = "select sum(income),sum(rework),sum(dai_shang),sum(onduty),sum(daigong),sum(gongshang),sum(absence_add),sum(total) from month_team where name = ? and date like '"+date+"%'";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;
+	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,name);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		
+		if(rs.next()){
+		
+			month_teambean.setIncome(rs.getFloat(1));
+			month_teambean.setRework(rs.getFloat(2));
+			month_teambean.setDai_shang(rs.getFloat(3));
+			month_teambean.setOnduty(rs.getFloat(4));
+			
+			month_teambean.setDaigong(rs.getFloat(5));
+			month_teambean.setGongshang(rs.getFloat(6));
+			month_teambean.setAbsence_add(rs.getFloat(7));
+			month_teambean.setTotal(rs.getFloat(8));
+		}
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();	
+		}
+		
+			
+    return month_teambean;
+	
+}
+
+
+//根据id进行更新
+public void updaterework(int monthID,float rework)throws Exception{
+String sql = "UPDATE  month_team SET  rework=?where monthID=?";
+PreparedStatement pstmt = null;
+DataBaseConnection dbc = new DataBaseConnection();
+
+try{
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	
+	pstmt.setFloat(1,rework);
+	pstmt.setInt(2,monthID);
+
+	// 进行数据库插入操作
+ pstmt.executeUpdate();
+}
+catch(Exception e){
+	throw new Exception("出现异常");
+}
+finally{
+	// 关闭数据库连接
+	pstmt.close();
+	dbc.close();}
+}
+public void updateincome(int monthID,float income)throws Exception{
+	String sql = "UPDATE  month_team SET  income=?where monthID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,income);
+		pstmt.setInt(2,monthID);
+
+		// 进行数据库插入操作
+	 pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+public void updateonduty(String name,String date,float onduty,float absence ,float absence_add,float daigong, float gongshang,float daigong_gongshang)throws Exception{
+	String sql = "UPDATE  month_team SET  onduty=?, absence=? ,absence_add=?, daigong=?, gongshang=?, dai_shang=? where name=? and date=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setFloat(1,onduty);
+		pstmt.setFloat(2,absence);
+		pstmt.setFloat(3,absence_add);
+		pstmt.setFloat(4,daigong);
+		pstmt.setFloat(5,gongshang);
+		pstmt.setFloat(6,daigong_gongshang);
+		pstmt.setString(7,name);
+		pstmt.setString(8,date);
+
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+       pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+
+public int deleteByDate(String date,String name)throws Exception {
+
+StringBuffer sql1 = new StringBuffer();
+sql1.append("DELETE from month_team where Date='");
+sql1.append(date);
+sql1.append("'and name='");
+sql1.append(name);
+sql1.append("'");
+String sql = sql1.toString();
+PreparedStatement pstmt = null;
+DataBaseConnection dbc = new DataBaseConnection();
+int delete_count=0;
+
+// 下面是针对数据库的具体操作
+try {
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	// 进行数据库更新操作
+	delete_count=pstmt.executeUpdate();			
+}
+catch (Exception e)
+{
+	throw new Exception("操作出现异常");
+}
+finally
+{
+	// 关闭数据库连接
+	pstmt.close();
+	dbc.close();
+}
+return delete_count;
+}
+			
+	
+}

@@ -1,0 +1,351 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Diaohua {
+	
+	public Table_Diaohua()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取雕花个数
+	public int getlastDiaohuaID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM diaohua order by(diaohuaID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取雕花的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加雕花种类     
+	public int insertDiaohua(String diaohua_name,float diaohua_price,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian)throws Exception  {
+		//注意：要先判断该雕花名是否已经存在
+		String sql = "INSERT INTO diaohua(diaohuaID,diaohua_name,diaohua_price,suanliao,kailiao,mugong,diqi,pendi,penmian) VALUES (?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		int diaohuaID = 0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, diaohuaID);
+		pstmt.setString(2, diaohua_name);
+		pstmt.setFloat(3,diaohua_price);
+		pstmt.setFloat(4,suanliao);
+		pstmt.setFloat(5,kailiao);
+		pstmt.setFloat(6,mugong);
+		pstmt.setFloat(7,diqi);
+		pstmt.setFloat(8,pendi);
+		pstmt.setFloat(9,penmian);
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有雕花信息
+	public ArrayList findTotalDiaohua(String pageNo)throws Exception 
+	{
+		ArrayList diaohualist = new ArrayList();
+		String sql = "SELECT * FROM diaohua order by(diaohuaID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpDiaohuaID=rs.getInt(1);
+				
+				String tmpDiaohua_name=rs.getString(2);
+				// 进行编码转换
+				tmpDiaohua_name=new String(tmpDiaohua_name.getBytes("GBK"));
+				
+				float tmpDiaohua_price=rs.getFloat(3);
+				
+				float tmpSuanliao=rs.getFloat(4);
+				float tmpKailiao=rs.getFloat(5);
+				float tmpMugong=rs.getFloat(6);
+				float tmpDiqi=rs.getFloat(7);
+				float tmpPendi=rs.getFloat(8);
+				float tmpPenmian=rs.getFloat(9);
+			
+			
+				DiaohuaBean diaohua = new DiaohuaBean();
+				diaohua.setDiaohuaID(tmpDiaohuaID);
+				diaohua.setDiaohua_name(tmpDiaohua_name);
+				diaohua.setDiaohua_price(tmpDiaohua_price);
+				diaohua.setSuanliao(tmpSuanliao);
+				diaohua.setKailiao(tmpKailiao);
+				diaohua.setMugong(tmpMugong);
+				diaohua.setDiqi(tmpDiqi);
+				diaohua.setPendi(tmpPendi);
+				diaohua.setPenmian(tmpPenmian);
+				// 把对象添加到集合中
+				diaohualist.add(diaohua);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return diaohualist;
+	}	
+	
+	
+	public boolean hasExist(String diaohua_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from diaohua where diaohua_name='");
+	sql1.append(diaohua_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	public DiaohuaBean selectDiaohuaByName(String diaohua_name) throws Exception  {
+		
+		DiaohuaBean diaohua = new DiaohuaBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from diaohua where diaohua_name='");
+		sql1.append(diaohua_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				diaohua.setDiaohuaID(rs.getInt("DiaohuaID"));
+				diaohua.setDiaohua_name(rs.getString("Diaohua_name"));
+				diaohua.setDiaohua_price(rs.getFloat("Diaohua_price"));
+				diaohua.setSuanliao(rs.getFloat("suanliao"));
+				diaohua.setKailiao(rs.getFloat("kailiao"));
+				diaohua.setMugong(rs.getFloat("mugong"));
+				diaohua.setDiqi(rs.getFloat("diqi"));
+				diaohua.setPendi(rs.getFloat("pendi"));
+				diaohua.setPenmian(rs.getFloat("penmian"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return diaohua;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM diaohua ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	//修改与更新雕花数据表数据(雕花名不允许修改)
+	public int UpdateDiaohua(String diaohua_name,float diaohua_price)throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("UPDATE diaohua SET diaohua_price='");
+		sql1.append(diaohua_price);
+		sql1.append("'WHERE diaohua_name='");
+		sql1.append(diaohua_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	
+	public int DeleteDiaohua(String diaohua_name)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from diaohua where diaohua_name='");
+		sql1.append(diaohua_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+}

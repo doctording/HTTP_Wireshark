@@ -1,0 +1,206 @@
+package Table_bean;
+
+public class Door_tBean {
+      
+	//13¸ö×Ö¶Î
+	  private int door_tid;
+      private String door_tstyle;
+      private float door_tfloatnum;
+      private float price_discount;
+      private float lowest_discount;
+      private float suanliao;//calculate_material; 
+  	  private float kailiao;//open_material;
+  	  private float mugong;//woodworking;
+  	  private float diqi;//primer;
+  	  private float pendi;//spray_bottom;
+  	  private float penmian;//spray_face;
+  	  private float wujin;//hardware;
+  	  private float anzhuang;//installation;
+      
+      public Door_tBean(){
+    	  super();
+      }
+
+	/**
+	 * @return the door_tid
+	 */
+	public int getDoor_tid() {
+		return door_tid;
+	}
+
+	/**
+	 * @param door_tid the door_tid to set
+	 */
+	public void setDoor_tid(int door_tid) {
+		this.door_tid = door_tid;
+	}
+
+	/**
+	 * @return the door_tstyle
+	 */
+	public String getDoor_tstyle() {
+		return door_tstyle;
+	}
+
+	/**
+	 * @param door_tstyle the door_tstyle to set
+	 */
+	public void setDoor_tstyle(String door_tstyle) {
+		this.door_tstyle = door_tstyle;
+	}
+
+	/**
+	 * @return the door_tfloatnum
+	 */
+	public float getDoor_tfloatnum() {
+		return door_tfloatnum;
+	}
+
+	/**
+	 * @param door_tfloatnum the door_tfloatnum to set
+	 */
+	public void setDoor_tfloatnum(float door_tfloatnum) {
+		this.door_tfloatnum = door_tfloatnum;
+	}
+
+	/**
+	 * @return the price_discount
+	 */
+	public float getPrice_discount() {
+		return price_discount;
+	}
+
+	/**
+	 * @param price_discount the price_discount to set
+	 */
+	public void setPrice_discount(float price_discount) {
+		this.price_discount = price_discount;
+	}
+
+	/**
+	 * @return the lowest_discount
+	 */
+	public float getLowest_discount() {
+		return lowest_discount;
+	}
+
+	/**
+	 * @param lowest_discount the lowest_discount to set
+	 */
+	public void setLowest_discount(float lowest_discount) {
+		this.lowest_discount = lowest_discount;
+	}
+
+	/**
+	 * @return the suanliao
+	 */
+	public float getSuanliao() {
+		return suanliao;
+	}
+
+	/**
+	 * @param suanliao the suanliao to set
+	 */
+	public void setSuanliao(float suanliao) {
+		this.suanliao = suanliao;
+	}
+
+	/**
+	 * @return the kailiao
+	 */
+	public float getKailiao() {
+		return kailiao;
+	}
+
+	/**
+	 * @param kailiao the kailiao to set
+	 */
+	public void setKailiao(float kailiao) {
+		this.kailiao = kailiao;
+	}
+
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+
+	/**
+	 * @return the diqi
+	 */
+	public float getDiqi() {
+		return diqi;
+	}
+
+	/**
+	 * @param diqi the diqi to set
+	 */
+	public void setDiqi(float diqi) {
+		this.diqi = diqi;
+	}
+
+	/**
+	 * @return the pendi
+	 */
+	public float getPendi() {
+		return pendi;
+	}
+
+	/**
+	 * @param pendi the pendi to set
+	 */
+	public void setPendi(float pendi) {
+		this.pendi = pendi;
+	}
+
+	/**
+	 * @return the penmian
+	 */
+	public float getPenmian() {
+		return penmian;
+	}
+
+	/**
+	 * @param penmian the penmian to set
+	 */
+	public void setPenmian(float penmian) {
+		this.penmian = penmian;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+	/**
+	 * @return the anzhuang
+	 */
+	public float getAnzhuang() {
+		return anzhuang;
+	}
+
+	/**
+	 * @param anzhuang the anzhuang to set
+	 */
+	public void setAnzhuang(float anzhuang) {
+		this.anzhuang = anzhuang;
+	}
+      
+}

@@ -1,0 +1,102 @@
+package Table_bean;
+
+public class WorkteamBean {
+
+	//12¸ö×Ö¶Î
+	private int teamID;
+	private String team_name;
+	private int suanliao;
+	private int kailiao;
+	private int mugong;
+	private int diqi; 
+	private int pendi;
+	private int mianqi;
+	private int wujin;
+	private int anzhuang ;
+	private float ability;
+	private String last;
+	
+	public int getTeamID() {
+		return teamID;
+	}
+	public void setTeamID(int teamID) {
+		this.teamID = teamID;
+	}
+	public String getTeam_name() {
+		return team_name;
+	}
+	public void setTeam_name(String teamName) {
+		team_name = teamName;
+	}
+	public int getSuanliao() {
+		return suanliao;
+	}
+	public void setSuanliao(int suanliao) {
+		this.suanliao = suanliao;
+	}
+	public int getKailiao() {
+		return kailiao;
+	}
+	public void setKailiao(int kailiao) {
+		this.kailiao = kailiao;
+	}
+	public int getMugong() {
+		return mugong;
+	}
+	public void setMugong(int mugong) {
+		this.mugong = mugong;
+	}
+	public int getDiqi() {
+		return diqi;
+	}
+	public void setDiqi(int diqi) {
+		this.diqi = diqi;
+	}
+	public int getPendi() {
+		return pendi;
+	}
+	public void setPendi(int pendi) {
+		this.pendi = pendi;
+	}
+	public int getMianqi() {
+		return mianqi;
+	}
+	public void setMianqi(int mianqi) {
+		this.mianqi = mianqi;
+	}
+	public int getWujin() {
+		return wujin;
+	}
+	public void setWujin(int wujin) {
+		this.wujin = wujin;
+	}
+	public int getAnzhuang() {
+		return anzhuang;
+	}
+	public void setAnzhuang(int anzhuang) {
+		this.anzhuang = anzhuang;
+	}
+	public float getAbility() {
+		return ability;
+	}
+	public void setAbility(float ability) {
+		this.ability = ability;
+	}
+	public String getLast() {
+		return last;
+	}
+	public void setLast(String last) {
+		this.last = last;
+	}
+	
+	
+	public WorkteamBean()
+	{
+		super();
+	}
+	/**
+	 * @return woodID
+	 */
+	
+	
+}

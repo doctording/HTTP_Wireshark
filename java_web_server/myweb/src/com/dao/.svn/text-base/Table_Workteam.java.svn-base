@@ -1,0 +1,516 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Workteam {
+	
+	public Table_Workteam()
+	{
+		super();
+	}
+	
+	public int getlastTeamID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM workteam order by(teamID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastteamid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取工作组的个数
+            if (rs.next())
+            	lastteamid++;
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+		return lastteamid;		
+	}
+	
+	//从数据库中找出所有工作组方法不懂为什么有误
+	public ArrayList findTotalWorkteam()throws Exception 
+	{
+		ArrayList teamlist = new ArrayList();
+		String sql = "SELECT * FROM workteam ORDER BY(teamID)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		try {
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs= pstmt.executeQuery();
+			while(rs.next())
+			{
+				int tmpTeamID = rs.getInt(1);
+				String tmpTeam_name=rs.getString(2);
+				tmpTeam_name=new String(tmpTeam_name.getBytes("GBK"));
+				int tmpSuanliao=rs.getInt(3);
+				int tmpKailiao=rs.getInt(4);
+				int tmpMugong = rs.getInt(5);
+				int tmpDiqi = rs.getInt(6);
+				int tmpPenqi = rs.getInt(7);
+				int tmpMianqi=rs.getInt(8);
+				int tmpWujin=rs.getInt(9);
+				int tmpAnzhuang=rs.getInt(10);
+				float tmpAbility=rs.getFloat(11);
+				String tmpLast = rs.getString(12);
+				tmpLast=new String(tmpLast.getBytes("GBK"));
+				
+				WorkteamBean workteam = new WorkteamBean();
+				workteam.setTeamID(tmpTeamID);
+				workteam.setTeam_name(tmpTeam_name);
+				workteam.setSuanliao(tmpSuanliao);
+				workteam.setKailiao(tmpKailiao);
+				workteam.setMugong(tmpMugong);
+				workteam.setDiqi(tmpDiqi); 
+				workteam.setPendi(tmpPenqi);
+				workteam.setMianqi(tmpMianqi);
+				workteam.setWujin(tmpWujin);
+				workteam.setAnzhuang(tmpAnzhuang);
+				workteam.setAbility(tmpAbility);
+				workteam.setLast(tmpLast);
+				teamlist.add(workteam);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return teamlist;
+	}
+	
+
+	public boolean hasExist(String team_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from workteam where team_name='");
+	sql1.append(team_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	//根据teamID和team_name从数据库中删除某项产品
+	public int deleteByteamID(int teamID,String team_name)throws Exception {
+
+		String sql = "DELETE  FROM workteam WHERE teamID='"+teamID+"' AND team_name='"+team_name+"'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}
+	
+	
+	public WorkteamBean selectWorkteamByName(String team_name) throws Exception  {
+	
+		WorkteamBean workteam = new WorkteamBean();
+//		StringBuffer sql1 = new StringBuffer();
+//		sql1.append("select * from workteam where team_name='");
+//		sql1.append(team_name);
+//		sql1.append("'");
+//		String sql = sql1.toString();
+		String sql = "SELECT * FROM workteam WHERE team_name=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, team_name);
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				workteam.setTeamID(rs.getInt(1));
+				workteam.setTeam_name(rs.getString(2));
+				workteam.setSuanliao(rs.getInt(3));
+				workteam.setKailiao(rs.getInt(4));
+				workteam.setMugong(rs.getInt(5));
+				workteam.setDiqi(rs.getInt(6));
+				workteam.setPendi(rs.getInt(7));	
+				workteam.setMianqi(rs.getInt(8));
+				workteam.setWujin(rs.getInt(9));
+				workteam.setAnzhuang(rs.getInt(10));
+				workteam.setAbility(rs.getFloat(11));
+				workteam.setLast(rs.getString(12));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return workteam;
+		
+	}
+
+	
+	
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM workteam ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	
+		// 工作组全部信息修改、更新 
+	   public int updateWorkteam(int teamID,String team_name,int suanliao,int kailiao,int mugong,int diqi,int penqi,int mianqi,int wujin,int anzhuang,float ability,String last)throws Exception  {
+		
+		int update_count=0;
+		String sql="UPDATE workteam SET team_name='"+team_name+"suanliao='"+suanliao+"kailiao='"+kailiao+"mugong='"+mugong+"diqi='"+diqi+"penqi='"+penqi+"mianqi='"+mianqi+"wujin='"+wujin+"anzhuang='"+anzhuang+"ability='"+ability+"last='"+last+"WHERE teamID='"+teamID+"'";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}
+
+	   
+	   //单独更新工作组的最后完工日期last字段
+	public int updateLast(int teamID,String team_name,String last,int day)throws Exception {
+
+		String sql = "UPDATE workteam SET last=? WHERE teamID=? AND team_name=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update=0;
+		//日期操作
+		  Date date = new Date();
+		  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");//日期格式：2013-04-16
+		  date=format.parse(last);//将String型的last转换成Date型
+		  Calendar calendar = Calendar.getInstance(); 
+		  calendar.setTime(date);
+		  calendar.add(Calendar.DATE,day);  //Calendar可以进行日期加减 ，存在calendar中
+		  date=calendar.getTime();//Calendar型转换回Date型
+		  String last1= format.format(date);//Date转换回String
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, last1);
+			pstmt.setInt(2, teamID);
+			pstmt.setString(3, team_name);
+			// 进行数据库更新操作
+			update=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return update;
+	}
+		
+	
+	
+////	更新工作组
+//	
+//	public int updateAccount(int teamID,String team_name,int suanliao,int kailiao,int mugong,int diqi,int penqi,int mianqi,int wujin,int anzhuang,float ability,String last)throws Exception {
+//		
+//		String sql = "UPDATE workteam SET team_name=?,suanliao=?,kailiao=?,mugong=?,diqi=?,penqi=?,mianqi=?,wujin=?,anzhuang=?,ability=?,last=? WHERE teamID=?";
+//		PreparedStatement pstmt = null;
+//		DataBaseConnection dbc = new DataBaseConnection();
+//		
+//		int update_count=0;	
+//	// 下面是针对数据库的具体操作
+//	try {
+//		// 连接数据库
+//		dbc.DataBase_Connection();
+//		pstmt = dbc.getConnection().prepareStatement(sql);
+//		pstmt.setString(1,team_name);
+//		pstmt.setInt(2, suanliao);
+//		pstmt.setInt(3, kailiao);
+//		pstmt.setInt(4, mugong);
+//		pstmt.setInt(5, diqi);
+//		pstmt.setInt(6, penqi);
+//		pstmt.setInt(7, mianqi);
+//		pstmt.setInt(8, wujin);
+//		pstmt.setInt(9, anzhuang);
+//		pstmt.setFloat(10, ability);
+//		pstmt.setString(11, last);
+//		pstmt.setInt(12, teamID);
+//
+//		update_count=pstmt.executeUpdate();
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//		// 关闭数据库连接
+//			pstmt.close();
+//			dbc.close();
+//			
+//	}
+//		return update_count;
+//	
+//}
+
+
+
+	public ArrayList findAllWorkteam() throws Exception{
+		ArrayList teamlist = new ArrayList();
+		String sql = "SELECT * FROM workteam ORDER BY(teamID)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		try {
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs= pstmt.executeQuery();
+			while(rs.next()){
+				int tmpTeamID = rs.getInt(1);
+				String tmpTeam_name=rs.getString(2);
+				
+				int tmpSuanliao=rs.getInt(3);
+				int tmpKailiao=rs.getInt(4);
+				int tmpMugong = rs.getInt(5);
+				int tmpDiqi = rs.getInt(6);
+				int tmpPenqi = rs.getInt(7);
+				int tmpMianqi=rs.getInt(8);
+				int tmpWujin=rs.getInt(9);
+				int tmpAnzhuang=rs.getInt(10);
+				float tmpAbility=rs.getFloat(11);
+				String tmpLast = rs.getString(12);
+				tmpLast=new String(tmpLast.getBytes("GBK"));
+				
+				WorkteamBean workteam = new WorkteamBean();
+				workteam.setTeamID(tmpTeamID);
+				workteam.setTeam_name(tmpTeam_name);
+				workteam.setSuanliao(tmpSuanliao);
+				workteam.setKailiao(tmpKailiao);
+				workteam.setMugong(tmpMugong);
+				workteam.setDiqi(tmpDiqi);
+				workteam.setPendi(tmpPenqi);
+				workteam.setMianqi(tmpMianqi);
+				workteam.setWujin(tmpWujin);
+				workteam.setAnzhuang(tmpAnzhuang);
+				workteam.setAbility(tmpAbility);
+				workteam.setLast(tmpLast);
+				teamlist.add(workteam);
+				
+				
+			}
+		}catch(Exception e){ e.printStackTrace();}
+		
+		return teamlist;}
+	
+	public int insetintowork(String team_name,int suanliao,int kailiao,int mugong,int diqi,int penqi,int mianqi,int wujin,int anzhuang,float ability)throws Exception{
+		String sql = "INSERT INTO workteam(team_name,suanliao,kailiao,mugong,diqi,pendi,mianqi,wujin,anzhuang,ability,lasttime) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		TimeInfoBean time=new TimeInfoBean();
+		String last11=time.getTime();
+		int insert_count=0;
+		try{
+			dbc.DataBase_Connection();
+		pstmt=dbc.getConnection().prepareStatement(sql);
+	
+		pstmt.setString(1, team_name);
+		pstmt.setInt(2, suanliao);
+		pstmt.setInt(3, kailiao);
+		pstmt.setInt(4, mugong);
+		pstmt.setInt(5, diqi);
+		pstmt.setInt(6, penqi);
+		pstmt.setInt(7, mianqi);
+		pstmt.setInt(8, wujin);
+		pstmt.setInt(9, anzhuang);
+		pstmt.setFloat(10, ability);
+		pstmt.setString(11, last11);
+		
+		insert_count=pstmt.executeUpdate();
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			
+		}finally{
+			pstmt.close();
+			dbc.close();
+			
+		}
+		
+		return insert_count;
+
+	}
+//	更新工作组
+	
+	public int updateAccount1(int teamID,String team_name,int suanliao,int kailiao,int mugong,int diqi,int penqi,int mianqi,int wujin,int anzhuang,float ability)throws Exception {
+		
+		String sql = "UPDATE workteam SET team_name='"+team_name+"',suanliao='"+suanliao+"',kailiao='"+kailiao+"',mugong='"+mugong+"',diqi='"+diqi+"',pendi='"+penqi+"',mianqi='"+mianqi+"',wujin='"+wujin+"',anzhuang='"+anzhuang+"',ability='"+ability+"'WHERE teamID='"+teamID+"'";		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		int update_count=0;	
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+			
+	}
+		return update_count;
+	
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

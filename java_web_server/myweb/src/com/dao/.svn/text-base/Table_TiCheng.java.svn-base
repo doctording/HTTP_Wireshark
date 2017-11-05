@@ -1,0 +1,342 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_TiCheng {
+	
+	public Table_TiCheng()
+	{
+		super();
+	}
+	
+	
+	public int insertTiCheng(float low_percent,float high_percent,float ratio,int sign)throws Exception  {
+		//注意：要先判断该玻璃名是否已经存在
+		String sql = "INSERT INTO ticheng(low_percent,high_percent,ratio,sign) VALUES (?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		int boliID = 0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setFloat(1, low_percent);
+		pstmt.setFloat(2, high_percent);
+		pstmt.setFloat(3,ratio);
+		pstmt.setInt(4,sign);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	public ArrayList findTotal(int sign)throws Exception 
+	{
+		ArrayList list = new ArrayList();
+		String sql = "SELECT * FROM ticheng where sign=? " ;//对数据库的操作语句
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, sign);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				TiChengBean bean = new TiChengBean();
+				bean.setRatioID(rs.getInt(1));
+				bean.setLow_percent(rs.getFloat(2));
+				bean.setHigh_percent(rs.getFloat(3));
+				bean.setRatio(rs.getFloat(4));
+				bean.setSign(rs.getInt(5));
+				
+				// 把对象添加到集合中
+				list.add(bean);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;//返回bolilist
+	}	
+	
+	
+	
+	public ArrayList findByTiCheng(float lowpercent,float hightpercent)throws Exception 
+	{
+		ArrayList list = new ArrayList();
+		String sql = "SELECT * FROM ticheng where low_percent>=? and high_percent<=?  " ;//对数据库的操作语句
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setFloat(1, lowpercent);
+			pstmt.setFloat(2,hightpercent);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				TiChengBean bean = new TiChengBean();
+				bean.setRatioID(rs.getInt(1));
+				bean.setLow_percent(rs.getFloat(2));
+				bean.setHigh_percent(rs.getFloat(3));
+				bean.setRatio(rs.getFloat(4));
+				bean.setSign(rs.getInt(5));
+				
+				// 把对象添加到集合中
+				list.add(bean);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;//返回bolilist
+	}	
+	
+	public TiChengBean findTiCheng(float percent,int sign)throws Exception 
+	{
+		TiChengBean bean = new TiChengBean();
+		String sql = "SELECT * FROM ticheng where low_percent<=? and high_percent>=? and sign=?  " ;//对数据库的操作语句
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setFloat(1, percent);
+			pstmt.setFloat(2,percent);
+			pstmt.setInt(3,sign);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				bean.setRatioID(rs.getInt(1));
+				bean.setLow_percent(rs.getFloat(2));
+				bean.setHigh_percent(rs.getFloat(3));
+				bean.setRatio(rs.getFloat(4));
+				bean.setSign(rs.getInt(5));
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return bean;//返回bolilist
+	}	
+	
+	public TiChengBean selectByName(int ratioID) throws Exception  {
+		
+		TiChengBean bean = new TiChengBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from ticheng where ratioID='");
+		sql1.append(ratioID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+		
+				bean.setRatioID(rs.getInt(1));
+				bean.setLow_percent(rs.getFloat(2));
+				bean.setHigh_percent(rs.getFloat(3));
+				bean.setRatio(rs.getFloat(4));
+				bean.setSign(rs.getInt(5));
+				
+				// 把对象添加到集合中
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return bean;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM ticheng";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	//修改与更新玻璃数据表数据(玻璃名不允许修改)
+	public int UpdateByID(int ratioID,float low_percent,float high_percent,float ratio,int sign)throws Exception {
+		String sql = "update ticheng set low_percent=?,high_percent=?,ratio=?,sign=? where ratioID=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setFloat(1, low_percent);
+			pstmt.setFloat(2, high_percent);
+			pstmt.setFloat(3, ratio);
+			pstmt.setFloat(4, sign);
+			pstmt.setInt(5, ratioID);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	
+	public int DeleteById(int ratioID)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from ticheng where ratioID='");
+		sql1.append(ratioID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+}

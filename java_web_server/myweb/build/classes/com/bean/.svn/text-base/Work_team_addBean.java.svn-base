@@ -1,0 +1,109 @@
+package Table_bean;
+
+public class Work_team_addBean {
+
+	private int id;
+	private String work_team;//工作组
+	private String group_members;//工作组成员
+	private float gongling;//工龄
+	private float daigong_injury;//代工工伤
+	private float living_expenses;//生活费
+	private float month_holidays;//月规定假期
+	private float month_expenses;//月开支
+	private float salary;
+	private float ratio;
+	private int sign;
+	
+	public float getSalary() {
+		return salary;
+	}
+
+	public void setSalary(float salary) {
+		this.salary = salary;
+	}
+
+	public float getRatio() {
+		return ratio;
+	}
+
+	public void setRatio(float ratio) {
+		this.ratio = ratio;
+	}
+
+	public int getSign() {
+		return sign;
+	}
+
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+
+	public Work_team_addBean(){
+		super();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getWork_team() {
+		return work_team;
+	}
+
+	public void setWork_team(String work_team) {
+		this.work_team = work_team;
+	}
+
+	public String getGroup_members() {
+		return group_members;
+	}
+
+	public void setGroup_members(String group_members) {
+		this.group_members = group_members;
+	}
+
+	public float getGongling() {
+		return gongling;
+	}
+
+	public void setGongling(float gongling) {
+		this.gongling = gongling;
+	}
+
+	public float getDaigong_injury() {
+		return daigong_injury;
+	}
+
+	public void setDaigong_injury(float daigong_injury) {
+		this.daigong_injury = daigong_injury;
+	}
+
+	public float getLiving_expenses() {
+		return living_expenses;
+	}
+
+	public void setLiving_expenses(float living_expenses) {
+		this.living_expenses = living_expenses;
+	}
+
+	public float getMonth_holidays() {
+		return month_holidays;
+	}
+
+	public void setMonth_holidays(float month_holidays) {
+		this.month_holidays = month_holidays;
+	}
+
+	public float getMonth_expenses() {
+		return month_expenses;
+	}
+
+	public void setMonth_expenses(float month_expenses) {
+		this.month_expenses = month_expenses;
+	}
+	
+}

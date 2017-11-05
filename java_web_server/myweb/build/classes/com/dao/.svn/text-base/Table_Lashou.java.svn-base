@@ -1,0 +1,301 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Lashou {
+	
+	public Table_Lashou()
+	{
+		super();
+	}
+	
+	// 依靠最后ID来获取拉手个数
+	public int getlastLashouID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM lashou order by(lashouID) DESC";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取拉手的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加拉手种类     
+	public int insertLashou(String lashou_name,float lashou_price,int lashou_sign,float woodworking,float wujin)throws Exception  {
+		//注意：要先判断该拉手名是否已经存在
+		String sql = "INSERT INTO lashou(lashouID,lashou_name,lashou_price,lashou_sign,woodworking,wujin) VALUES (?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		int lashouID = 0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, lashouID);
+		pstmt.setString(2, lashou_name);
+		pstmt.setFloat(3,lashou_price);
+		pstmt.setInt(4,lashou_sign);
+		pstmt.setFloat(5, woodworking);
+		pstmt.setFloat(6, wujin);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有拉手信息
+	public ArrayList findTotalLashou(String pageNo)throws Exception 
+	{
+		ArrayList lashoulist = new ArrayList();
+		String sql = "SELECT * FROM lashou order by(lashouID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpLashouID=rs.getInt(1);
+				
+				String tmpLashou_name=rs.getString(2);
+				// 进行编码转换
+				tmpLashou_name=new String(tmpLashou_name.getBytes("GBK"));
+				
+				float tmpLashou_price=rs.getFloat(3);
+				int tmpLashou_sign=rs.getInt(4);
+				float tmpMugong=rs.getFloat(5);
+				float tmpWujin=rs.getFloat(6);
+			
+			
+				LashouBean lashou = new LashouBean();
+				lashou.setLashouID(tmpLashouID);
+				lashou.setLashou_name(tmpLashou_name);
+				lashou.setLashou_price(tmpLashou_price);
+				lashou.setLashou_sign(tmpLashou_sign);
+				lashou.setMugong(tmpMugong);
+				lashou.setWujin(tmpWujin);
+
+				// 把对象添加到集合中
+				lashoulist.add(lashou);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return lashoulist;
+	}	
+	
+	
+	public boolean hasExist(String lashou_name,int lashou_sign) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from lashou where lashou_name='");
+	sql1.append(lashou_name);
+	sql1.append("' AND lashou_sign='");
+	sql1.append(lashou_sign);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	//获取门拉手或者抽拉手(门拉手lashou_sign字段=1;抽拉手lashou_sign字段=2)
+	public LashouBean selectMenLashouByName(int lashou_sign) throws Exception  {
+		
+		LashouBean lashou = new LashouBean();
+		String sql = new String();
+		sql="select * from lashou where lashou_sign='"+lashou_sign+"' ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				lashou.setLashouID(rs.getInt("LashouID"));
+				lashou.setLashou_name(rs.getString("Lashou_name"));
+				lashou.setLashou_price(rs.getFloat("Lashou_price"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return lashou;	
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM lashou ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	public int DeleteLashou(String lashou_name,int lashou_sign)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from lashou where lashou_name='");
+		sql1.append(lashou_name);
+		sql1.append("'AND lashou_sign='");
+		sql1.append(lashou_sign);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+}

@@ -1,0 +1,482 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Style {
+	
+	public Table_Style()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取款式个数
+	public int getlastStyleID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM style order by(styleID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加款式种类     
+	public int insertStyle(String style_name,float style_ratio,float price_discount,float lowest_discount,float calculate_material,float open_material,float woodworking,float primer,float spray_bottom,float spray_face,float hardware,float install)throws Exception  {
+		//注意：要先判断该款式名是否已经存在
+		String sql = "INSERT INTO style(style_name,style_ratio,price_discount,lowest_discount,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin,anzhuang) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+	
+		pstmt.setString(1, style_name);
+		pstmt.setFloat(2,style_ratio);
+		pstmt.setFloat(3,price_discount);
+		pstmt.setFloat(4,lowest_discount);
+		pstmt.setFloat(5,calculate_material);
+		pstmt.setFloat(6,open_material);
+		pstmt.setFloat(7,woodworking);
+		pstmt.setFloat(8,primer);
+		pstmt.setFloat(9,spray_bottom);
+		pstmt.setFloat(10,spray_face);
+		pstmt.setFloat(11,hardware);
+		pstmt.setFloat(12,install);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+	//获取所有款式信息
+	public ArrayList findTotalStyle(String pageNo)throws Exception 
+	{
+		ArrayList stylelist = new ArrayList();
+		String sql = "SELECT * FROM style order by(styleID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			int iPageNo=1;
+			// 要显示的第一条记录,一页十条记录
+		        iPageNo=Integer.parseInt(pageNo);
+			int begin = ( iPageNo-1)*10+1;
+			// 要显示的最后一条记录
+			int end = iPageNo*10;
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{index++;
+			
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+			
+
+				// 获取结果集中的信息
+				int tmpStyleID=rs.getInt(1);
+				
+				String tmpStyle_name=rs.getString(2);
+				// 进行编码转换
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				float tmpStyle_ratio=rs.getFloat(3);
+				float tmpprice_Discount=rs.getFloat(4);
+				float tmplowest_discout=rs.getFloat(5);
+				float tmpsuanliao=rs.getFloat(6); 
+				float tmpkailiao=rs.getFloat(7);
+				float tmpmugong=rs.getFloat(8);
+				float tmpdiqi=rs.getFloat(9);
+				float tmppendi=rs.getFloat(10);
+				float tmppemmian=rs.getFloat(11);
+				float tmpwujin=rs.getFloat(12);
+				float tmpanzhuang=rs.getFloat(13);
+				
+			
+		
+				StyleBean style = new StyleBean();
+				style.setStyleID(tmpStyleID);
+				style.setStyle_name(tmpStyle_name);
+				style.setStyle_ratio(tmpStyle_ratio);
+				style.setPrice_discount(tmpprice_Discount);
+				style.setLowest_discount(tmplowest_discout);
+				style.setSuanliao(tmpsuanliao);
+				style.setKailiao(tmpkailiao);
+				style.setMugong(tmpmugong);
+				style.setDiqi(tmpdiqi);
+				style.setPendi(tmppendi);
+				style.setPenmian(tmppemmian);
+				style.setWujin(tmpwujin);
+				style.setAnzhuang(tmpanzhuang);
+
+				// 把对象添加到集合中
+				stylelist.add(style);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return stylelist;
+	}	
+	
+	
+	public boolean hasExist(String style_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from style where style_name='");
+	sql1.append(style_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	public StyleBean selectStyleByName(String style_name) throws Exception  {
+		
+		StyleBean style = new StyleBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from style where style_name='");
+		sql1.append(style_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				style.setStyleID(rs.getInt("StyleID"));
+				style.setStyle_name(rs.getString("Style_name"));
+				style.setStyle_ratio(rs.getFloat("Style_ratio"));
+				style.setPrice_discount(rs.getFloat("Price_discount"));
+				style.setLowest_discount(rs.getFloat("Lowest_discount"));
+				style.setSuanliao(rs.getFloat("suanliao"));
+				style.setKailiao(rs.getFloat("kailiao"));
+				style.setMugong(rs.getFloat("mugong"));
+				style.setDiqi(rs.getFloat("diqi"));
+				style.setPendi(rs.getFloat("pendi"));
+				style.setPenmian(rs.getFloat("penmian"));
+				style.setWujin(rs.getFloat("wujin"));
+				style.setAnzhuang(rs.getFloat("anzhuang"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return style;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM style ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	public int DeleteStyle(String style_name)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from style where style_name='");
+		sql1.append(style_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+		
+	
+public StyleBean selectStyleByID(int styleID) throws Exception  {
+		
+		StyleBean stylebean = new StyleBean();
+		String sql = "select * from style where styleID = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,styleID);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				stylebean.setStyleID(rs.getInt(1));
+				stylebean.setStyle_name(rs.getString(2));
+				stylebean.setStyle_ratio(rs.getFloat(3));
+				stylebean.setPrice_discount(rs.getFloat(4));
+				stylebean.setLowest_discount(rs.getFloat(5));
+				stylebean.setSuanliao(rs.getFloat(6));
+				stylebean.setKailiao(rs.getFloat(7));
+				stylebean.setMugong(rs.getFloat(8));
+				stylebean.setDiqi(rs.getFloat(9));
+				stylebean.setPendi(rs.getFloat(10));
+				stylebean.setPenmian(rs.getFloat(11));
+				stylebean.setWujin(rs.getFloat(12));
+				stylebean.setAnzhuang(rs.getFloat(13));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+			
+				
+        return stylebean;
+		
+	}
+	
+
+//根据id进行更新
+public int updateStyle(int styleID	,String style_name,float style_ratio,float price_discount,float lowest_discount,float suanliao,float kailiao,float mugong ,float diqi,float pendi ,float penmian,float wujin ,float anzhuang )throws Exception{
+	String sql = "UPDATE  style SET  style_name=?,style_ratio=?,price_discount=?,lowest_discount=?,suanliao=?,kailiao=?,mugong=?,diqi=?,pendi=?,penmian=?,wujin=?,anzhuang=?  where styleID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,style_name);
+		pstmt.setFloat(2, style_ratio);
+		pstmt.setFloat(3, price_discount);
+		pstmt.setFloat(4, lowest_discount);
+		
+		pstmt.setFloat(5,suanliao );
+		pstmt.setFloat(6, kailiao);
+		pstmt.setFloat(7, mugong);
+		pstmt.setFloat(8, diqi);
+		
+		pstmt.setFloat(9, pendi);
+		pstmt.setFloat(10,penmian );
+		pstmt.setFloat(11, wujin);
+		pstmt.setFloat(12, anzhuang);
+		pstmt.setInt(13, styleID);
+		
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+	
+	
+	
+
+public int deleteStyleById(int styleID)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from style where styleID='");
+	sql1.append(styleID);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

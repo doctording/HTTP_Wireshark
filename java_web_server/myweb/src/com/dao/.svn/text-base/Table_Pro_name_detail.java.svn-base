@@ -1,0 +1,751 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Pro_name_detail  {
+	
+	public Table_Pro_name_detail()
+	{
+		super();
+	}
+	
+	public int getlastContractID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM product order by(pro_sort) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+		return lastmessid;		
+	}
+	
+	//从数据库中找出所有产品名称
+	public ArrayList findTotalPro_name()throws Exception 
+	{
+		ArrayList pro_namelist = new ArrayList();
+		String sql = "SELECT DISTINCT pro_name FROM product ORDER BY(pro_name)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				String tmpPro_name=rs.getString(1);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				ProductBean product = new ProductBean();
+				product.setPro_name(tmpPro_name);
+				// 把对象添加到集合中
+				pro_namelist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_namelist;
+	}
+	
+	
+	//从数据库中模糊搜索产品项目
+	public ArrayList findPro_item(String word)throws Exception 
+	{
+		ArrayList pro_itemlist = new ArrayList();
+		String sql = "SELECT  pro_item FROM product where pro_name = ? " ;
+		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, word);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				// 获取结果集中的信息
+				String tmpPro_item=rs.getString(1);
+				// 进行编码转换
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				ProductBean product = new ProductBean();
+				product.setPro_item(tmpPro_item);
+				// 把对象添加到集合中
+				pro_itemlist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_itemlist;
+	}	
+	
+	
+
+	public ArrayList findTotalProduct()throws Exception 
+	{
+		ArrayList productlist = new ArrayList();
+		String sql = "SELECT * FROM product order by(proID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpProID = rs.getInt(1);
+				
+				String tmpPro_sort=rs.getString(2);
+				// 进行编码转换
+				tmpPro_sort=new String(tmpPro_sort.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				// 进行编码转换
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				int tmpLimit_length = rs.getInt(5);
+				int tmpLimit_height = rs.getInt(6);
+				int tmpLimit_depth = rs.getInt(7);
+				
+				String tmpPro_standard=rs.getString(8);
+				// 进行编码转换
+				tmpPro_standard=new String(tmpPro_standard.getBytes("GBK"));
+				
+				String tmpPro_unit=rs.getString(9);
+				// 进行编码转换
+				tmpPro_unit=new String(tmpPro_unit.getBytes("GBK"));
+				
+				float tmpPro_perunit=rs.getFloat(10);
+				
+				String tmpPro_mark=rs.getString(11);
+				// 进行编码转换
+				tmpPro_mark=new String(tmpPro_mark.getBytes("GBK"));
+				
+				int tmpMethod = rs.getInt(12);
+				
+				float tmpPro_dosage=rs.getFloat(13);
+			
+				ProductBean product = new ProductBean();
+				product.setProID(tmpProID);
+				product.setPro_sort(tmpPro_sort);
+				product.setPro_name(tmpPro_name);
+				product.setPro_item(tmpPro_item);
+				product.setLimit_length(tmpLimit_length);
+				product.setLimit_height(tmpLimit_height);
+				product.setLimit_depth(tmpLimit_depth);
+				product.setPro_standard(tmpPro_standard);
+				product.setPro_unit(tmpPro_unit);
+				product.setPro_perunit(tmpPro_perunit);
+				product.setPro_mark(tmpPro_mark);
+				product.setMethod(tmpMethod);
+				product.setPro_dosage(tmpPro_dosage);
+
+				// 把对象添加到集合中
+				productlist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return productlist;
+	}	
+	
+	
+	//从数据库中模糊搜索产品名称
+	public ArrayList findPro_name(String word)throws Exception 
+	{
+		ArrayList pro_namelist = new ArrayList();
+		String sql = "SELECT DISTINCT pro_name FROM product where pro_name like  '%"+word+"%' ORDER BY(pro_name)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				// 获取结果集中的信息
+				String tmpPro_name=rs.getString(1);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				ProductBean product = new ProductBean();
+				product.setPro_name(tmpPro_name);
+				// 把对象添加到集合中
+				pro_namelist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_namelist;
+	}	
+	
+	public boolean hasExist(String pro_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from product where pro_name='");
+	sql1.append(pro_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+
+	//根据proID从数据库中删除某项产品
+	public int deleteByproID(int proID)throws Exception {
+
+		String sql = "DELETE  FROM product WHERE proID='"+proID+"'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}
+	
+	
+	public ArrayList selectDetailByName(String pro_name) throws Exception  {
+		
+		ArrayList pro_namelist = new ArrayList();
+		String sql = "SELECT * FROM pro_name_detail WHERE pro_name=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, pro_name);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				// 获取结果集中的信息
+				int tmpPro_id=rs.getInt(1);
+				String tmpPro_name=rs.getString(2);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				String tmpDetail_name=rs.getString(3);
+				// 进行编码转换
+				tmpDetail_name=new String(tmpDetail_name.getBytes("GBK"));
+				Pro_name_detailBean product = new Pro_name_detailBean();
+				product.setPro_id(tmpPro_id);
+				product.setPro_name(tmpPro_name);
+				product.setDetail_name(tmpDetail_name);
+				// 把对象添加到集合中
+				pro_namelist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_namelist;
+	}	
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM product ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}
+	
+	public int ClearTableContract()throws Exception {
+
+		String sql = "DELETE  FROM contract";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}*/
+	public int deleteStyleByname(String pro_name)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from pro_name_detail where pro_name='");
+		sql1.append(pro_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}		
+	//根据id进行更新
+	public int updateProNameDetail(int pro_id	,String pro_name,String detail_name )throws Exception{
+		String sql = "UPDATE  pro_name_detail SET  pro_name=?,detail_name=?where pro_id=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		try{
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			pstmt.setString(1,pro_name);
+			pstmt.setString(2, detail_name);
+			pstmt.setInt(3, pro_id);
+			
+			
+			
+			
+			
+			// 进行数据库插入操作
+		 int count1=pstmt.executeUpdate();
+		 return count1;
+		}
+		catch(Exception e){
+			throw new Exception("出现异常");
+		}
+		finally{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();}
+		}
+
+	public Pro_name_detailBean findDetailNamebean(String pro_name,String detail_name)throws Exception 
+	{
+
+		String sql="select * from pro_name_detail where pro_name='"+pro_name+"'and detail_name='"+detail_name+"'";
+		Pro_name_detailBean product=new	Pro_name_detailBean();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			// 进行数据库查询操作Ss
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				
+				product.setPro_id(rs.getInt(1));
+				product.setPro_name(rs.getString(2));
+				product.setDetail_name(rs.getString(3));
+
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return product;
+		
+	}	
+	//添加款式种类     
+	public int insertPro_name_detail(String pro_name,String detail_name)throws Exception  {
+		//注意：要先判断该款式名是否已经存在
+		String sql = "INSERT INTO pro_name_detail(pro_name,detail_name) VALUES (?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		int styleID = 0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, pro_name);
+		pstmt.setString(2,detail_name);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+	public int deleteStyleByproname(String pro_name,String detail_name)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		String sql="DELETE from pro_name_detail where pro_name='"+pro_name+"'and detail_name='"+detail_name+"'";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	public ArrayList selectByName(String pro_name) throws Exception  {
+		ArrayList detail_namelist = new ArrayList();
+		Pro_name_detailBean namedetailbean=new	Pro_name_detailBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from pro_name_detail where pro_name='");
+		sql1.append(pro_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				
+				namedetailbean.setPro_id(rs.getInt(1));
+				namedetailbean.setPro_name(rs.getString(2));
+				namedetailbean.setDetail_name(rs.getString(3));
+
+
+				// 把对象添加到集合中
+				detail_namelist.add(namedetailbean);;
+
+			}
+			
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+		return detail_namelist;
+		
+	}
+	public int deleteStyleById(int pro_id)throws Exception {
+
+		String sql ="DELETE from pro_name_detail where pro_id='"+pro_id+"'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+}

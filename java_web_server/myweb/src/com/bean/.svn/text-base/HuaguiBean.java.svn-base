@@ -1,0 +1,66 @@
+package Table_bean;
+
+public class HuaguiBean {
+
+	//4个字段
+	private int huaguiID;
+	private String huagui_name;
+	private float huagui_price;
+	private float wujin;
+	
+	public HuaguiBean()
+	{
+		super();
+	}
+	/**
+	 * @return HuaguiID
+	 */
+	public int getHuaguiID() {
+		return huaguiID;
+	}
+	/**
+	 * @param huaguiID 要设置的HuaguiID
+	 */
+	public void setHuaguiID(int huaguiID) {
+		this.huaguiID = huaguiID;
+	}
+	/**
+	 * @return huagui_name
+	 */
+	public String getHuagui_name() {
+		return huagui_name;
+	}
+	/**
+	 * @param huagui_name 要设置的 huagui_name
+	 */
+	public void setHuagui_name(String huagui_name) {
+		this.huagui_name = huagui_name;
+	}
+	
+	/**
+	 * @return huagui_price
+	 */
+	public float getHuagui_price() {
+		return huagui_price;
+	}
+	/**
+	 * @param huagui_price 要设置的 huagui_price
+	 */
+	public void setHuagui_price(float huagui_price) {
+		this.huagui_price = huagui_price;
+	}
+	
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+}

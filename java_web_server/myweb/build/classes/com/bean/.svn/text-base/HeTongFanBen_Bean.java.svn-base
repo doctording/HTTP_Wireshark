@@ -1,0 +1,18 @@
+package Table_bean;
+
+public class HeTongFanBen_Bean {
+	private int hetongID;
+	private String hetongfanben;
+	public int getHetongID() {
+		return hetongID;
+	}
+	public void setHetongID(int hetongID) {
+		this.hetongID = hetongID;
+	}
+	public String getHetongfanben() {
+		return hetongfanben;
+	}
+	public void setHetongfanben(String hetongfanben) {
+		this.hetongfanben = hetongfanben;
+	}
+}

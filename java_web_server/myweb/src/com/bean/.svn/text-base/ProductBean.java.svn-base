@@ -1,0 +1,326 @@
+package Table_bean;
+
+public class ProductBean {
+
+	//21¸ö×Ö¶Î
+	private int proID;
+	private String pro_sort;
+	private String pro_name;
+	private String pro_item;
+	private int limit_length;
+	private int limit_height;
+	private int limit_depth;
+	private String pro_standard;
+	private String pro_unit;
+	private float pro_perunit;
+	private String pro_mark;
+	private int method;
+	private float pro_dosage;
+	private float suanliao;//calculate_material; 
+	private float kailiao;//open_material;
+	private float mugong;//woodworking;
+	private float diqi;//primer;
+	private float pendi;//spray_bottom;
+	private float penmian;//spray_face;
+	private float wujin;//hardware;	
+	private float anzhuang;//installation;
+	
+	public ProductBean(){
+		super();
+	}
+
+	/**
+	 * @return the proID
+	 */
+	public int getProID() {
+		return proID;
+	}
+
+	/**
+	 * @param proID the proID to set
+	 */
+	public void setProID(int proID) {
+		this.proID = proID;
+	}
+
+	/**
+	 * @return the pro_sort
+	 */
+	public String getPro_sort() {
+		return pro_sort;
+	}
+
+	/**
+	 * @param pro_sort the pro_sort to set
+	 */
+	public void setPro_sort(String pro_sort) {
+		this.pro_sort = pro_sort;
+	}
+
+	/**
+	 * @return the pro_name
+	 */
+	public String getPro_name() {
+		return pro_name;
+	}
+
+	/**
+	 * @param pro_name the pro_name to set
+	 */
+	public void setPro_name(String pro_name) {
+		this.pro_name = pro_name;
+	}
+
+	/**
+	 * @return the pro_item
+	 */
+	public String getPro_item() {
+		return pro_item;
+	}
+
+	/**
+	 * @param pro_item the pro_item to set
+	 */
+	public void setPro_item(String pro_item) {
+		this.pro_item = pro_item;
+	}
+
+	/**
+	 * @return the limit_length
+	 */
+	public int getLimit_length() {
+		return limit_length;
+	}
+
+	/**
+	 * @param limit_length the limit_length to set
+	 */
+	public void setLimit_length(int limit_length) {
+		this.limit_length = limit_length;
+	}
+
+	/**
+	 * @return the limit_height
+	 */
+	public int getLimit_height() {
+		return limit_height;
+	}
+
+	/**
+	 * @param limit_height the limit_height to set
+	 */
+	public void setLimit_height(int limit_height) {
+		this.limit_height = limit_height;
+	}
+
+	/**
+	 * @return the limit_depth
+	 */
+	public int getLimit_depth() {
+		return limit_depth;
+	}
+
+	/**
+	 * @param limit_depth the limit_depth to set
+	 */
+	public void setLimit_depth(int limit_depth) {
+		this.limit_depth = limit_depth;
+	}
+
+	/**
+	 * @return the pro_standard
+	 */
+	public String getPro_standard() {
+		return pro_standard;
+	}
+
+	/**
+	 * @param pro_standard the pro_standard to set
+	 */
+	public void setPro_standard(String pro_standard) {
+		this.pro_standard = pro_standard;
+	}
+
+	/**
+	 * @return the pro_unit
+	 */
+	public String getPro_unit() {
+		return pro_unit;
+	}
+
+	/**
+	 * @param pro_unit the pro_unit to set
+	 */
+	public void setPro_unit(String pro_unit) {
+		this.pro_unit = pro_unit;
+	}
+
+	/**
+	 * @return the pro_perunit
+	 */
+	public float getPro_perunit() {
+		return pro_perunit;
+	}
+
+	/**
+	 * @param pro_perunit the pro_perunit to set
+	 */
+	public void setPro_perunit(float pro_perunit) {
+		this.pro_perunit = pro_perunit;
+	}
+
+	/**
+	 * @return the pro_mark
+	 */
+	public String getPro_mark() {
+		return pro_mark;
+	}
+
+	/**
+	 * @param pro_mark the pro_mark to set
+	 */
+	public void setPro_mark(String pro_mark) {
+		this.pro_mark = pro_mark;
+	}
+
+	/**
+	 * @return the method
+	 */
+	public int getMethod() {
+		return method;
+	}
+
+	/**
+	 * @param method the method to set
+	 */
+	public void setMethod(int method) {
+		this.method = method;
+	}
+
+	/**
+	 * @return the pro_dosage
+	 */
+	public float getPro_dosage() {
+		return pro_dosage;
+	}
+
+	/**
+	 * @param pro_dosage the pro_dosage to set
+	 */
+	public void setPro_dosage(float pro_dosage) {
+		this.pro_dosage = pro_dosage;
+	}
+
+	/**
+	 * @return the suanliao
+	 */
+	public float getSuanliao() {
+		return suanliao;
+	}
+
+	/**
+	 * @param suanliao the suanliao to set
+	 */
+	public void setSuanliao(float suanliao) {
+		this.suanliao = suanliao;
+	}
+
+	/**
+	 * @return the kailiao
+	 */
+	public float getKailiao() {
+		return kailiao;
+	}
+
+	/**
+	 * @param kailiao the kailiao to set
+	 */
+	public void setKailiao(float kailiao) {
+		this.kailiao = kailiao;
+	}
+
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+
+	/**
+	 * @return the diqi
+	 */
+	public float getDiqi() {
+		return diqi;
+	}
+
+	/**
+	 * @param diqi the diqi to set
+	 */
+	public void setDiqi(float diqi) {
+		this.diqi = diqi;
+	}
+
+	/**
+	 * @return the pendi
+	 */
+	public float getPendi() {
+		return pendi;
+	}
+
+	/**
+	 * @param pendi the pendi to set
+	 */
+	public void setPendi(float pendi) {
+		this.pendi = pendi;
+	}
+
+	/**
+	 * @return the penmian
+	 */
+	public float getPenmian() {
+		return penmian;
+	}
+
+	/**
+	 * @param penmian the penmian to set
+	 */
+	public void setPenmian(float penmian) {
+		this.penmian = penmian;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+	/**
+	 * @return the anzhuang
+	 */
+	public float getAnzhuang() {
+		return anzhuang;
+	}
+
+	/**
+	 * @param anzhuang the anzhuang to set
+	 */
+	public void setAnzhuang(float anzhuang) {
+		this.anzhuang = anzhuang;
+	}
+	
+}

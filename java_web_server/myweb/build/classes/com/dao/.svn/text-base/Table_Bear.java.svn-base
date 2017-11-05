@@ -1,0 +1,291 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Bear {
+	
+	public Table_Bear()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取玻璃个数
+	public int getlastBearID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM bear order by(bearID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加
+	public int insertBoli(String respon_people,int wood,int paint,int peijian,int yunfei,int gongfei,int guanlifei)throws Exception  {
+
+		String sql = "INSERT INTO bear(respon_people,wood,paint,peijian,yunfei,gongfei,guanlifei) VALUES (?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+
+		pstmt.setString(1, respon_people);
+		pstmt.setInt(2,wood);
+		pstmt.setInt(3,paint);
+		pstmt.setInt(4,peijian);
+		pstmt.setInt(5,yunfei);
+		pstmt.setInt(6,gongfei);
+		pstmt.setInt(7,guanlifei);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	public ArrayList findTotalBear()throws Exception //返回一个ArrayList bolilist
+	{
+		ArrayList bearlist = new ArrayList();
+		
+		String sql = "SELECT * FROM bear " ;//对数据库的操作语句
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				BearBean bear = new BearBean();
+			bear.setBearID(rs.getInt(1));
+			bear.setRespon_people(rs.getString(2));
+			bear.setWood(rs.getInt(3));
+			bear.setPaint(rs.getInt(4));
+			bear.setPeijian(rs.getInt(5));
+			bear.setYunfei(rs.getInt(6));
+			bear.setGongfei(rs.getInt(7));
+			bear.setGuanlifei(rs.getInt(8));
+				
+				// 把对象添加到集合中
+				bearlist.add(bear);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return bearlist;//返回bolilist
+	}	
+	
+	
+	
+	public BearBean selectBearBypeople(String respon_people) throws Exception  {
+		
+		BearBean bear = new BearBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from bear where respon_people='");
+		sql1.append(respon_people);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				bear.setBearID(rs.getInt(1));
+				bear.setRespon_people(rs.getString(2));
+				bear.setWood(rs.getInt(3));
+				bear.setPaint(rs.getInt(4));
+				bear.setPeijian(rs.getInt(5));
+				bear.setYunfei(rs.getInt(6));
+				bear.setGongfei(rs.getInt(7));
+				bear.setGuanlifei(rs.getInt(8));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return bear;
+		
+	}
+
+public BearBean selectBearByID(int id) throws Exception  {
+		
+		BearBean bear = new BearBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from bear where bearID='");
+		sql1.append(id);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				bear.setBearID(rs.getInt(1));
+				bear.setRespon_people(rs.getString(2));
+				bear.setWood(rs.getInt(3));
+				bear.setPaint(rs.getInt(4));
+				bear.setPeijian(rs.getInt(5));
+				bear.setYunfei(rs.getInt(6));
+				bear.setGongfei(rs.getInt(7));
+				bear.setGuanlifei(rs.getInt(8));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return bear;
+		
+	}
+
+	//修改与更新玻璃数据表数据(玻璃名不允许修改)
+	public int UpdateBoli(int bearID,String respon_people,int wood,int paint,int peijian,int yunfei,int gongfei,int guanlifei)throws Exception {
+		String sql = "update bear set respon_people=?,wood=?,paint=?,peijian=?,yunfei=?,gongfei=?,guanlifei=? where bearID=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, respon_people);
+			pstmt.setInt(2, wood);
+			pstmt.setInt(3, paint);
+			pstmt.setInt(4, peijian);
+			pstmt.setInt(5, yunfei);
+			pstmt.setInt(6, gongfei);
+			pstmt.setInt(7, guanlifei);
+			pstmt.setInt(8, bearID);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	
+	public int DeleteBear(int bearID)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from bear where bearID='");
+		sql1.append(bearID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+}

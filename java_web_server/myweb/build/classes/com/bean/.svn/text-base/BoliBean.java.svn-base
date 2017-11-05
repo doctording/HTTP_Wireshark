@@ -1,0 +1,72 @@
+package Table_bean;
+
+public class BoliBean {
+
+	//4¸ö×Ö¶Î
+	private int boliID;
+	private String boli_name;
+	private float boli_price;
+	private float wujin;
+	
+	public BoliBean()
+	{
+		super();
+	}
+
+	/**
+	 * @return the boliID
+	 */
+	public int getBoliID() {
+		return boliID;
+	}
+
+	/**
+	 * @param boliID the boliID to set
+	 */
+	public void setBoliID(int boliID) {
+		this.boliID = boliID;
+	}
+
+	/**
+	 * @return the boli_name
+	 */
+	public String getBoli_name() {
+		return boli_name;
+	}
+
+	/**
+	 * @param boli_name the boli_name to set
+	 */
+	public void setBoli_name(String boli_name) {
+		this.boli_name = boli_name;
+	}
+
+	/**
+	 * @return the boli_price
+	 */
+	public float getBoli_price() {
+		return boli_price;
+	}
+
+	/**
+	 * @param boli_price the boli_price to set
+	 */
+	public void setBoli_price(float boli_price) {
+		this.boli_price = boli_price;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+}

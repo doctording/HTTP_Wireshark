@@ -1,0 +1,60 @@
+package Table_bean;
+
+public class BearBean {
+	private int bearID;
+	private String respon_people;
+	private int wood;
+	private int paint;
+	private int peijian;
+	private int yunfei;
+	private int gongfei;
+	private int guanlifei;
+	public int getBearID() {
+		return bearID;
+	}
+	public void setBearID(int bearID) {
+		this.bearID = bearID;
+	}
+	public String getRespon_people() {
+		return respon_people;
+	}
+	public void setRespon_people(String responPeople) {
+		respon_people = responPeople;
+	}
+	public int getWood() {
+		return wood;
+	}
+	public void setWood(int wood) {
+		this.wood = wood;
+	}
+	public int getPaint() {
+		return paint;
+	}
+	public void setPaint(int paint) {
+		this.paint = paint;
+	}
+	public int getPeijian() {
+		return peijian;
+	}
+	public void setPeijian(int peijian) {
+		this.peijian = peijian;
+	}
+	public int getYunfei() {
+		return yunfei;
+	}
+	public void setYunfei(int yunfei) {
+		this.yunfei = yunfei;
+	}
+	public int getGongfei() {
+		return gongfei;
+	}
+	public void setGongfei(int gongfei) {
+		this.gongfei = gongfei;
+	}
+	public int getGuanlifei() {
+		return guanlifei;
+	}
+	public void setGuanlifei(int guanlifei) {
+		this.guanlifei = guanlifei;
+	}
+}

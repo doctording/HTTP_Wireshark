@@ -1,0 +1,708 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Message {
+	
+	public Table_Message()
+	{
+		super();
+	}
+	
+	//获得总的页数
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM message ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+	
+	public int getlastMessageID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM message order by(messageID) desc";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		MessageBean messageinfo= new MessageBean();
+		int lastmessid=0;
+	
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+        	
+
+		}
+
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+		
+		return lastmessid;	
+		
+	}
+	public int insertMessage(MessageBean message)throws Exception  {
+		String sql = "INSERT INTO message(messageID,title,content,writer,writedate,count) VALUES (?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		int insert_ID=0;
+		int insert_count=0;
+		//获得数据库中最后的留言的ID号（最大值）
+		insert_ID=getlastMessageID();
+		//设置当前留言为最大ID+1
+		message.setMessageID(insert_ID+1);
+	
+			
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1,message.getMessageID());
+		pstmt.setString(2, message.getTitle());
+		pstmt.setString(3, message.getContent());
+		pstmt.setString(4, message.getWriter());
+		pstmt.setString(5,message.getWritedate());
+		pstmt.setInt(6,message.getCount());
+		
+		
+		
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+		
+	}
+
+	public ArrayList findTotalMessage(String pageNo)throws Exception 
+	{
+		ArrayList messagelist = new ArrayList();
+		String sql = "SELECT * FROM message order by(messageID)  desc " ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		
+		// 要显示的页码，默认值为1
+		int iPageNo=1;
+		// 要显示的第一条记录,一页十条记录
+	        iPageNo=Integer.parseInt(pageNo);
+		int begin = ( iPageNo-1)*10+1;
+		// 要显示的最后一条记录
+		int end = iPageNo*10;
+		// 循环计数器
+		int index = 0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				if(index < begin)
+				continue;
+				// 如果已经大于最后一条记录，则结束循环
+				if(index > end)
+				break;
+				
+				// 获取结果集中的信息
+				int tmpMessageID=rs.getInt(1);
+				String tmpTitle=rs.getString(2);
+				// 进行编码转换
+				tmpTitle=new String(tmpTitle.getBytes("GBK"));
+				String tmpContent=rs.getString(3);
+				// 进行编码转换
+				tmpContent=new String(tmpContent.getBytes("GBK"));
+				String tmpwriter=rs.getString(4);
+				// 进行编码转换
+				tmpContent=new String(tmpContent.getBytes("GBK"));
+				String tmpwriterDate=rs.getString(5);
+				int tmpcount=rs.getInt(6);
+			
+				MessageBean message = new MessageBean();
+				message.setMessageID(tmpMessageID);
+				message.setTitle(tmpTitle);
+				message.setContent(tmpContent);
+				message.setWriter(tmpwriter);
+				message.setWriteDate(tmpwriterDate);
+				message.setCount(tmpcount);
+				
+				// 把对象添加到集合中
+				messagelist.add(message);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return messagelist;
+	}	
+	public MessageBean selectMessageByID(int messageID) throws Exception  {
+		
+		MessageBean message = new MessageBean();
+		String sql = "select * from message where messageID = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,messageID);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				
+				message.setMessageID(rs.getInt("messageID"));
+				message.setTitle(rs.getString("title"));
+				message.setContent(rs.getString("content"));
+				message.setWriter(rs.getString("writer"));
+				message.setWriteDate(rs.getString("writedate"));
+				message.setCount(rs.getInt("count"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+			
+				
+        return message;
+		
+	}
+
+	
+	public int updateCount(String messageID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}
+	
+	public int ClearTableMessage()throws Exception {
+
+		String sql = "DELETE  FROM message";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}
+	//浏览数加1的方法
+public void changeScan(int messageID) throws Exception  {
+		
+		
+		String sql = "update message set scan=scan+1 where messageID = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			//pstmt.setInt(1,scan);
+			pstmt.setInt(1,messageID);
+			// 进行数据库查询操作
+			pstmt.executeUpdate();
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			
+			pstmt.close();
+			dbc.close();	
+			}
+    
+		
+	}
+//根据id进行更新
+public int updateMessage(int messageID,String title,String content,String writer,String writedate,int count,int scan )throws Exception{
+	String sql = "UPDATE  message SET  title=? ,content=?,writer=?,writedate=?,count=?,scan=? WHERE messageID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,title);
+		pstmt.setString(2,content);
+		pstmt.setString(3,writer);
+		pstmt.setString(4,writedate);
+		pstmt.setInt(5,count);
+		pstmt.setInt(6,scan);
+		
+		pstmt.setInt(7,messageID);
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+	
+public int DeleteMessageByID(int messageID)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from message where messageID='");
+	sql1.append(messageID);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+
+//模糊搜索的方法
+		//根据标题查询
+public ArrayList findMessageByTitle(String word)throws Exception 
+{
+	ArrayList messagelist = new ArrayList();
+	String sql = "SELECT * FROM message where title like  '%"+word+"%' ORDER BY(title)" ;
+	
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+            int tmpmessageID=rs.getInt(1);
+			String tmptitle=rs.getString(2);
+			String tmpcontent=rs.getString(3);
+			String tmpwriter=rs.getString(4);
+			String tmpwritedate=rs.getString(5);
+			int tmpcount=rs.getInt(6);
+//			int tmpscan=rs.getInt(7);
+			
+			// 进行编码转换
+			tmptitle=new String(tmptitle.getBytes("GBK"));
+			tmpcontent=new String(tmpcontent.getBytes("GBK"));
+			tmpwriter=new String(tmpwriter.getBytes("GBK"));
+			tmpwritedate=new String(tmpwritedate.getBytes("GBK"));
+			MessageBean message= new MessageBean();
+			
+			message.setMessageID(tmpmessageID);
+			message.setTitle(tmptitle);
+			message.setContent(tmpcontent);
+			message.setWriter(tmpwriter);
+			message.setWritedate(tmpwritedate);
+			message.setCount(tmpcount);
+//			message.setScan(tmpscan);
+			// 把对象添加到集合中
+			messagelist.add(message);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return messagelist;
+}	
+
+
+//根据作者查询
+public ArrayList findMessageByWriter(String word)throws Exception 
+{
+	ArrayList messagelist = new ArrayList();
+	String sql = "SELECT * FROM message where writer like  '%"+word+"%' ORDER BY(writer)" ;
+	
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+            int tmpmessageID=rs.getInt(1);
+			String tmptitle=rs.getString(2);
+			String tmpcontent=rs.getString(3);
+			String tmpwriter=rs.getString(4);
+			String tmpwritedate=rs.getString(5);
+			int tmpcount=rs.getInt(6);
+//			int tmpscan=rs.getInt(7);
+			
+			// 进行编码转换
+			tmptitle=new String(tmptitle.getBytes("GBK"));
+			tmpcontent=new String(tmpcontent.getBytes("GBK"));
+			tmpwriter=new String(tmpwriter.getBytes("GBK"));
+			tmpwritedate=new String(tmpwritedate.getBytes("GBK"));
+			MessageBean message= new MessageBean();
+			
+			message.setMessageID(tmpmessageID);
+			message.setTitle(tmptitle);
+			message.setContent(tmpcontent);
+			message.setWriter(tmpwriter);
+			message.setWritedate(tmpwritedate);
+			message.setCount(tmpcount);
+//			message.setScan(tmpscan);
+			// 把对象添加到集合中
+			messagelist.add(message);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return messagelist;
+}	
+
+//根据时间查询
+public ArrayList findMessageByWritedate(String word)throws Exception 
+{
+	ArrayList messagelist = new ArrayList();
+	String sql = "SELECT * FROM message where writedate like  '%"+word+"%' ORDER BY(writedate)" ;
+	
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+            int tmpmessageID=rs.getInt(1);
+			String tmptitle=rs.getString(2);
+			String tmpcontent=rs.getString(3);
+			String tmpwriter=rs.getString(4);
+			String tmpwritedate=rs.getString(5);
+			int tmpcount=rs.getInt(6);
+//			int tmpscan=rs.getInt(7);
+			
+			// 进行编码转换
+			tmptitle=new String(tmptitle.getBytes("GBK"));
+			tmpcontent=new String(tmpcontent.getBytes("GBK"));
+			tmpwriter=new String(tmpwriter.getBytes("GBK"));
+			tmpwritedate=new String(tmpwritedate.getBytes("GBK"));
+			MessageBean message= new MessageBean();
+			
+			message.setMessageID(tmpmessageID);
+			message.setTitle(tmptitle);
+			message.setContent(tmpcontent);
+			message.setWriter(tmpwriter);
+			message.setWritedate(tmpwritedate);
+			message.setCount(tmpcount);
+//			message.setScan(tmpscan);
+			// 把对象添加到集合中
+			messagelist.add(message);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return messagelist;
+}	
+
+
+//根据内容查询
+public ArrayList findMessageByContent(String word)throws Exception 
+{
+	ArrayList messagelist = new ArrayList();
+	String sql = "SELECT * FROM message where content like  '%"+word+"%' ORDER BY(content)" ;
+	
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+            int tmpmessageID=rs.getInt(1);
+			String tmptitle=rs.getString(2);
+			String tmpcontent=rs.getString(3);
+			String tmpwriter=rs.getString(4);
+			String tmpwritedate=rs.getString(5);
+			int tmpcount=rs.getInt(6);
+//			int tmpscan=rs.getInt(7);
+			
+			// 进行编码转换
+			tmptitle=new String(tmptitle.getBytes("GBK"));
+			tmpcontent=new String(tmpcontent.getBytes("GBK"));
+			tmpwriter=new String(tmpwriter.getBytes("GBK"));
+			tmpwritedate=new String(tmpwritedate.getBytes("GBK"));
+			MessageBean message= new MessageBean();
+			
+			message.setMessageID(tmpmessageID);
+			message.setTitle(tmptitle);
+			message.setContent(tmpcontent);
+			message.setWriter(tmpwriter);
+			message.setWritedate(tmpwritedate);
+			message.setCount(tmpcount);
+//			message.setScan(tmpscan);
+			// 把对象添加到集合中
+			messagelist.add(message);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return messagelist;
+}
+
+//根据时间进行批量删除
+public int deletemessageByTimerange(String timerange) throws Exception{
+
+	String sql="delete from message where writedate<='"+timerange+"'and writedate>='2013-01-01 00:00:00'";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	int delete_count=0;
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		//执行
+		delete_count=pstmt.executeUpdate();
+			
+	}catch(Exception e){
+		e.printStackTrace();
+	}finally{
+		pstmt.close();
+		dbc.close();
+		
+	}
+	
+	
+	return delete_count;
+
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

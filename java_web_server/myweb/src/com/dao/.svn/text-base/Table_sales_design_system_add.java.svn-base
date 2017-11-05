@@ -1,0 +1,564 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import Table_bean.Factory_workers_addBean;
+import Table_bean.Sales_design_system_addBean;
+
+public class Table_sales_design_system_add {
+
+	public Table_sales_design_system_add() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	// 获得元组个数
+	public int getCount() throws Exception {
+		String sql = "SELECT * FROM sales_design_system_add order by id ; ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		int count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			while (rs != null && rs.next())
+				count++;
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return count;
+	}
+	
+	// 通过salessystem即店名得到所有的元組
+	public ArrayList getAll() throws Exception {
+		ArrayList list = new ArrayList();
+		String sql = "SELECT * from sales_design_system_add order by name";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpStore = rs.getString(2);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpName = rs.getString(3);
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				String tmpRank = rs.getString(4);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(5);
+				float tmpBasic_wage = rs.getFloat(6);
+				float tmpAllowance = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				Sales_design_system_addBean ff = new Sales_design_system_addBean();
+				ff.setId(tmpID);
+				ff.setSales_design_system(tmpStore);
+				ff.setName(tmpName);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setMonth_holidays(tmpMonth_holidays);
+				// 把对象添加到集合中
+				list.add(ff);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+		
+	// 通过salessystem即店名得到所有的元組
+	public ArrayList getAllBySystem(String storename) throws Exception {
+		ArrayList list = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("SELECT * from sales_design_system_add where sales_design_system='");
+		sql1.append(storename);
+		sql1.append("'");
+		String sql = sql1.toString();
+		// String sql =
+		// "SELECT * FROM factory_workers_add where sales_design_system=";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpStore = rs.getString(2);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpName = rs.getString(3);
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				String tmpRank = rs.getString(4);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(5);
+				float tmpBasic_wage = rs.getFloat(6);
+				float tmpAllowance = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				Sales_design_system_addBean ff = new Sales_design_system_addBean();
+				ff.setId(tmpID);
+				ff.setSales_design_system(tmpStore);
+				ff.setName(tmpName);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setMonth_holidays(tmpMonth_holidays);
+				// 把对象添加到集合中
+				list.add(ff);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+		
+	public Sales_design_system_addBean getBeanById(int id) throws Exception {
+		
+		Sales_design_system_addBean ff = new Sales_design_system_addBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("SELECT * from sales_design_system_add where id='");
+		sql1.append(id);
+		sql1.append("'");
+		String sql = sql1.toString();
+		// String sql =
+		// "SELECT * FROM factory_workers_add where sales_design_system=";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpStore = rs.getString(2);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpName = rs.getString(3);
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				String tmpRank = rs.getString(4);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(5);
+				float tmpBasic_wage = rs.getFloat(6);
+				float tmpAllowance = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				ff.setId(tmpID);
+				ff.setSales_design_system(tmpStore);
+				ff.setName(tmpName);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setMonth_holidays(tmpMonth_holidays);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return ff;
+	}
+	
+	// 根据factory_workers 的名字得到一个元组
+	public Sales_design_system_addBean getBeanByName(String name)throws Exception {
+
+		Sales_design_system_addBean ff = new Sales_design_system_addBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("SELECT * from sales_design_system_add where name='");
+		sql1.append(name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpStore = rs.getString(2);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpName = rs.getString(3);
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				String tmpRank = rs.getString(4);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(5);
+				float tmpBasic_wage = rs.getFloat(6);
+				float tmpAllowance = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				ff.setId(tmpID);
+				ff.setSales_design_system(tmpStore);
+				ff.setName(tmpName);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setMonth_holidays(tmpMonth_holidays);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return ff;
+	}
+		
+	// 插入一个元组，id是自增的
+	public int insertBean(String sales_design_system, String name, String rank,
+			float gongling, float basic_wage, float allowance,
+			float month_holidays) throws Exception {
+		// 注意：要先判断是否已经存在
+		String sql = "INSERT INTO sales_design_system_add(sales_design_system,name,rank, gongling,basic_wage,allowance,month_holidays) VALUES (?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			pstmt.setString(1, sales_design_system);
+			pstmt.setString(2, name);
+			pstmt.setString(3, rank);
+			pstmt.setFloat(4, gongling);
+			pstmt.setFloat(5, basic_wage);
+			pstmt.setFloat(6, allowance);
+			pstmt.setFloat(7, month_holidays);
+
+			// 进行数据库插入操作
+			insert_count = pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+		
+	// 根据id 删除一个元组
+	public int deleteBeanByid(int id) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from sales_design_system_add where id='");
+		sql1.append(id);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	// 根据id 删除一个元组
+	public int deleteBeanByName(String name) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from sales_design_system_add where name='");
+		sql1.append(name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	// 判断某人是否已存在
+	public boolean hasExistbyName(String name) throws Exception {
+		boolean find = false;
+		// 连接对象
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		dbc.DataBase_Connection();
+		// 结果集对象
+		ResultSet rs = null;
+		// 查询语句
+		PreparedStatement pstmt = null;
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select *from sales_design_system_add where name='");
+		sql1.append(name);
+		sql1.append("'");
+		String sql = sql1.toString();
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs != null && rs.next())
+				find = true;
+		} catch (Exception e) {
+		} finally {
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		// 返回是否找到
+		return find;
+	}
+		
+	// 通过salessystem即店名得到所有的元組
+	public ArrayList getDistinctBySystem() throws Exception {
+		ArrayList list = new ArrayList();
+	
+		String sql="select distinct sales_design_system from sales_design_system_add";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				String tmpStore = rs.getString(1);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+				Sales_design_system_addBean sales = new Sales_design_system_addBean();	
+				sales.setSales_design_system(tmpStore);
+				
+				// 把对象添加到集合中
+				list.add(sales);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+	
+	
+	//根据工作组的id进行更新
+	public int UpdateSales(int id,String sales_desin_system,String name,String rank,float gongling,float basic_wage,float allowance,float month_holidays)throws Exception {
+         String sql="update sales_design_system_add set sales_design_system=?,name=?,rank=?,gongling=?,basic_wage=?,allowance=?,month_holidays=? where id=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,sales_desin_system);
+			pstmt.setString(2, name);
+			pstmt.setString(3, rank);
+			pstmt.setFloat(4, gongling);
+			pstmt.setFloat(5, basic_wage);
+			pstmt.setFloat(6, allowance);
+			pstmt.setFloat(7, month_holidays);
+			pstmt.setInt(8,id);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+		/*public static void main(String args[]) throws Exception {
+			Sales_design_system_addBean bb = new Sales_design_system_addBean();
+			Table_sales_design_system_add t = new Table_sales_design_system_add();
+
+			boolean td=t.hasExistbyName("梁秋");//梁秋
+			System.out.print(td);
+		}*/
+		/*public static void main(String args[]) throws Exception {
+			Sales_design_system_addBean bb = new Sales_design_system_addBean();
+			Table_sales_design_system_add t = new Table_sales_design_system_add();
+
+				float a=(float) 1.1,b=(float) 1.3,c=(float) 1.4,d=(float) 1.5;
+			//t.insertBean("dd","dsaf", "0",a,b,c,d);
+					int td=t.deleteBeanByid(7);
+			System.out.print(td);
+		}*/
+		/*public static void main(String args[]) throws Exception{
+			Sales_design_system_addBean bb = new Sales_design_system_addBean();
+			Table_sales_design_system_add t = new Table_sales_design_system_add();
+			
+			bb=t.getBeanByName("梁秋");//梁秋
+				System.out.print(bb.getId());
+				System.out.print(bb.getName());
+			
+		}*/
+	/*public static void main(String args[]) throws Exception{
+		Sales_design_system_addBean bb = new Sales_design_system_addBean();
+		Table_sales_design_system_add t = new Table_sales_design_system_add();
+		
+		bb=t.getBeanById(2);
+			System.out.print(bb.getId());
+			System.out.print(bb.getName());
+		
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Sales_design_system_addBean bb = new Sales_design_system_addBean();
+		Table_sales_design_system_add t = new Table_sales_design_system_add();
+		ArrayList list = t.getAll();
+		java.util.Iterator it = list.iterator();
+		while (it.hasNext()) {
+			bb = (Sales_design_system_addBean) it.next();
+			System.out.print(bb.getId());
+			System.out.print(bb.getName());
+		}
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Sales_design_system_addBean bb = new Sales_design_system_addBean();
+		Table_sales_design_system_add t = new Table_sales_design_system_add();
+
+		String name="塔光店";
+		ArrayList list = t.getAllBySystem(name);
+		java.util.Iterator it = list.iterator();
+		while (it.hasNext()) {
+			bb = (Sales_design_system_addBean) it.next();
+			System.out.print(bb.getId());
+			System.out.print(bb.getName());
+		}
+	}*/
+		/*public static void main(String args[]) throws Exception{
+			Sales_design_system_addBean bb=new Sales_design_system_addBean();
+			Table_sales_design_system_add t=new Table_sales_design_system_add();
+			
+			System.out.println(t.getCount());
+		}*/
+}

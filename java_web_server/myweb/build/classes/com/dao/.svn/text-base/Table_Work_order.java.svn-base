@@ -1,0 +1,430 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServlet;
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Work_order {
+	
+	public Table_Work_order(){
+		super();
+	}
+	
+public int updateWork_order(String con_proID,
+			String lashou_1_style,int lashou_1_num, float lashou_1_price, 
+			String lashou_2_style, int lashou_2_num,float lashou_2_price,
+			String peijian_style,float item_1_num,float item_1_price,
+			float item_2_num,float item_2_price,float item_3_num,float item_3_price,
+			String huagui_1_style,int huagui_1_num,float huagui_1_price,
+			String huagui_2_style,int huagui_2_num,float huagui_2_price,
+			int chouti_num,float chouti_price,
+			String boli_1_style,float boli_1_num,float boli_1_price,
+			String boli_2_style,float boli_2_num,float boli_2_price,
+			String boli_3_style,float boli_3_num,float boli_3_price,
+			String diaohua_1_style,float diaohua_1_num,float diaohua_1_price,
+			String diaohua_2_style,float diaohua_2_num,float diaohua_2_price,
+			String diaohua_3_style,float diaohua_3_num,float diaohua_3_price,
+			String qita_1_style,float qita_1_num,float qita_1_price,
+			String qita_2_style,float qita_2_num,float qita_2_price,
+			String qita_3_style,float qita_3_num,float qita_3_price,float add_price)throws Exception  {
+		String sql="UPDATE `work_order` SET  `lashou_1_style`=?," +
+				" `lashou_1_num`=?, `lashou_1_price`=?, `lashou_2_style`=?, `lashou_2_num`=?, `lashou_2_price`=?," +
+				" `peijian_style`=?, `item_1_num`=?, `item_1_price`=?, `item_2_num`=?, `item_2_price`=?," +
+				" `item_3_num`=?, `item_3_price`=?, `huagui_1_style`=?, `huagui_1_num`=?, `huagui_1_price`=?, " +
+				"`huagui_2_style`=?, `huagui_2_num`=?, `huagui_2_price`=?, `chouti_num`=?, `chouti_price`=?," +
+				" `boli_1_style`=?, `boli_1_num`=?, `boli_1_price`=?, `boli_2_style`=?, `boli_2_num`=?," +
+				" `boli_2_price`=?, `boli_3_style`=?, `boli_3_num`=?, `boli_3_price`=?, `diaohua_1_style`=?, " +
+				"`diaohua_1_num`=?, `diaohua_1_price`=?, `diaohua_2_style`=?, `diaohua_2_num`=?, `diaohua_2_price`=?, " +
+				"`diaohua_3_style`=?, `diaohua_3_num`=?, `diaohua_3_price`=?, `qita_1_style`=?, `qita_1_num`=?," +
+				" `qita_1_price`=?, `qita_2_style`=?, `qita_2_num`=?, `qita_2_price`=?, `qita_3_style`=?, " +
+				"`qita_3_num`=?, `qita_3_price`=?, `check`=? ,`add_price`=? WHERE `con_proID`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0,check=1;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, lashou_1_style);
+		pstmt.setInt(2, lashou_1_num);
+		pstmt.setFloat(3, lashou_1_price);
+		pstmt.setString(4, lashou_2_style);
+		pstmt.setInt(5, lashou_2_num);
+		pstmt.setFloat(6, lashou_2_price);
+		pstmt.setString(7, peijian_style);
+		pstmt.setFloat(8, item_1_num);
+		pstmt.setFloat(9, item_1_price);
+		pstmt.setFloat(10, item_2_num);
+		pstmt.setFloat(11, item_2_price);
+		pstmt.setFloat(12, item_3_num);
+		pstmt.setFloat(13, item_3_price);
+		pstmt.setString(14, huagui_1_style);
+		pstmt.setInt(15, huagui_1_num);
+		pstmt.setFloat(16,huagui_1_price);
+		pstmt.setString(17, huagui_2_style);
+		pstmt.setInt(18, huagui_2_num);
+		pstmt.setFloat(19,huagui_2_price);
+		pstmt.setInt(20, chouti_num);
+		pstmt.setFloat(21,chouti_price);
+		pstmt.setString(22, boli_1_style);
+		pstmt.setFloat(23, boli_1_num);
+		pstmt.setFloat(24,boli_1_price);
+		pstmt.setString(25, boli_2_style);
+		pstmt.setFloat(26, boli_2_num);
+		pstmt.setFloat(27,boli_2_price);
+		pstmt.setString(28, boli_3_style);
+		pstmt.setFloat(29, boli_3_num);
+		pstmt.setFloat(30,boli_3_price);
+		pstmt.setString(31, diaohua_1_style);
+		pstmt.setFloat(32, diaohua_1_num);
+		pstmt.setFloat(33,diaohua_1_price);
+		pstmt.setString(34, diaohua_2_style);
+		pstmt.setFloat(35, diaohua_2_num);
+		pstmt.setFloat(36,diaohua_2_price);
+		pstmt.setString(37, diaohua_3_style);
+		pstmt.setFloat(38, diaohua_3_num);
+		pstmt.setFloat(39,diaohua_3_price);
+		pstmt.setString(40, qita_1_style);
+		pstmt.setFloat(41, qita_1_num);
+		pstmt.setFloat(42,qita_1_price);
+		pstmt.setString(43, qita_2_style);
+		pstmt.setFloat(44, qita_2_num);
+		pstmt.setFloat(45,qita_2_price);
+		pstmt.setString(46, qita_3_style);
+		pstmt.setFloat(47, qita_3_num);
+		pstmt.setFloat(48,qita_3_price);
+		pstmt.setInt(49,check);
+		pstmt.setFloat(50,add_price);
+		pstmt.setString(51, con_proID);
+		
+		// 进行数据库插入操作
+		update_count=pstmt.executeUpdate();
+
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return update_count;			
+	}
+	
+	//提交完成后自动在work_order中保存con_proID,pro_name,pro_item字段(从order_con_pro表中复制)
+	public int insertWork_order(String contract_num)throws Exception  {
+		String sql = "INSERT INTO `work_order`(con_proID,pro_name,pro_item) SELECT con_proID,pro_name,pro_item FROM `con_pro` WHERE `contract_num`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, contract_num);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;			
+	}
+	
+	public int deleteWork_order(String contract_num)throws Exception  {
+		String sql = "DELETE FROM `work_order` WHERE `con_proID` like ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, contract_num+"%");
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;			
+	}
+	
+	
+	public Work_orderBean selectWork_order(String key_word)throws Exception  {
+		Work_orderBean wob =new Work_orderBean();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from work_order where con_proID='");
+		sql1.append(key_word);
+		sql1.append("'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				tmpCon_proID=new String(tmpCon_proID.getBytes("GBK"));
+				String tmpPro_name=rs.getString(2);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				String tmpPro_item=rs.getString(3);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpLashou_1_style=rs.getString(4);
+				tmpLashou_1_style=new String(tmpLashou_1_style.getBytes("GBK"));
+				int tmpLashou_1_num=rs.getInt(5);
+				float tmpLashou_1_price=rs.getFloat(6);
+				
+				String tmpLashou_2_style=rs.getString(7);
+				tmpLashou_2_style=new String(tmpLashou_2_style.getBytes("GBK"));
+				int tmpLashou_2_num=rs.getInt(8);
+				float tmpLashou_2_price=rs.getFloat(9);
+				String tmpPeijian_style=rs.getString(10);
+				tmpPeijian_style=new String(tmpPeijian_style.getBytes("GBK"));
+				float tmpItem_1_num=rs.getFloat(11);
+				float tmpItem_1_price=rs.getFloat(12);
+				float tmpItem_2_num=rs.getFloat(13);
+				float tmpItem_2_price=rs.getFloat(14);
+				float tmpItem_3_num=rs.getFloat(15);
+				float tmpItem_3_price=rs.getFloat(16);
+				
+				String tmpHuagui_1_style=rs.getString(17);
+				tmpHuagui_1_style=new String(tmpHuagui_1_style.getBytes("GBK"));
+				int tmpHuagui_1_num=rs.getInt(18);
+				float tmpHuagui_1_price=rs.getFloat(19);
+				
+				String tmpHuagui_2_style=rs.getString(20);
+				tmpHuagui_2_style=new String(tmpHuagui_2_style.getBytes("GBK"));
+				int tmpHuagui_2_num=rs.getInt(21);
+				float tmpHuagui_2_price=rs.getFloat(22);
+				int tmpChouti_num=rs.getInt(23);
+				float tmpChouti_price=rs.getFloat(24);
+			
+				
+				String tmpBoli_1_style=rs.getString(25);
+				tmpBoli_1_style=new String(tmpBoli_1_style.getBytes("GBK"));
+				int tmpBoli_1_num=rs.getInt(26);
+				float tmpBoli_1_price=rs.getFloat(27);
+				
+				String tmpBoli_2_style=rs.getString(28);
+				tmpBoli_2_style=new String(tmpBoli_2_style.getBytes("GBK"));
+				int tmpBoli_2_num=rs.getInt(29);
+				float tmpBoli_2_price=rs.getFloat(30);
+				
+				String tmpBoli_3_style=rs.getString(31);
+				tmpBoli_3_style=new String(tmpBoli_3_style.getBytes("GBK"));
+				int tmpBoli_3_num=rs.getInt(32);
+				float tmpBoli_3_price=rs.getFloat(33);
+				
+				String tmpDiaohua_1_style=rs.getString(34);
+				tmpDiaohua_1_style=new String(tmpDiaohua_1_style.getBytes("GBK"));
+				int tmpDiaohua_1_num=rs.getInt(35);
+				float tmpDiaohua_1_price=rs.getFloat(36);
+				
+				String tmpDiaohua_2_style=rs.getString(37);
+				tmpDiaohua_2_style=new String(tmpDiaohua_2_style.getBytes("GBK"));
+				int tmpDiaohua_2_num=rs.getInt(38);
+				float tmpDiaohua_2_price=rs.getFloat(39);
+				
+				String tmpDiaohua_3_style=rs.getString(40);
+				tmpDiaohua_3_style=new String(tmpDiaohua_3_style.getBytes("GBK"));
+				int tmpDiaohua_3_num=rs.getInt(41);
+				float tmpDiaohua_3_price=rs.getFloat(42);
+				
+				String tmpQita_1_style=rs.getString(43);
+				tmpQita_1_style=new String(tmpQita_1_style.getBytes("GBK"));
+				int tmpQita_1_num=rs.getInt(44);
+				float tmpQita_1_price=rs.getFloat(45);
+				
+				String tmpQita_2_style=rs.getString(46);
+				tmpQita_2_style=new String(tmpQita_2_style.getBytes("GBK"));
+				int tmpQita_2_num=rs.getInt(47);
+				float tmpQita_2_price=rs.getFloat(48);
+				
+				String tmpQita_3_style=rs.getString(49);
+				tmpQita_3_style=new String(tmpQita_3_style.getBytes("GBK"));
+				int tmpQita_3_num=rs.getInt(50);
+				float tmpQita_3_price=rs.getFloat(51);
+				float tmpAdd_price=rs.getFloat(52);
+				int tmpCheck=rs.getInt(53);
+				
+				
+				wob.setCon_proID(tmpCon_proID);
+				wob.setPro_name(tmpPro_name);
+				wob.setPro_item(tmpPro_item);
+				wob.setLashou_1_style(tmpLashou_1_style);
+				wob.setLashou_1_num(tmpLashou_1_num);
+				wob.setLashou_1_price(tmpLashou_1_price);
+				wob.setLashou_2_style(tmpLashou_2_style);
+				wob.setLashou_2_num(tmpLashou_2_num);
+				wob.setLashou_2_price(tmpLashou_2_price);
+				wob.setPeijian_style(tmpPeijian_style);
+				wob.setItem_1_num(tmpItem_1_num);
+				wob.setItem_1_price(tmpItem_1_price);
+				wob.setItem_2_num(tmpItem_2_num);
+				wob.setItem_2_price(tmpItem_2_price);
+				wob.setItem_3_num(tmpItem_3_num);
+				wob.setItem_3_price(tmpItem_3_price);
+				wob.setHuagui_1_style(tmpHuagui_1_style);
+				wob.setHuagui_1_num(tmpHuagui_1_num);
+				wob.setHuagui_1_price(tmpHuagui_1_price);
+				wob.setHuagui_2_style(tmpHuagui_2_style);
+				wob.setHuagui_2_num(tmpHuagui_2_num);
+				wob.setHuagui_2_price(tmpHuagui_2_price);
+				wob.setChouti_num(tmpChouti_num);
+				wob.setChouti_price(tmpChouti_price);
+				wob.setBoli_1_style(tmpBoli_1_style);
+				wob.setBoli_1_num(tmpBoli_1_num);
+				wob.setBoli_1_price(tmpBoli_1_price);
+				wob.setBoli_2_style(tmpBoli_2_style);
+				wob.setBoli_2_num(tmpBoli_2_num);
+				wob.setBoli_2_price(tmpBoli_2_price);
+				wob.setBoli_3_style(tmpBoli_3_style);
+				wob.setBoli_3_num(tmpBoli_3_num);
+				wob.setBoli_3_price(tmpBoli_3_price);
+				wob.setDiaohua_1_style(tmpDiaohua_1_style);
+				wob.setDiaohua_1_num(tmpDiaohua_1_num);
+				wob.setDiaohua_1_price(tmpDiaohua_1_price);
+				wob.setDiaohua_2_style(tmpDiaohua_2_style);
+				wob.setDiaohua_2_num(tmpDiaohua_2_num);
+				wob.setDiaohua_2_price(tmpDiaohua_2_price);
+				wob.setDiaohua_3_style(tmpDiaohua_3_style);
+				wob.setDiaohua_3_num(tmpDiaohua_3_num);
+				wob.setDiaohua_3_price(tmpDiaohua_3_price);
+				wob.setQita_1_style(tmpQita_1_style);
+				wob.setQita_1_num(tmpQita_1_num);
+				wob.setQita_1_price(tmpQita_1_price);
+				wob.setQita_2_style(tmpQita_2_style);
+				wob.setQita_2_num(tmpQita_2_num);
+				wob.setQita_2_price(tmpQita_2_price);
+				wob.setQita_3_style(tmpQita_3_style);
+				wob.setQita_3_num(tmpQita_3_num);
+				wob.setQita_3_price(tmpQita_3_price);
+				wob.setAdd_price(tmpAdd_price);
+				wob.setcheck(tmpCheck);
+			
+				
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return wob;
+		
+	}
+	public void saveState(String con_proID,int state) throws Exception {
+		String sql = "UPDATE work_order SET `check`=? WHERE con_proID like ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, state);
+		pstmt.setString(2, con_proID+"%");
+
+		pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();		
+	}
+	
+	}
+	
+	//是否存在
+	public boolean hasExist(String key_word)throws Exception  {
+		boolean find=false;
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from work_order where con_proID like '");
+		sql1.append(key_word);
+		sql1.append("%'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next())
+				find = true;
+				else
+				find = false;
+				}catch(Exception e)
+				{
+				}
+				finally
+				{
+					rs.close();
+					pstmt.close();
+					dbc.close();
+				}
+				// 返回查找的结果
+				return find;
+				}
+	
+	
+	public boolean isNumeric(String str){
+		   for(int i=str.length();--i>=0;){
+		      int chr=str.charAt(i);
+		      if(chr<48 || chr>57)
+		         return false;
+		   }
+		   return true;
+		}	
+	
+}

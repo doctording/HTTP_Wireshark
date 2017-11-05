@@ -1,0 +1,1141 @@
+package jdbc;
+
+import java.net.URLDecoder;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServlet;
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Contract {
+	
+	public Table_Contract(){
+		super();
+	}
+	
+	public int insertContract(int contractID,String contract_num,String username,String customer_name,String customer_tel,
+			String customer_add, String customer_mark,float total_price,float total_disc, float disc_price,float contract_price,float deposit,int inset,String contract_mark,String date )throws Exception  {
+		String sql = "INSERT INTO `contract` (`contractID`, `contract_num`, `username`, `customer_name`, `customer_tel`, `customer_add`, `customer_mark`, `total_price`, `total_disc`, `disc_price`, `contract_price`,`deposit`, `inset`, `rate`, `state`, `order_state`,`contract_mark`, `date`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0,rate=0,state=1,order_state=1;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, contractID);
+		pstmt.setString(2, contract_num);
+		pstmt.setString(3, username);
+		pstmt.setString(4, customer_name);
+		pstmt.setString(5, customer_tel);
+		pstmt.setString(6, customer_add);
+		pstmt.setString(7, customer_mark);
+		pstmt.setFloat(8, total_price);
+		pstmt.setFloat(9, total_disc);
+		pstmt.setFloat(10,disc_price);
+		pstmt.setFloat(11,contract_price);
+		pstmt.setFloat(12,deposit);
+		pstmt.setInt(13, inset);
+		pstmt.setInt(14,rate);
+		pstmt.setInt(15,state);
+		pstmt.setInt(16,order_state);
+		pstmt.setString(17, contract_mark);
+		pstmt.setString(18, date);
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;			
+	}
+	
+	public int updateContract(String contract_num,String username,String customer_name,String customer_tel,
+			String customer_add, String customer_mark,float total_price,float total_disc, float disc_price,float contract_price,float deposit,int inset,String contract_mark,String date )throws Exception  {
+		String sql = " UPDATE order_contract SET `username`=?, `customer_name`=?, `customer_tel`=?, `customer_add`=?, `customer_mark`=?, `total_price`=?, `total_disc`=?, `disc_price`=?, `contract_price`=?,`deposit`=?, `inset`=?, `rate`=?, `state`=?, `contract_mark`=?, `date`=?  WHERE `contract_num`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0,rate=0,state=1;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+	
+		
+		pstmt.setString(1, username);
+		pstmt.setString(2, customer_name);
+		pstmt.setString(3, customer_tel);
+		pstmt.setString(4, customer_add);
+		pstmt.setString(5, customer_mark);
+		pstmt.setFloat(6, total_price);
+		pstmt.setFloat(7, total_disc);
+		pstmt.setFloat(8,disc_price);
+		pstmt.setFloat(9,contract_price);
+		pstmt.setFloat(10,deposit);
+		pstmt.setInt(11, inset);
+		pstmt.setInt(12,rate);
+		pstmt.setInt(13,state);
+		pstmt.setString(14, contract_mark);
+		pstmt.setString(15, date);
+		pstmt.setString(16, contract_num);
+		// 进行数据库插入操作;
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;			
+	}
+	//返回当天最大合同ID
+	public String getlastContractID_date(String contract_num)throws Exception {
+		String num = contract_num;
+		String sql =  "select * from contract where contract_num like  '%"+num+"%' order by (contractID) desc";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		// 下面是针对数据库的具体操作
+			try {
+			// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs= pstmt.executeQuery();
+				// 获取公告的个数
+	            if (rs.next()){
+	            	num=rs.getString(2).substring(8,10);
+	            	int num_1 = Integer.parseInt(num);
+	            	num_1+=1;
+	            	if(num_1>10){
+	            		num = String.valueOf(num_1);
+	            	}
+	            	else{
+	            		num = "0"+String.valueOf(num_1);
+	            	}
+	            }
+	            else{
+					num="01";
+				}
+			}
+			
+            catch (Exception e){
+				throw new Exception("操作出现异常");
+			}
+		finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+		
+		return num;	
+        	
+	}
+	//遍历表中所有合同（适用于总管理员 or ？？级别）
+	/*public ArrayList findTotalContract()throws Exception{
+	ArrayList contractlist = new ArrayList();
+	String sql = "select * from contract order by(contractID)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+	
+		try{
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			int index = 0;
+			while(rs.next()){
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpContractID=rs.getInt(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpUsername=rs.getString(3);
+				tmpUsername=new String(tmpUsername.getBytes("GBK"));
+				
+				String tmpCustomer_name=rs.getString(4);
+				tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+				
+				String tmpCustomer_tel=rs.getString(5);
+				tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+				
+				String tmpCustomer_add=rs.getString(6);
+				tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+				
+				String tmpCustomer_mark=rs.getString(7);
+				tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+				
+				float tmpTotal_price=rs.getFloat(8);
+				float tmpTotal_disc=rs.getFloat(9);
+				float tmpDisc_price=rs.getFloat(10);
+				float tmpDeposit=rs.getFloat(11);
+				int tmpInsert=rs.getInt(12);
+				int tmpRate=rs.getInt(13);
+				int tmpState=rs.getInt(14);
+				
+				String tmpContract_mark=rs.getString(15);
+				tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+				
+				String tmpDate=rs.getString(16);
+				tmpDate = new String(tmpDate.getBytes("GBK"));
+			
+			
+				ContractBean contract = new ContractBean();
+				contract.setContractID(tmpContractID);
+				contract.setContract_num(tmpContract_num);
+				contract.setUsername(tmpUsername);
+				contract.setCustomer_name(tmpCustomer_name);
+				contract.setCustomer_tel(tmpCustomer_tel);
+				contract.setCustomer_add(tmpCustomer_add);
+				contract.setCustomer_mark(tmpCustomer_mark);
+				contract.setTotal_price(tmpTotal_price);
+				contract.setTotal_disc(tmpTotal_disc);
+				contract.setDisc_price(tmpDisc_price);
+				contract.setDeposit(tmpDeposit);
+				contract.setInsert(tmpInsert);
+				contract.setRate(tmpRate);
+				contract.setState(tmpState);
+				contract.setContract_mark(tmpContract_mark);
+				contract.setDate(tmpDate);
+				
+				// 把对象添加到集合中
+				contractlist.add(contract);
+			}			
+		}
+		catch (Exception e){
+			throw new Exception("操作异常");
+		}
+		finally{
+		//关闭数据库
+		rs.close();
+		pstmt.close();
+		dbc.close();
+		}
+		return contractlist;
+	}	
+	*/
+	
+	//根据用户身份查询合同(总管理员、总经理可见所有合同，销售经理可见本人及所属销售代表的合同，销售代表可见自身合同)
+	public ArrayList findTotalContract_User(String username,String realname,String rank)throws Exception{
+	ArrayList contractlist = new ArrayList();
+	ArrayList userlist = new ArrayList();
+	Table_Userinfo table_userinfo= new Table_Userinfo();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+	String sql;
+	if(rank.equals("销售经理")){
+		userlist=table_userinfo.ManagerFindUser(username,realname);
+		for(int i=0; i<userlist.size(); i++){
+			UserInfoBean userinfo = (UserInfoBean) userlist.get(i);
+			String k = userinfo.getUsername();
+			sql = "SELECT * FROM contract WHERE username ='"+k+"' AND state!=0 and state!=3 ORDER BY contractID DESC";
+			try{
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				while(rs.next()){
+
+					// 获取结果集中的信息
+					int tmpContractID=rs.getInt(1);
+					
+					String tmpContract_num=rs.getString(2);
+					tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+					
+					String tmpUsername=rs.getString(3);
+					tmpUsername=new String(tmpUsername.getBytes("GBK"));
+					
+					String tmpCustomer_name=rs.getString(4);
+					tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+					
+					String tmpCustomer_tel=rs.getString(5);
+					tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+					
+					String tmpCustomer_add=rs.getString(6);
+					tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+					
+					String tmpCustomer_mark=rs.getString(7);
+					tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+					
+					float tmpTotal_price=rs.getFloat(8);
+					float tmpTotal_disc=rs.getFloat(9);
+					float tmpDisc_price=rs.getFloat(10);
+					float tmpContract_price=rs.getFloat(11);
+					float tmpDeposit=rs.getFloat(12);
+					int tmpInset=rs.getInt(13);
+					int tmpRate=rs.getInt(14);
+					int tmpState=rs.getInt(15);
+					int tmpOrder_state=rs.getInt(16);
+					
+					String tmpContract_mark=rs.getString(17);
+					tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+					
+					String tmpDate=rs.getString(18);
+					tmpDate = new String(tmpDate.getBytes("GBK"));
+				
+				
+					ContractBean contract = new ContractBean();
+					contract.setContractID(tmpContractID);
+					contract.setContract_num(tmpContract_num);
+					contract.setUsername(tmpUsername);
+					contract.setCustomer_name(tmpCustomer_name);
+					contract.setCustomer_tel(tmpCustomer_tel);
+					contract.setCustomer_add(tmpCustomer_add);
+					contract.setCustomer_mark(tmpCustomer_mark);
+					contract.setTotal_price(tmpTotal_price);
+					contract.setTotal_disc(tmpTotal_disc);
+					contract.setDisc_price(tmpDisc_price);
+
+					contract.setDeposit(tmpDeposit);
+					contract.setInset(tmpInset);
+					contract.setRate(tmpRate);
+					contract.setState(tmpState);
+
+					contract.setContract_mark(tmpContract_mark);
+					contract.setDate(tmpDate);
+					
+					// 把对象添加到集合中
+					contractlist.add(contract);
+				}			
+			}
+			catch (Exception e){
+				throw new Exception("操作异常");
+			}
+			finally{
+			//关闭数据库
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+			
+		}
+		return contractlist;
+	}
+	else if(rank.equals("总管理员")||rank.equals("总经理"))
+		sql = "select * from contract where state !=0 and state!=3  order by contractID desc";
+	
+	else 
+		sql = "select * from contract where username ='"+username+"'  AND state!=0 and state!=3 order by contractID desc";
+		
+	try{
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()){
+
+				// 获取结果集中的信息
+				int tmpContractID=rs.getInt(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpUsername=rs.getString(3);
+				tmpUsername=new String(tmpUsername.getBytes("GBK")); 
+				
+				String tmpCustomer_name=rs.getString(4);
+				tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+				
+				String tmpCustomer_tel=rs.getString(5);
+				tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+				
+				String tmpCustomer_add=rs.getString(6);
+				tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+				
+				String tmpCustomer_mark=rs.getString(7);
+				tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+				
+				float tmpTotal_price=rs.getFloat(8);
+				float tmpTotal_disc=rs.getFloat(9);
+				float tmpDisc_price=rs.getFloat(10);
+				float tmpContract_price=rs.getFloat(11);
+				float tmpDeposit=rs.getFloat(12);
+				int tmpInset=rs.getInt(13);
+				int tmpRate=rs.getInt(14);
+				int tmpState=rs.getInt(15);
+				int tmpOrder_state=rs.getInt(16);
+				
+				String tmpContract_mark=rs.getString(17);
+				tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+				
+				String tmpDate=rs.getString(18);
+				tmpDate = new String(tmpDate.getBytes("GBK"));
+			
+			
+				ContractBean contract = new ContractBean();
+				contract.setContractID(tmpContractID);
+				contract.setContract_num(tmpContract_num);
+				contract.setUsername(tmpUsername);
+				contract.setCustomer_name(tmpCustomer_name);
+				contract.setCustomer_tel(tmpCustomer_tel);
+				contract.setCustomer_add(tmpCustomer_add);
+				contract.setCustomer_mark(tmpCustomer_mark);
+				contract.setTotal_price(tmpTotal_price);
+				contract.setTotal_disc(tmpTotal_disc);
+				contract.setDisc_price(tmpDisc_price);
+
+				contract.setDeposit(tmpDeposit);
+				contract.setInset(tmpInset);
+				contract.setRate(tmpRate);
+				contract.setState(tmpState);
+
+				contract.setContract_mark(tmpContract_mark);
+				contract.setDate(tmpDate);
+				
+				// 把对象添加到集合中
+				contractlist.add(contract);
+			}			
+		}
+		catch (Exception e){
+			throw new Exception("操作异常");
+		}
+		finally{
+		//关闭数据库
+		rs.close();
+		pstmt.close();
+		dbc.close();
+		}
+		return contractlist;
+	}	
+	//包括搜索功能的查询合同
+	public ArrayList findTotalContract_User(String username,String realname,String rank,String searchType, String searchValue)throws Exception{
+		ArrayList contractlist = new ArrayList();
+		ArrayList userlist = new ArrayList();
+		Table_Userinfo table_userinfo= new Table_Userinfo();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		String sql;
+		if(rank.equals("销售经理")){
+			userlist=table_userinfo.ManagerFindUser(username,realname);
+			for(int i=0; i<userlist.size(); i++){
+				UserInfoBean userinfo = (UserInfoBean) userlist.get(i);
+				String k = userinfo.getUsername();
+				sql = "SELECT * FROM contract WHERE username ='"+k+"' AND state!=0 and state!=3 ";
+				if(searchValue!=""&&searchValue!=null){
+					searchValue=URLDecoder.decode(searchValue,"UTF-8");
+					if (searchType.equals("1")) {
+						sql += "and username='" + searchValue + "'";
+					} else if (searchType.equals("2")) {
+						sql += "and contract_num='" + searchValue + "'";
+					} else if (searchType.equals("3")) {
+						sql += "and customer_add='" + searchValue + "'";
+					} else if (searchType.equals("4")) {
+						sql += "and customer_name='" + searchValue + "'";
+					}
+					}
+					sql += " ORDER BY contractID DESC";
+				try{
+					dbc.DataBase_Connection();
+					pstmt = dbc.getConnection().prepareStatement(sql);
+					rs = pstmt.executeQuery();
+					while(rs.next()){
+
+						// 获取结果集中的信息
+						int tmpContractID=rs.getInt(1);
+						
+						String tmpContract_num=rs.getString(2);
+						tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+						
+						String tmpUsername=rs.getString(3);
+						tmpUsername=new String(tmpUsername.getBytes("GBK"));
+						
+						String tmpCustomer_name=rs.getString(4);
+						tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+						
+						String tmpCustomer_tel=rs.getString(5);
+						tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+						
+						String tmpCustomer_add=rs.getString(6);
+						tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+						
+						String tmpCustomer_mark=rs.getString(7);
+						tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+						
+						float tmpTotal_price=rs.getFloat(8);
+						float tmpTotal_disc=rs.getFloat(9);
+						float tmpDisc_price=rs.getFloat(10);
+						float tmpContract_price=rs.getFloat(11);
+						float tmpDeposit=rs.getFloat(12);
+						int tmpInset=rs.getInt(13);
+						int tmpRate=rs.getInt(14);
+						int tmpState=rs.getInt(15);
+						int tmpOrder_state=rs.getInt(16);
+						
+						String tmpContract_mark=rs.getString(17);
+						tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+						
+						String tmpDate=rs.getString(18);
+						tmpDate = new String(tmpDate.getBytes("GBK"));
+					
+					
+						ContractBean contract = new ContractBean();
+						contract.setContractID(tmpContractID);
+						contract.setContract_num(tmpContract_num);
+						contract.setUsername(tmpUsername);
+						contract.setCustomer_name(tmpCustomer_name);
+						contract.setCustomer_tel(tmpCustomer_tel);
+						contract.setCustomer_add(tmpCustomer_add);
+						contract.setCustomer_mark(tmpCustomer_mark);
+						contract.setTotal_price(tmpTotal_price);
+						contract.setTotal_disc(tmpTotal_disc);
+						contract.setDisc_price(tmpDisc_price);
+
+						contract.setDeposit(tmpDeposit);
+						contract.setInset(tmpInset);
+						contract.setRate(tmpRate);
+						contract.setState(tmpState);
+
+						contract.setContract_mark(tmpContract_mark);
+						contract.setDate(tmpDate);
+						
+						// 把对象添加到集合中
+						contractlist.add(contract);
+					}			
+				}
+				catch (Exception e){
+					throw new Exception("操作异常");
+				}
+				finally{
+				//关闭数据库
+				rs.close();
+				pstmt.close();
+				dbc.close();
+				}
+				
+			}
+			return contractlist;
+		}
+		else if(rank.equals("总管理员")||rank.equals("总经理"))
+			sql = "select * from contract where state !=0 and state!=3 ";
+		
+		else 
+			sql = "select * from contract where username ='"+username+"'  AND state!=0 and state!=3 ";
+		
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+			if (searchType.equals("1")) {
+				sql += "and username='" + searchValue + "'";
+			} else if (searchType.equals("2")) {
+				sql += "and contract_num='" + searchValue + "'";
+			} else if (searchType.equals("3")) {
+				sql += "and customer_add='" + searchValue + "'";
+			} else if (searchType.equals("4")) {
+				sql += "and customer_name='" + searchValue + "'";
+			}else if (searchType.equals("7")) {
+				sql += "and username in(SELECT username FROM userinfo_admin WHERE manager='"+searchValue+"')";
+			}
+			}
+			sql += " ORDER BY contractID DESC";
+			
+		try{
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				while(rs.next()){
+
+					// 获取结果集中的信息
+					int tmpContractID=rs.getInt(1);
+					
+					String tmpContract_num=rs.getString(2);
+					tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+					
+					String tmpUsername=rs.getString(3);
+					tmpUsername=new String(tmpUsername.getBytes("GBK")); 
+					
+					String tmpCustomer_name=rs.getString(4);
+					tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+					
+					String tmpCustomer_tel=rs.getString(5);
+					tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+					
+					String tmpCustomer_add=rs.getString(6);
+					tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+					
+					String tmpCustomer_mark=rs.getString(7);
+					tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+					
+					float tmpTotal_price=rs.getFloat(8);
+					float tmpTotal_disc=rs.getFloat(9);
+					float tmpDisc_price=rs.getFloat(10);
+					float tmpContract_price=rs.getFloat(11);
+					float tmpDeposit=rs.getFloat(12);
+					int tmpInset=rs.getInt(13);
+					int tmpRate=rs.getInt(14);
+					int tmpState=rs.getInt(15);
+					int tmpOrder_state=rs.getInt(16);
+					
+					String tmpContract_mark=rs.getString(17);
+					tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+					
+					String tmpDate=rs.getString(18);
+					tmpDate = new String(tmpDate.getBytes("GBK"));
+				
+				
+					ContractBean contract = new ContractBean();
+					contract.setContractID(tmpContractID);
+					contract.setContract_num(tmpContract_num);
+					contract.setUsername(tmpUsername);
+					contract.setCustomer_name(tmpCustomer_name);
+					contract.setCustomer_tel(tmpCustomer_tel);
+					contract.setCustomer_add(tmpCustomer_add);
+					contract.setCustomer_mark(tmpCustomer_mark);
+					contract.setTotal_price(tmpTotal_price);
+					contract.setTotal_disc(tmpTotal_disc);
+					contract.setDisc_price(tmpDisc_price);
+
+					contract.setDeposit(tmpDeposit);
+					contract.setInset(tmpInset);
+					contract.setRate(tmpRate);
+					contract.setState(tmpState);
+
+					contract.setContract_mark(tmpContract_mark);
+					contract.setDate(tmpDate);
+					
+					// 把对象添加到集合中
+					contractlist.add(contract);
+				}			
+			}
+			catch (Exception e){
+				throw new Exception("操作异常");
+			}
+			finally{
+			//关闭数据库
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+			return contractlist;
+		}	
+	
+	//搜索合同（用户名或客户名）
+	public ArrayList selectContract(String key_word,String username)throws Exception  {
+		ArrayList contractlist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from contract where contract_num='");
+		sql1.append(key_word);
+		sql1.append("'");
+		sql1.append("OR customer_name='");
+		sql1.append(key_word);
+		sql1.append("'");
+		sql1.append("AND username='");
+		sql1.append(username);
+		sql1.append("'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+					int tmpContractID=rs.getInt(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpUsername=rs.getString(3);
+				tmpUsername=new String(tmpUsername.getBytes("GBK"));
+				
+				String tmpCustomer_name=rs.getString(4);
+				tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+				
+				String tmpCustomer_tel=rs.getString(5);
+				tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+				
+				String tmpCustomer_add=rs.getString(6);
+				tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+				
+				String tmpCustomer_mark=rs.getString(7);
+				tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+				
+				float tmpTotal_price=rs.getFloat(8);
+				float tmpTotal_disc=rs.getFloat(9);
+				float tmpDisc_price=rs.getFloat(10);
+				float tmpContract_price=rs.getFloat(11);
+				float tmpDeposit=rs.getFloat(12);
+				int tmpInset=rs.getInt(13);
+				int tmpRate=rs.getInt(14);
+				int tmpState=rs.getInt(15);
+				int tmpOrder_state=rs.getInt(16);
+				
+				String tmpContract_mark=rs.getString(17);
+				tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+				
+				String tmpDate=rs.getString(18);
+				tmpDate = new String(tmpDate.getBytes("GBK"));
+			
+			
+				ContractBean contract = new ContractBean();
+				contract.setContractID(tmpContractID);
+				contract.setContract_num(tmpContract_num);
+				contract.setUsername(tmpUsername);
+				contract.setCustomer_name(tmpCustomer_name);
+				contract.setCustomer_tel(tmpCustomer_tel);
+				contract.setCustomer_add(tmpCustomer_add);
+				contract.setCustomer_mark(tmpCustomer_mark);
+				contract.setTotal_price(tmpTotal_price);
+				contract.setTotal_disc(tmpTotal_disc);
+				contract.setDisc_price(tmpDisc_price);
+
+				contract.setDeposit(tmpDeposit);
+				contract.setInset(tmpInset);
+				contract.setRate(tmpRate);
+				contract.setState(tmpState);
+
+				contract.setContract_mark(tmpContract_mark);
+				contract.setDate(tmpDate);
+				
+				// 把对象添加到集合中
+				contractlist.add(contract);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return contractlist;
+		
+	}
+	
+	//搜索合同（合同号）
+	public ArrayList selectContract(String key_word)throws Exception  {
+		ArrayList contractlist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from contract where contract_num='");
+		sql1.append(key_word);
+		sql1.append("'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+					int tmpContractID=rs.getInt(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpUsername=rs.getString(3);
+				tmpUsername=new String(tmpUsername.getBytes("GBK"));
+				
+				String tmpCustomer_name=rs.getString(4);
+				tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+				
+				String tmpCustomer_tel=rs.getString(5);
+				tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+				
+				String tmpCustomer_add=rs.getString(6);
+				tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+				
+				String tmpCustomer_mark=rs.getString(7);
+				tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+				
+				float tmpTotal_price=rs.getFloat(8);
+				float tmpTotal_disc=rs.getFloat(9);
+				float tmpDisc_price=rs.getFloat(10);
+				float tmpContract_price=rs.getFloat(11);
+				float tmpDeposit=rs.getFloat(12);
+				int tmpInset=rs.getInt(13);
+				int tmpRate=rs.getInt(14);
+				int tmpState=rs.getInt(15);
+				int tmpOrder_state=rs.getInt(16);
+				
+				String tmpContract_mark=rs.getString(17);
+				tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+				
+				String tmpDate=rs.getString(18);
+				tmpDate = new String(tmpDate.getBytes("GBK"));
+			
+			
+				ContractBean contract = new ContractBean();
+				contract.setContractID(tmpContractID);
+				contract.setContract_num(tmpContract_num);
+				contract.setUsername(tmpUsername);
+				contract.setCustomer_name(tmpCustomer_name);
+				contract.setCustomer_tel(tmpCustomer_tel);
+				contract.setCustomer_add(tmpCustomer_add);
+				contract.setCustomer_mark(tmpCustomer_mark);
+				contract.setTotal_price(tmpTotal_price);
+				contract.setContract_price(tmpContract_price);
+				contract.setTotal_disc(tmpTotal_disc);
+				contract.setDisc_price(tmpDisc_price);
+
+				contract.setDeposit(tmpDeposit);
+				contract.setInset(tmpInset);
+				contract.setRate(tmpRate);
+				contract.setState(tmpState);
+
+				contract.setContract_mark(tmpContract_mark);
+				contract.setDate(tmpDate);
+				
+				// 把对象添加到集合中
+				contractlist.add(contract);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return contractlist;
+		
+	}
+	
+	//搜索待预审合同（合同state字段=2）
+	public ArrayList selectExamineContract(String searchType,String searchValue)throws Exception  {
+		ArrayList contractlist = new ArrayList();
+		String sql = "select * from contract where state=2 ";
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+			if (searchType.equals("1")) {
+				sql += "and username='" + searchValue + "'";
+			} else if (searchType.equals("2")) {
+				sql += "and contract_num='" + searchValue + "'";
+			} else if (searchType.equals("3")) {
+				sql += "and customer_add='" + searchValue + "'";
+			} else if (searchType.equals("4")) {
+				sql += "and customer_name='" + searchValue + "'";
+			}else if (searchType.equals("7")) {
+				sql += "and username in(SELECT username FROM userinfo_admin WHERE manager='"+searchValue+"')";
+			}else if (searchType.equals("8")){
+				sql +=" and 1=2";
+			}
+			}
+System.out.println(sql);
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+int tmpContractID=rs.getInt(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpUsername=rs.getString(3);
+				tmpUsername=new String(tmpUsername.getBytes("GBK"));
+				
+				String tmpCustomer_name=rs.getString(4);
+				tmpCustomer_name=new String(tmpCustomer_name.getBytes("GBK"));
+				
+				String tmpCustomer_tel=rs.getString(5);
+				tmpCustomer_tel=new String(tmpCustomer_tel.getBytes("GBK"));
+				
+				String tmpCustomer_add=rs.getString(6);
+				tmpCustomer_add=new String(tmpCustomer_add.getBytes("GBK"));
+				
+				String tmpCustomer_mark=rs.getString(7);
+				tmpCustomer_mark=new String(tmpCustomer_mark.getBytes("GBK"));
+				
+				float tmpTotal_price=rs.getFloat(8);
+				float tmpTotal_disc=rs.getFloat(9);
+				float tmpDisc_price=rs.getFloat(10);
+				float tmpContract_price=rs.getFloat(11);
+				float tmpDeposit=rs.getFloat(12);
+				int tmpInset=rs.getInt(13);
+				int tmpRate=rs.getInt(14);
+				int tmpState=rs.getInt(15);
+				int tmpOrder_state=rs.getInt(16);
+				
+				String tmpContract_mark=rs.getString(17);
+				tmpContract_mark=new String(tmpContract_mark.getBytes("GBK"));
+				
+				String tmpDate=rs.getString(18);
+				tmpDate = new String(tmpDate.getBytes("GBK"));
+			
+			
+				ContractBean contract = new ContractBean();
+				contract.setContractID(tmpContractID);
+				contract.setContract_num(tmpContract_num);
+				contract.setUsername(tmpUsername);
+				contract.setCustomer_name(tmpCustomer_name);
+				contract.setCustomer_tel(tmpCustomer_tel);
+				contract.setCustomer_add(tmpCustomer_add);
+				contract.setCustomer_mark(tmpCustomer_mark);
+				contract.setTotal_price(tmpTotal_price);
+				contract.setTotal_disc(tmpTotal_disc);
+				contract.setDisc_price(tmpDisc_price);
+	
+				contract.setDeposit(tmpDeposit);
+				contract.setInset(tmpInset);
+				contract.setRate(tmpRate);
+				contract.setState(tmpState);
+				
+				contract.setContract_mark(tmpContract_mark);
+				contract.setDate(tmpDate);
+				
+				// 把对象添加到集合中
+				contractlist.add(contract);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return contractlist;
+		
+	}
+	
+	//解锁注册的用户，修改state字段=1(可登录),其他保持不动
+	public int saveDeposit(String contract_num,float deposit) throws Exception {
+			String sql = "UPDATE contract SET deposit=? WHERE contract_num=?";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			int update_count=0;	
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setFloat(1, deposit);
+			pstmt.setString(2, contract_num);
+
+			update_count=pstmt.executeUpdate();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+			// 关闭数据库连接
+				pstmt.close();
+				dbc.close();		
+		}
+			return update_count;
+		
+	}
+	
+	public int saveState(String contract_num,int state) throws Exception {
+		String sql = "UPDATE contract SET state=? WHERE contract_num=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int save_count=0;
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, state);
+		pstmt.setString(2, contract_num);
+
+		save_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();		
+	}
+		return save_count;
+}
+	
+	//根据合同编号从数据库中将字段state改为0即表示删除合同
+	public int deleteContract(String contract_num) throws Exception {
+		
+		String sql = "UPDATE contract SET state=0 WHERE contract_num=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, contract_num);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+		}
+
+	/*	public ContractBean selectContractByID(String contractID) throws Exception  {
+	
+	ContractBean contract = new ContractBean();
+	String sql = "select * from contract where contractID = ?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;
+	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(contractID));
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		
+		if(rs.next()){
+			contract.setContractID(rs.getInt("ContractID"));
+			contract.setContract_num(rs.getString("Contract_num"));
+			contract.setUsername(rs.getString("Username"));
+			contract.setCustomer_name(rs.getString("Customer_name"));
+			contract.setCustomer_tel(rs.getString("Customer_tel"));
+			contract.setCustomer_add(rs.getString("Customer_add"));
+			contract.setCustomer_mark(rs.getString("Customer_mark"));
+			contract.setTotal_price(rs.getFloat("Total_price"));
+			contract.setDisc_price(rs.getFloat("Disc_price"));
+			contract.setDeposit(rs.getFloat("Deposit"));
+			contract.setState(rs.getInt("State"));
+			contract.setContract_mark(rs.getString("Contract_mark"));
+		}
+	}
+	catch (Exception e) {
+			e.printStackTrace();
+		}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();	
+		}
+		
+			
+    return contract;
+	
+}
+*/
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}
+	
+	public int ClearTableContract()throws Exception {
+
+		String sql = "DELETE  FROM contract";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}*/
+	//判断字符串中是否有数字（ascii码判断）
+	public boolean isNumeric(String str){
+		   for(int i=str.length();--i>=0;){
+		      int chr=str.charAt(i);
+		      if(chr<48 || chr>57)
+		         return false;
+		   }
+		   return true;
+		}	
+	
+}

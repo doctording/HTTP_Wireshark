@@ -1,0 +1,25 @@
+package Table_bean;
+
+public class Pro_name_detailBean {
+	private int pro_id;
+	private String pro_name;
+	private String detail_name;
+	public int getPro_id() {
+		return pro_id;
+	}
+	public void setPro_id(int proNameID) {
+		this.pro_id = proNameID;
+	}
+	public String getPro_name() {
+		return pro_name;
+	}
+	public void setPro_name(String proName) {
+		pro_name = proName;
+	}
+	public String getDetail_name() {
+		return detail_name;
+	}
+	public void setDetail_name(String detailName) {
+		detail_name = detailName;
+	}
+}

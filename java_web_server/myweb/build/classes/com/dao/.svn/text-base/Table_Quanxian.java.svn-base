@@ -1,0 +1,700 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import Table_bean.*;
+
+public class Table_Quanxian {
+
+	// 根据quanxian表中的jspname和userinfo_admin表中的rank(需要转换)
+	// 得到权限 1 表示有权限 0没有权限
+	public int getRightByChuangkouUser(String chuangkou, String user)
+			throws Exception {
+
+		DataBaseConnection dbc = new DataBaseConnection();
+		dbc.DataBase_Connection();
+
+		int i = 0;
+		ResultSet rs = null;
+
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from quanxian where chuangkou='");
+		sql1.append(chuangkou);
+		sql1.append("' and ");
+		sql1.append(user);
+		sql1.append("=1;");
+		String sql = sql1.toString();
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs = pstmt.executeQuery(sql);
+
+			while (rs != null && rs.next()) {
+				i++;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return i;// i为1或0
+	}
+
+	// 直接根据jsppagename页面地址名 和 用户名 得到权限 1 表示有权限 0没有权限
+	public int getRightJsppageUser(String jsppagename, String user)
+			throws Exception {
+
+		DataBaseConnection dbc = new DataBaseConnection();
+		dbc.DataBase_Connection();
+
+		int i = 0;
+		ResultSet rs = null;
+
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from quanxian where jsppagename='");
+		sql1.append(jsppagename);
+		sql1.append("' and ");
+		sql1.append(user);
+		sql1.append("=1;");
+		String sql = sql1.toString();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs = pstmt.executeQuery(sql);
+
+			while (rs != null && rs.next()) {
+				i++;
+			}
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return i;
+	}
+
+	// 根据jsppagename 得到一条记录 如 newcontact 页面
+	public QuanxianBean getOneByJspname(String jsppagename) throws Exception {
+
+		QuanxianBean one = new QuanxianBean();
+
+		String sql = "SELECT * FROM quanxian WHERE jsppagename='" + jsppagename
+				+ "';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpJiemian = rs.getString("jiemian");
+				// 进行编码转换
+				tmpJiemian = new String(tmpJiemian.getBytes("GBK"));
+
+				String tmpChuangou = rs.getString("chuangkou");
+				// 进行编码转换
+				tmpChuangou = new String(tmpChuangou.getBytes("GBK"));
+
+				String tmpJsppagename = rs.getString("jsppagename");
+				// 进行编码转换
+				tmpJsppagename = new String(tmpJsppagename.getBytes("GBK"));
+
+				int tmpZgly = rs.getInt("zgly");
+				int tmpZjl = rs.getInt("zjl");
+				int tmpFzjl = rs.getInt("fzjl");
+				int tmpKjcw = rs.getInt("kjcw");
+				int tmpCkgl = rs.getInt("ckgl");
+				int tmpCz = rs.getInt("cz");
+				int tmpFcz = rs.getInt("fcz");
+				int tmpZsjs = rs.getInt("zsjs");
+				int tmpSjs = rs.getInt("sjs");
+				int tmpXsjl = rs.getInt("xsjl");
+				int tmpXsdb = rs.getInt("xsdb");
+
+				one.setId(tmpId);
+				one.setJiemian(tmpJiemian);
+				one.setChaungkou(tmpChuangou);
+				one.setJsppagename(tmpJsppagename);
+				one.setZgly(tmpZgly);
+				one.setZjl(tmpZjl);
+				one.setFzjl(tmpFzjl);
+				one.setKjcw(tmpKjcw);
+				one.setCkgl(tmpCkgl);
+				one.setCz(tmpCz);
+				one.setFcz(tmpFcz);
+				one.setZsjs(tmpZsjs);
+				one.setSjs(tmpSjs);
+				one.setXsjl(tmpXsjl);
+				one.setXsdb(tmpXsdb);
+
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return one;
+	}
+
+	// 根据jsppagename中文名 得到一条记录 如 newcontact 页面 对应 添加合同 页面
+	public QuanxianBean getOneByChuangkou(String chuangkou) throws Exception {
+
+		QuanxianBean one = new QuanxianBean();
+
+		String sql = "SELECT * FROM quanxian WHERE chuangkou='" + chuangkou
+				+ "';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpJiemian = rs.getString("jiemian");
+				// 进行编码转换
+				tmpJiemian = new String(tmpJiemian.getBytes("GBK"));
+
+				String tmpChuangou = rs.getString("chuangkou");
+				// 进行编码转换
+				tmpChuangou = new String(tmpChuangou.getBytes("GBK"));
+
+				String tmpJsppagename = rs.getString("jsppagename");
+				// 进行编码转换
+				tmpJsppagename = new String(tmpJsppagename.getBytes("GBK"));
+
+				int tmpZgly = rs.getInt("zgly");
+				int tmpZjl = rs.getInt("zjl");
+				int tmpFzjl = rs.getInt("fzjl");
+				int tmpKjcw = rs.getInt("kjcw");
+				int tmpCkgl = rs.getInt("ckgl");
+				int tmpCz = rs.getInt("cz");
+				int tmpFcz = rs.getInt("fcz");
+				int tmpZsjs = rs.getInt("zsjs");
+				int tmpSjs = rs.getInt("sjs");
+				int tmpXsjl = rs.getInt("xsjl");
+				int tmpXsdb = rs.getInt("xsdb");
+
+				one.setId(tmpId);
+				one.setJiemian(tmpJiemian);
+				one.setChaungkou(tmpChuangou);
+				one.setJsppagename(tmpJsppagename);
+				one.setZgly(tmpZgly);
+				one.setZjl(tmpZjl);
+				one.setFzjl(tmpFzjl);
+				one.setKjcw(tmpKjcw);
+				one.setCkgl(tmpCkgl);
+				one.setCz(tmpCz);
+				one.setFcz(tmpFcz);
+				one.setZsjs(tmpZsjs);
+				one.setSjs(tmpSjs);
+				one.setXsjl(tmpXsjl);
+				one.setXsdb(tmpXsdb);
+
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return one;
+	}
+
+	// 修改某个用户 在 某个界面 的权限
+	public int updateRight(String chuangkou, String user, int right)
+			throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("update quanxian set ");
+		sql1.append(user);
+		sql1.append("=");
+		sql1.append(right);
+		sql1.append(" where chuangkou='");
+		sql1.append(chuangkou);
+		sql1.append("';");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count = 0;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}
+
+	//根据jsppagename 修改一行记录
+	public int updateRight2(String jsppagename, int zgly, int zjl, int fzjl, int kjcw,
+			int ckgl, int cz, int fcz, int zsjs, int sjs, int xsjl, int xsdb)
+			throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("update quanxian set zgly=");
+		sql1.append(zgly);
+		sql1.append(",zjl=");
+		sql1.append(zjl);
+		sql1.append(",fzjl=");
+		sql1.append(fzjl);
+		sql1.append(",kjcw=");
+		sql1.append(kjcw);
+		sql1.append(",ckgl=");
+		sql1.append(ckgl);
+		sql1.append(",cz=");
+		sql1.append(cz);
+		sql1.append(",fcz=");
+		sql1.append(fcz);
+		sql1.append(",zsjs=");
+		sql1.append(zsjs);
+		sql1.append(",sjs=");
+		sql1.append(sjs);
+		sql1.append(",xsjl=");
+		sql1.append(xsjl);
+		sql1.append(",xsdb=");
+		sql1.append(xsdb);
+		sql1.append(" where jsppagename='");
+		sql1.append(jsppagename);
+		sql1.append("';");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count = 0;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}
+	
+	
+	
+	// 获得quanxian表中的元组个数
+	public int getTotalCount() throws Exception {
+		String sql = "SELECT * FROM quanxian order by id ; ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		int count = 0;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			while (rs != null && rs.next())
+				count++;
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return count;
+	}
+
+	// 从第n条记录(包括第n条)开始(n取值为 [1,count]） 查询countsize条记录 countsize>=1
+	// n=totalcount时 countsize 必须为1 否则有exception 表示查询最后一条记录
+	public ArrayList getBeansByfromcount(int n, int countsize)
+			throws Exception {
+		ArrayList quanxianlist = new ArrayList();
+		String sql = "select *from quanxian limit ?,?;";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, n - 1);
+			pstmt.setInt(2, countsize);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			// 对结果集进行遍历
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpJiemian = rs.getString("jiemian");
+				// 进行编码转换
+				tmpJiemian = new String(tmpJiemian.getBytes("GBK"));
+
+				String tmpChuangou = rs.getString("chuangkou");
+				// 进行编码转换
+				tmpChuangou = new String(tmpChuangou.getBytes("GBK"));
+
+				String tmpJsppagename = rs.getString("jsppagename");
+				// 进行编码转换
+				tmpJsppagename = new String(tmpJsppagename.getBytes("GBK"));
+
+				int tmpZgly = rs.getInt("zgly");
+				int tmpZjl = rs.getInt("zjl");
+				int tmpFzjl = rs.getInt("fzjl");
+				int tmpKjcw = rs.getInt("kjcw");
+				int tmpCkgl = rs.getInt("ckgl");
+				int tmpCz = rs.getInt("cz");
+				int tmpFcz = rs.getInt("fcz");
+				int tmpZsjs = rs.getInt("zsjs");
+				int tmpSjs = rs.getInt("sjs");
+				int tmpXsjl = rs.getInt("xsjl");
+				int tmpXsdb = rs.getInt("xsdb");
+
+				QuanxianBean one = new QuanxianBean();
+
+				one.setId(tmpId);
+				one.setJiemian(tmpJiemian);
+				one.setChaungkou(tmpChuangou);
+				one.setJsppagename(tmpJsppagename);
+				one.setZgly(tmpZgly);
+				one.setZjl(tmpZjl);
+				one.setFzjl(tmpFzjl);
+				one.setKjcw(tmpKjcw);
+				one.setCkgl(tmpCkgl);
+				one.setCz(tmpCz);
+				one.setFcz(tmpFcz);
+				one.setZsjs(tmpZsjs);
+				one.setSjs(tmpSjs);
+				one.setXsjl(tmpXsjl);
+				one.setXsdb(tmpXsdb);
+
+				quanxianlist.add(one);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return quanxianlist;// 返回
+	}
+
+	// 得到所有的界面
+	public ArrayList getAllJiemian() throws Exception {
+
+		ArrayList al = new ArrayList();
+		String sql = "SELECT distinct jiemian FROM quanxian;;";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				al.add(rs.getString("jiemian"));
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return al;
+	}
+	
+	//根据jiemian 得到该界面包含的所有页面的记录
+	public ArrayList getBeansByJiemian(String jiemian)
+			throws Exception {
+
+		ArrayList al = new ArrayList();
+		String sql = "SELECT * FROM quanxian WHERE jiemian='" + jiemian
+				+ "' order by id;";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpJiemian = rs.getString("jiemian");
+				// 进行编码转换
+				tmpJiemian = new String(tmpJiemian.getBytes("GBK"));
+
+				String tmpChuangou = rs.getString("chuangkou");
+				// 进行编码转换
+				tmpChuangou = new String(tmpChuangou.getBytes("GBK"));
+
+				String tmpJsppagename = rs.getString("jsppagename");
+				// 进行编码转换
+				tmpJsppagename = new String(tmpJsppagename.getBytes("GBK"));
+
+				int tmpZgly = rs.getInt("zgly");
+				int tmpZjl = rs.getInt("zjl");
+				int tmpFzjl = rs.getInt("fzjl");
+				int tmpKjcw = rs.getInt("kjcw");
+				int tmpCkgl = rs.getInt("ckgl");
+				int tmpCz = rs.getInt("cz");
+				int tmpFcz = rs.getInt("fcz");
+				int tmpZsjs = rs.getInt("zsjs");
+				int tmpSjs = rs.getInt("sjs");
+				int tmpXsjl = rs.getInt("xsjl");
+				int tmpXsdb = rs.getInt("xsdb");
+
+				QuanxianBean one = new QuanxianBean();
+
+				one.setId(tmpId);
+				one.setJiemian(tmpJiemian);
+				one.setChaungkou(tmpChuangou);
+				one.setJsppagename(tmpJsppagename);
+				one.setZgly(tmpZgly);
+				one.setZjl(tmpZjl);
+				one.setFzjl(tmpFzjl);
+				one.setKjcw(tmpKjcw);
+				one.setCkgl(tmpCkgl);
+				one.setCz(tmpCz);
+				one.setFcz(tmpFcz);
+				one.setZsjs(tmpZsjs);
+				one.setSjs(tmpSjs);
+				one.setXsjl(tmpXsjl);
+				one.setXsdb(tmpXsdb);
+
+				al.add(one);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return al;
+	}
+	
+	
+	// 插入一条记录
+	public int insertQuanxian(String jiemian, String chuangkou,
+			String jsppagename, int zgly, int zjl, int fzjl, int kjcw,
+			int ckgl, int cz, int fcz, int zsjs, int sjs, int xsjl, int xsdb)
+			throws Exception {
+
+		String sql = "INSERT INTO quanxian(jiemian,chuangkou,jsppagename,zgly,zjl,fzjl,kjcw,ckgl,cz,fcz,zsjs,sjs,xsjl,xsdb) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count = 0;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			pstmt.setString(1, jiemian);
+			pstmt.setString(2, chuangkou);
+			pstmt.setString(3, jsppagename);
+			pstmt.setInt(4, zgly);
+			pstmt.setInt(5, zjl);
+			pstmt.setInt(6, fzjl);
+			pstmt.setInt(7, kjcw);
+			pstmt.setInt(8, ckgl);
+			pstmt.setInt(9, cz);
+			pstmt.setInt(10, fcz);
+			pstmt.setInt(11, zsjs);
+			pstmt.setInt(12, sjs);
+			pstmt.setInt(13, xsjl);
+			pstmt.setInt(14, xsdb);
+
+			insert_count = pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+
+	//根据jsppagename 是否存在
+	public boolean hasExist(String jsppagename) throws Exception {
+		boolean find = false;
+		// 连接对象
+		DataBaseConnection dbc = new DataBaseConnection();
+		dbc.DataBase_Connection();
+		// 结果集对象
+		ResultSet rs = null;
+		// 查询语句
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from quanxian where jsppagename='");
+		sql1.append(jsppagename);
+		sql1.append("'");
+		String sql = sql1.toString();
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			if (rs!=null&&rs.next())
+				find = true;
+			else
+				find = false;
+		} catch (Exception e) {
+		} finally {
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		// 返回查找的结果
+		return find;
+	}
+	
+	// 删除一个页面的信息
+	public int deleteByJspname(String jsppagename) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from quanxian where jsppagename='");
+		sql1.append(jsppagename);
+		sql1.append("';");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	
+	// 删除一个页面的信息
+	public int deleteByChuangkou(String chuangkou) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from quanxian where chuangkou='");
+		sql1.append(chuangkou);
+		sql1.append("';");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+		
+	
+	//中文的rank 转换成英文字母的rank 人员不会再变化的
+		public String rankChn2Eng(String s){
+			String a[]={"zgly","zjl","fzjl",
+				"kjcw","ckgl","cz","fcz","zsjs","sjs","xsjl","xsdb"};	
+			String b[]={"总管理员","总经理","副总经理",
+				"会计财务","仓库管理","厂长","副厂长","总设计师","设计师","销售经理","销售代表"};
+			int i=0;
+			for(i=0;i<a.length;i++){
+				if(s.equals(b[i]))
+					break;
+			}
+			if(i<a.length)
+				return a[i];
+			else
+				return null;
+		}
+
+		//根据当前页面的地址得到页面的jspname
+		public String ch2Jspname(String s){		
+
+			int first=s.lastIndexOf('/');//得到最后一个为/的位置
+			int last=s.lastIndexOf('.');//得到最后为.的位置
+			return (String) s.subSequence(first+1, last);//得到子字符串
+		}	
+	
+		/*public static void main(String args[]) throws Exception{
+			Table_Quanxian t=new Table_Quanxian();
+			t.updateRight2("newcontract", 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1);
+			
+		}*/
+}

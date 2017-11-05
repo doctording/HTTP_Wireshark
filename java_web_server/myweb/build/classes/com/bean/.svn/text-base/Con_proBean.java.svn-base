@@ -1,0 +1,248 @@
+package Table_bean;
+
+public class Con_proBean {
+
+	//18个字段
+	private String con_proID;
+	private String contract_num;
+	private String pro_name;
+	private String pro_item;
+	private String style_name;
+	private String wood_name;
+	private String paint_name;
+	private float length;
+	private float height;
+	private float depth;
+	private int amount;
+	private float totals;
+	private float pro_price;
+	private float discount;
+	private float price;
+	private float add_price;
+	private String con_pro_mark;
+	private int state;
+	
+	public Con_proBean()
+	{
+		super();
+	}
+	/**
+	 * @return con_proID
+	 */
+	public String getCon_proID() {
+		return con_proID;
+	}
+	/**
+	 * @param con_proID 要设置的con_proID
+	 */
+	public void setCon_proID(String con_proID) {
+		this.con_proID = con_proID;
+	}
+	/**
+	 * @return contract_num
+	 */
+	public String getContract_num() {
+		return contract_num;
+	}
+	/**
+	 * @param contract_num 要设置的 contract_num
+	 */
+	public void setContract_num(String contract_num) {
+		this.contract_num = contract_num;
+	}
+	/**
+	 * @return pro_name
+	 */
+	public String getPro_name() {
+		return pro_name;
+	}
+	/**
+	 * @param pro_name 要设置的pro_name
+	 */
+	public void setPro_name(String pro_name) {
+		this.pro_name = pro_name;
+	}
+	/**
+	 * @return pro_item
+	 */
+	public String getPro_item() {
+		return pro_item;
+	}
+	/**
+	 * @param pro_item 要设置的pro_item
+	 */
+	public void setPro_item(String pro_item) {
+		this.pro_item = pro_item;
+	}
+	/**
+	 * @return style_name
+	 */
+	public String getStyle_name() {
+		return style_name;
+	}
+	/**
+	 * @param style_name 要设置的 style_name
+	 */
+	public void setStyle_name(String style_name) {
+		this.style_name = style_name;
+	}
+	/**
+	 * @return wood_name
+	 */
+	public String getWood_name() {
+		return wood_name;
+	}
+	/**
+	 * @param wood_name 要设置的 wood_name
+	 */
+	public void setWood_name(String wood_name) {
+		this.wood_name = wood_name;
+	}
+	/**
+	 * @return paint_name
+	 */
+	public String getPaint_name() {
+		return paint_name;
+	}
+	/**
+	 * @param paint_name 要设置的 paint_name
+	 */
+	public void setPaint_name(String paint_name) {
+		this.paint_name = paint_name;
+	}
+	
+	/**
+	 * @return length
+	 */
+	public float getLength() {
+		return length;
+	}
+	/**
+	 * @param length 要设置的length
+	 */
+	public void setLength(float length) {
+		this.length = length;
+	}
+	/**
+	 * @return height
+	 */
+	public float getHeight() {
+		return height;
+	}
+	/**
+	 * @param height 要设置的height
+	 */
+	public void setHeight(float height) {
+		this.height = height;
+	}
+	/**
+	 * @return depth
+	 */
+	public float getDepth() {
+		return depth;
+	}
+	/**
+	 * @param depth 要设置的depth
+	 */
+	public void setDepth(float depth) {
+		this.depth = depth;
+	}
+	/**
+	 * @return amount
+	 */
+	public int getAmount() {
+		return amount;
+	}
+	/**
+	 * @param amount 要设置的 amount
+	 */
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	
+	/**
+	 * @return totals
+	 */
+	public float getTotals() {
+		return totals;
+	}
+	/**
+	 * @param totals 要设置的 totals
+	 */
+	public void setTotals(float totals) {
+		this.totals = totals;
+	}
+	/**
+	 * @return pro_price
+	 */
+	public float getPro_price() {
+		return pro_price;
+	}
+	/**
+	 * @param pro_price 要设置的  pro_price
+	 */
+	public void setPro_price(float pro_price) {
+		this.pro_price = pro_price;
+	}
+	
+	/**
+	 * @return discount
+	 */
+	public float getDiscount() {
+		return discount;
+	}
+	/**
+	 * @param discount 要设置的discount
+	 */
+	public void setDiscount(float discount) {
+		this.discount = discount;
+	}
+	/**
+	 * @return price
+	 */
+	public float getPrice() {
+		return price;
+	}
+	/**
+	 * @param price 要设置的price
+	 */
+	public void setPrice(float price) {
+		this.price = price;
+	}
+	/**
+	 * @return add_price
+	 */
+	public float getAdd_price() {
+		return add_price;
+	}
+	/**
+	 * @param add_price 要设置的add_price
+	 */
+	public void setAdd_price(float add_price) {
+		this.add_price = add_price;
+	}
+	/**
+	 * @return con_pro_mark
+	 */
+	public String getCon_pro_mark() {
+		return con_pro_mark;
+	}
+	/**
+	 * @param con_pro_mark 要设置的con_pro_mark
+	 */
+	public void setCon_pro_mark(String con_pro_mark) {
+		this.con_pro_mark = con_pro_mark;
+	}
+	/**
+	 * @return state
+	 */
+	public int getState() {
+		return state;
+	}
+	/**
+	 * @param state 要设置的 state
+	 */
+	public void setState(int state) {
+		this.state = state;
+	}
+}

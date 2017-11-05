@@ -1,0 +1,950 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import Table_bean.UserInfoBean;
+import Time_bean.TimeInfoBean;
+
+public class Table_Userinfo {
+
+	public Table_Userinfo()
+	{
+		super();
+	}
+
+	// 与表userinfo_admin联系
+	public Integer getPageCount() throws Exception {
+		int pageCount = 1;
+		String sql = "SELECT * FROM userinfo_admin ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		UserInfoBean userinfo= new UserInfoBean();
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+
+			// 计算总页数
+			pageCount = (count - 1) / 10 + 1;
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+
+		return new Integer(pageCount);
+
+	}
+
+	public ArrayList findAllUser(String pageNo)throws Exception 
+	{
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM userinfo_admin ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 要显示的页码，默认值为1
+			int iPageNo=1;
+			try
+			{
+			// 把字符串转换成整数
+				iPageNo = Integer.parseInt(pageNo);
+			}catch(Exception e){}
+			// 要显示的第一条记录,一页十条记录
+			int begin = (iPageNo-1)*10+1;
+			// 要显示的最后一条记录
+			int end = iPageNo*10;
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				
+
+				// 获取结果集中的信息
+				String tmpUsername=rs.getString(1);
+				// 进行编码转换
+				tmpUsername=new String(tmpUsername.getBytes("GBK"));
+				
+				String tmpRealname=rs.getString(2);
+				// 进行编码转换
+				tmpRealname=new String(tmpRealname.getBytes("GBK"));
+				
+				String tmpUserpassword=rs.getString(3);
+				String tmpUserrank=rs.getString(4);
+				// 进行编码转换
+				tmpUserrank=new String(tmpUserrank.getBytes("GBK"));
+				
+				String tmpManager=rs.getString(5);
+				// 进行编码转换
+				tmpManager=new String(tmpManager.getBytes("GBK"));
+				
+				String tmpStore=rs.getString(6);
+				String tmpRegtime=rs.getString(7);
+				int tmpState=rs.getInt(8);
+			
+				UserInfoBean user = new UserInfoBean();
+				user.setUsername(tmpUsername);
+				user.setRealname(tmpRealname);
+				user.setPassword(tmpUserpassword);
+				user.setRank(tmpUserrank);
+				user.setManager(tmpManager);
+				user.setStore(tmpStore);
+				user.setRegtime(tmpRegtime);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+	
+
+	public ArrayList ManagerFindUser(String username,String realname)throws Exception 
+	{
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM userinfo_admin WHERE manager='" + realname
+				+ "' OR username='" + username + "'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String tmpUsername = rs.getString(1);
+				// 进行编码转换
+				tmpUsername = new String(tmpUsername.getBytes("GBK"));
+
+				String tmpRealname = rs.getString(2);
+				// 进行编码转换
+				tmpRealname = new String(tmpRealname.getBytes("GBK"));
+
+				String tmpUserpassword = rs.getString(3);
+				String tmpUserrank = rs.getString(4);
+				// 进行编码转换
+				tmpUserrank = new String(tmpUserrank.getBytes("GBK"));
+
+				String tmpManager = rs.getString(5);
+				// 进行编码转换
+				tmpManager = new String(tmpManager.getBytes("GBK"));
+
+				String tmpRegtime = rs.getString(6);
+				int tmpState = rs.getInt(7);
+
+				UserInfoBean user = new UserInfoBean();
+				user.setUsername(tmpUsername);
+				user.setRealname(tmpRealname);
+				user.setPassword(tmpUserpassword);
+				user.setRank(tmpUserrank);
+				user.setManager(tmpManager);
+				user.setRegtime(tmpRegtime);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+
+	/*
+	 * public boolean hasExist(String regusername) { boolean find=false; // 连接对象
+	 * Connection con=null; // 结果集对象 ResultSet rs=null; // 创建DBBean对象 DBBean db
+	 * = new DBBean(); // 查询语句 StringBuffer sql = new StringBuffer();
+	 * sql.append("select * from usertable where userid='"); sql.append(userid);
+	 * sql.append("'"); try { // 获取连接 con = db.getConnection(); //
+	 * 执行select语句，返回结果集对象 rs=db.executeQuery(sql.toString()); // 指向结果集的第一条
+	 * if(rs.next()) find = true; else find = false; }catch(Exception e) { }
+	 * finally { db.close(); } // 返回查找的结果 return find; }
+	 */
+
+	public UserInfoBean selectByName(String username) throws Exception {
+
+		String sql = "SELECT * FROM userinfo_admin WHERE username=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		UserInfoBean userinfo = new UserInfoBean();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, username);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				// 查询出内容，之后将查询出的内容赋值给user对象
+				userinfo.setUsername(rs.getString(1));
+				userinfo.setRealname(rs.getString(2));
+				userinfo.setPassword(rs.getString(3));
+				userinfo.setRank(rs.getString(4));
+				userinfo.setManager(rs.getString(5));
+				userinfo.setStore(rs.getString(6));
+				userinfo.setRegtime(rs.getString(7));
+				userinfo.setState(rs.getInt(8));
+			}
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userinfo;
+	}
+	
+	
+	public ArrayList selectsailer_design() throws Exception {
+		ArrayList list=new ArrayList();
+	    String sql = "SELECT * FROM userinfo_admin where rank ='设计师' or rank like '销售%' or rank like '%管理员%'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			 rs= pstmt.executeQuery();
+			 while(rs.next()) {
+				String tmpUsername=rs.getString(1);
+				// 进行编码转换
+				tmpUsername=new String(tmpUsername.getBytes("GBK"));
+				
+				String tmpRealname=rs.getString(2);
+				// 进行编码转换
+				tmpRealname=new String(tmpRealname.getBytes("GBK"));
+				
+				String tmpUserpassword=rs.getString(3);
+				String tmpUserrank=rs.getString(4);
+				// 进行编码转换
+				tmpUserrank=new String(tmpUserrank.getBytes("GBK"));
+				
+				String tmpManager=rs.getString(5);
+				// 进行编码转换
+				tmpManager=new String(tmpManager.getBytes("GBK"));
+				
+				String tmpRegtime=rs.getString(6);
+				int tmpState=rs.getInt(7);
+			
+				UserInfoBean user = new UserInfoBean();
+				user.setUsername(tmpUsername);
+				user.setRealname(tmpRealname);
+				user.setPassword(tmpUserpassword);
+				user.setRank(tmpUserrank);
+				user.setManager(tmpManager);
+				user.setRegtime(tmpRegtime);
+				user.setState(tmpState);
+				list.add(user);
+				}
+			
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+	
+//根据用户名和密码从数据库查询	
+public UserInfoBean selectByNameAndPassword(String username, String password) throws Exception {
+		
+	    String sql = "SELECT * FROM userinfo_admin WHERE username=? and password=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		UserInfoBean userinfo = new UserInfoBean();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				// 查询出内容，之后将查询出的内容赋值给user对象
+				userinfo.setUsername(rs.getString(1));
+				userinfo.setRealname(rs.getString(2));
+				userinfo.setPassword(rs.getString(3));
+				userinfo.setRank(rs.getString(4));
+				userinfo.setManager(rs.getString(5));
+				userinfo.setRegtime(rs.getString(6));
+				userinfo.setState(rs.getInt(7));
+			}
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userinfo;
+	}
+
+	// 插入用户信息到数据库
+	public int insertNewAccount(String username, String realname,
+			String password, String rank, String manager, String store)
+			throws Exception {
+
+		String sql = "INSERT INTO userinfo_admin(username,realname,password,rank,manager,regtime,state,store) VALUES (?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		UserInfoBean userinfo = new UserInfoBean();
+		TimeInfoBean timeinfo = new TimeInfoBean();
+		int update_count = 0;
+		String regtime;
+		regtime = timeinfo.getTime();
+		int state = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, realname);
+			pstmt.setString(3, password);
+			pstmt.setString(4, rank);
+			pstmt.setString(5, manager);
+			pstmt.setString(6, regtime);
+			pstmt.setInt(7, state);
+			pstmt.setString(8, store);
+			// 进行数据库插入操作
+			update_count = pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}
+
+	// 根据用户名从数据库中删除用户信息
+	public int deleteAccount(String username) throws Exception {
+
+		String sql = "DELETE FROM userinfo_admin WHERE username=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, username);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}
+
+	// 根据参数更新数据库，username保持不动，其它修改
+	public int updateAccount(String username, String realname, String password,
+			String rank, String manager,String store) throws Exception {
+
+		String sql = "UPDATE userinfo_admin SET realname=?,password=?,rank=?,manager=?, store=? WHERE username=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		// TimeInfoBean timeinfo= new TimeInfoBean();
+		int update_count = 0;
+		// 注册日期没必要重置
+		// String regtime;
+		// regtime=timeinfo.getTime();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, realname);
+			pstmt.setString(2, password);
+			pstmt.setString(3, rank);
+			pstmt.setString(4, manager);
+			pstmt.setString(5, store);
+			pstmt.setString(6, username);
+
+			update_count = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return update_count;
+
+	}
+
+	// 解锁注册的用户，修改state字段=1(可登录),其他保持不动
+	public int yesState(String username) throws Exception {
+		String sql = "UPDATE userinfo_admin SET state=1 WHERE username=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, username);
+
+			update_count = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+
+	}
+
+	// 加锁注册的用户，修改state字段=0(不可登录),其他保持不动
+	public int noState(String username) throws Exception {
+		String sql = "UPDATE userinfo_admin SET state=0 WHERE username=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, username);
+
+			update_count = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+
+	}
+
+	// 得到userInfo表里面的店的个数（它与store表里面的店的个数不一定相同）
+	public int getStoreNumber() throws Exception {
+		int count = 0;
+		String sql = "SELECT distinct store FROM  userinfo_admin; ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs != null && rs.next()) {
+				if (!rs.getString("store").equals("0"))
+					count++;
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return count;
+	}
+
+	// 得到userinfo表里面的所有店名（String 类型的链表）
+	public ArrayList getAllStoreName() throws Exception {
+		ArrayList storelist = new ArrayList();
+		String sql = "SELECT distinct store FROM  userinfo_admin; ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs != null && rs.next()) {
+				if (!rs.getString("store").equals("0"))
+					storelist.add(rs.getString("store"));
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return storelist;
+	}
+
+	// 根据店名，得到这个店的的销售经理和所有销售代表的人数(即这个店有多少人)
+	public int getSalesNumberByStore(String store) throws Exception {
+		int count = 0;
+		String sql = "SELECT * FROM userinfo_admin WHERE store='" + store
+				+ "';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				count++;
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return count;
+	}
+
+	// 找到 所有的销售经理(userinfoBean 对象链表)
+	public ArrayList getManagers() throws Exception {
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM userinfo_admin WHERE rank='销售经理'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String tmpUsername = rs.getString(1);
+				// 进行编码转换
+				tmpUsername = new String(tmpUsername.getBytes("GBK"));
+
+				String tmpRealname = rs.getString(2);
+				// 进行编码转换
+				tmpRealname = new String(tmpRealname.getBytes("GBK"));
+
+				String tmpUserpassword = rs.getString(3);
+				String tmpUserrank = rs.getString(4);
+				// 进行编码转换
+				tmpUserrank = new String(tmpUserrank.getBytes("GBK"));
+
+				String tmpManager = rs.getString(5);
+				// 进行编码转换
+				tmpManager = new String(tmpManager.getBytes("GBK"));
+
+				String tmpStore = rs.getString(6);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpRegtime = rs.getString(7);
+				int tmpState = rs.getInt(8);
+
+				UserInfoBean user = new UserInfoBean();
+				user.setUsername(tmpUsername);
+				user.setRealname(tmpRealname);
+				user.setPassword(tmpUserpassword);
+				user.setRank(tmpUserrank);
+				user.setManager(tmpManager);
+				user.setStore(tmpStore);
+				user.setRegtime(tmpRegtime);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+
+	// 根据店名 找到这个店的销售经理(manager)和所有销售代表(sales)（userinfoBean对象的链表）
+	public ArrayList getManagerSalesByStore(String store) throws Exception {
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM userinfo_admin WHERE store='" + store
+				+ "';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String tmpUsername = rs.getString(1);
+				// 进行编码转换
+				tmpUsername = new String(tmpUsername.getBytes("GBK"));
+
+				String tmpRealname = rs.getString(2);
+				// 进行编码转换
+				tmpRealname = new String(tmpRealname.getBytes("GBK"));
+
+				String tmpUserpassword = rs.getString(3);
+				String tmpUserrank = rs.getString(4);
+				// 进行编码转换
+				tmpUserrank = new String(tmpUserrank.getBytes("GBK"));
+
+				String tmpManager = rs.getString(5);
+				// 进行编码转换
+				tmpManager = new String(tmpManager.getBytes("GBK"));
+
+				String tmpStore = rs.getString(6);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpRegtime = rs.getString(7);
+				int tmpState = rs.getInt(8);
+
+				UserInfoBean user = new UserInfoBean();
+				user.setUsername(tmpUsername);
+				user.setRealname(tmpRealname);
+				user.setPassword(tmpUserpassword);
+				user.setRank(tmpUserrank);
+				user.setManager(tmpManager);
+				user.setStore(tmpStore);
+				user.setRegtime(tmpRegtime);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+
+	// 根据店名 找到这个店的销售经理(销售经理的真实名字)
+	public String getManagernameByStore(String store) throws Exception {
+		String tmpRealname = null;
+		String sql = "SELECT * FROM userinfo_admin WHERE store='" + store
+				+ "' and rank='销售经理';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+
+				tmpRealname = rs.getString(2);
+				// 进行编码转换
+				tmpRealname = new String(tmpRealname.getBytes("GBK"));
+
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return tmpRealname;
+	}
+
+	// 根据销售经理 找到它对应的销售代表(userinfoBean对象的链表)
+	public ArrayList getSalesByManager(String Managername) throws Exception {
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM userinfo_admin WHERE manager='"
+				+ Managername + "';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				String tmpUsername = rs.getString(1);
+				// 进行编码转换
+				tmpUsername = new String(tmpUsername.getBytes("GBK"));
+
+				String tmpRealname = rs.getString(2);
+				// 进行编码转换
+				tmpRealname = new String(tmpRealname.getBytes("GBK"));
+
+				String tmpUserpassword = rs.getString(3);
+				String tmpUserrank = rs.getString(4);
+				// 进行编码转换
+				tmpUserrank = new String(tmpUserrank.getBytes("GBK"));
+
+				String tmpManager = rs.getString(5);
+				// 进行编码转换
+				tmpManager = new String(tmpManager.getBytes("GBK"));
+
+				String tmpStore = rs.getString(6);
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+				String tmpRegtime = rs.getString(7);
+				int tmpState = rs.getInt(8);
+
+				UserInfoBean user = new UserInfoBean();
+				user.setUsername(tmpUsername);
+				user.setRealname(tmpRealname);
+				user.setPassword(tmpUserpassword);
+				user.setRank(tmpUserrank);
+				user.setManager(tmpManager);
+				user.setStore(tmpStore);
+				user.setRegtime(tmpRegtime);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+
+	// 根据销售经理或销售代表的名字找到 他属于哪个店（返回 店名）
+	public String getStoreByManagerOrSales(String name) throws Exception {
+		String tmpStore = null;
+		String sql = "SELECT * FROM userinfo_admin WHERE realname='" + name
+				+ "' and store !='0';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+
+				tmpStore = rs.getString("store");
+				// 进行编码转换
+				tmpStore = new String(tmpStore.getBytes("GBK"));
+
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return tmpStore;
+	}
+
+	// 新写的，根据一个真实的名字得到一个元组
+	public UserInfoBean getABeanByName(String realname) throws Exception {
+
+		String sql = "SELECT * FROM userinfo_admin WHERE realname=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		UserInfoBean userinfo = new UserInfoBean();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, realname);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				// 查询出内容，之后将查询出的内容赋值给user对象
+				userinfo.setUsername(rs.getString(1));
+				userinfo.setRealname(rs.getString(2));
+				userinfo.setPassword(rs.getString(3));
+				userinfo.setRank(rs.getString(4));
+				userinfo.setManager(rs.getString(5));
+				userinfo.setStore(rs.getString(6));
+				userinfo.setRegtime(rs.getString(7));
+				userinfo.setState(rs.getInt(8));
+			}
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userinfo;
+	}
+
+	/*
+	 * public static void main(String args[]) throws Exception{ Table_Userinfo
+	 * t=new Table_Userinfo(); UserInfoBean bean=new UserInfoBean();
+	 * bean=t.getABeanByName("刘羽"); System.out.println(bean.getRealname());
+	 * System.out.println(bean.getStore()); }
+	 */
+	/*
+	 * public static void main(String args[]) throws Exception{ Table_Userinfo
+	 * t=new Table_Userinfo(); UserInfoBean bean=new UserInfoBean(); ArrayList
+	 * list=t.getAllStoreName(); Iterator it=list.iterator();
+	 * while(it.hasNext()){ String s=(String) it.next(); System.out.println(s);
+	 * } }
+	 */
+	/*
+	 * public static void main(String args[]) throws Exception{ Table_Userinfo
+	 * t=new Table_Userinfo(); UserInfoBean bean=new UserInfoBean(); ArrayList
+	 * list=t.getManagers(); Iterator it=list.iterator(); while(it.hasNext()){
+	 * bean=(UserInfoBean) it.next(); System.out.println(bean.getRealname()); }
+	 * }
+	 */
+	/*
+	 * public static void main(String args[]) throws Exception{ Table_Userinfo
+	 * t=new Table_Userinfo(); UserInfoBean bean=new UserInfoBean(); ArrayList
+	 * list=t.getManagerSalesByStore("国度店"); Iterator it=list.iterator();
+	 * while(it.hasNext()){ bean=(UserInfoBean) it.next();
+	 * System.out.println(bean.getRealname()); } }
+	 */
+	/*
+	 * public static void main(String args[]) throws Exception{ Table_Userinfo
+	 * t=new Table_Userinfo(); UserInfoBean bean=new UserInfoBean(); ArrayList
+	 * list=t.getSalesByManager("刘羽"); Iterator it=list.iterator();
+	 * while(it.hasNext()){ bean=(UserInfoBean) it.next();
+	 * System.out.println(bean.getRealname()); } }
+	 */
+
+	public List<String> getStylist() throws Exception {
+		String sql = "SELECT s.username FROM userinfo_admin s WHERE s.rank IN ('设计师','销售经理','销售代表')";
+		PreparedStatement pstmt = null;
+		List<String> list = new ArrayList<String>();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		try {
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				list.add(rs.getString("username"));
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			throw new Exception("操作出现异常", e);
+		} finally {
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+}

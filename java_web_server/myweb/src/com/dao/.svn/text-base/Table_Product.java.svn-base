@@ -1,0 +1,1249 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Product {
+	
+	public Table_Product()
+	{
+		super();
+	}
+	
+	public int getlastContractID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM product order by(pro_sort) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+		return lastmessid;		
+	}
+	
+	//从数据库中找出所有产品名称
+	public ArrayList findTotalPro_name()throws Exception 
+	{
+		ArrayList pro_namelist = new ArrayList();
+		String sql = "SELECT DISTINCT pro_name FROM product ORDER BY(pro_name)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				String tmpPro_name=rs.getString(1);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				ProductBean product = new ProductBean();
+				product.setPro_name(tmpPro_name);
+				// 把对象添加到集合中
+				pro_namelist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_namelist;
+	}
+	
+	
+	//从数据库中模糊搜索产品项目
+	public ArrayList findPro_item(String word)throws Exception 
+	{
+		ArrayList pro_itemlist = new ArrayList();
+		String sql = "SELECT  pro_item FROM product where pro_name = ? " ;
+		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, word);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				// 获取结果集中的信息
+				String tmpPro_item=rs.getString(1);
+				// 进行编码转换
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				ProductBean product = new ProductBean();
+				product.setPro_item(tmpPro_item);
+				// 把对象添加到集合中
+				pro_itemlist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_itemlist;
+	}	
+	
+	public int insertProduct(String pro_sort,String pro_name,String pro_item,int limit_length,int limit_height,int limit_depth,
+			String pro_standard, String pro_unit,float pro_perunit,String pro_mark,int method, float pro_dosage ,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin,float anzhuang)throws Exception  {
+		String sql = "INSERT INTO product(pro_sort,pro_name,pro_item,limit_length,limit_height,limit_depth,pro_standard,pro_unit,pro_perunit,pro_mark,method,pro_dosage,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin,anzhuang) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, pro_sort);
+		pstmt.setString(2, pro_name);
+		pstmt.setString(3, pro_item);
+		pstmt.setInt(4, limit_length);
+		pstmt.setInt(5, limit_height);
+		pstmt.setInt(6, limit_depth);
+		pstmt.setString(7, pro_standard);
+		pstmt.setString(8, pro_unit);
+		pstmt.setFloat(9,pro_perunit);
+		pstmt.setString(10, pro_mark);
+		pstmt.setInt(11, method);
+		pstmt.setFloat(12,pro_dosage);
+		pstmt.setFloat(13,suanliao);
+		pstmt.setFloat(14,kailiao);
+		pstmt.setFloat(15,mugong);
+		pstmt.setFloat(16,diqi);
+		pstmt.setFloat(17,pendi);
+		pstmt.setFloat(18,penmian);
+		pstmt.setFloat(19,wujin);
+		pstmt.setFloat(20,anzhuang);
+		
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+		
+	}
+ //得到以pro_sort字段唯一不同的值
+	public ArrayList findTotalProductOnly()throws Exception 
+	{
+		ArrayList productlist = new ArrayList();
+		String sql = "SELECT  DISTINCT  pro_sort from product" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				String tmpPro_sort=rs.getString(1);
+				
+				ProductBean product = new ProductBean();
+
+				product.setPro_sort(tmpPro_sort);
+
+
+				// 把对象添加到集合中
+				productlist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return productlist;
+	}	
+
+	public ArrayList findTotalProduct()throws Exception 
+	{
+		ArrayList productlist = new ArrayList();
+		String sql = "SELECT * FROM product order by(proID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpProID = rs.getInt(1);
+				
+				String tmpPro_sort=rs.getString(2);
+				// 进行编码转换
+				tmpPro_sort=new String(tmpPro_sort.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				// 进行编码转换
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				int tmpLimit_length = rs.getInt(5);
+				int tmpLimit_height = rs.getInt(6);
+				int tmpLimit_depth = rs.getInt(7);
+				
+				String tmpPro_standard=rs.getString(8);
+				// 进行编码转换
+				tmpPro_standard=new String(tmpPro_standard.getBytes("GBK"));
+				
+				String tmpPro_unit=rs.getString(9);
+				// 进行编码转换
+				tmpPro_unit=new String(tmpPro_unit.getBytes("GBK"));
+				
+				float tmpPro_perunit=rs.getFloat(10);
+				
+				String tmpPro_mark=rs.getString(11);
+				// 进行编码转换
+				tmpPro_mark=new String(tmpPro_mark.getBytes("GBK"));
+				
+				int tmpMethod = rs.getInt(12);
+				
+				float tmpPro_dosage=rs.getFloat(13);
+				
+				float tmpSuanliao=rs.getFloat(14);
+				float tmpKailiao=rs.getFloat(15);
+				float tmpMugong=rs.getFloat(16);
+				float tmpDiqi=rs.getFloat(17);
+				float tmpPendi=rs.getFloat(18);
+				float tmpPenmian=rs.getFloat(19);
+				float tmpWujin=rs.getFloat(20);
+				float tmpAnzhuang=rs.getFloat(21);
+				
+			
+				ProductBean product = new ProductBean();
+				product.setProID(tmpProID);
+				product.setPro_sort(tmpPro_sort);
+				product.setPro_name(tmpPro_name);
+				product.setPro_item(tmpPro_item);
+				product.setLimit_length(tmpLimit_length);
+				product.setLimit_height(tmpLimit_height);
+				product.setLimit_depth(tmpLimit_depth);
+				product.setPro_standard(tmpPro_standard);
+				product.setPro_unit(tmpPro_unit);
+				product.setPro_perunit(tmpPro_perunit);
+				product.setPro_mark(tmpPro_mark);
+				product.setMethod(tmpMethod);
+				product.setPro_dosage(tmpPro_dosage);
+				product.setSuanliao(tmpSuanliao);
+				product.setKailiao(tmpKailiao);
+				product.setMugong(tmpMugong);
+				product.setDiqi(tmpDiqi);
+				product.setPendi(tmpPendi);
+				product.setPenmian(tmpPenmian);
+				product.setWujin(tmpWujin);
+				product.setAnzhuang(tmpAnzhuang);
+
+				// 把对象添加到集合中
+				productlist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return productlist;
+	}	
+	
+	
+	//从数据库中模糊搜索产品名称
+	public ArrayList findPro_name(String word)throws Exception 
+	{
+		ArrayList pro_namelist = new ArrayList();
+		String sql = "SELECT DISTINCT pro_name FROM product where pro_name like  '%"+word+"%' ORDER BY(pro_name)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				// 获取结果集中的信息
+				String tmpPro_name=rs.getString(1);
+				// 进行编码转换
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				ProductBean product = new ProductBean();
+				product.setPro_name(tmpPro_name);
+				// 把对象添加到集合中
+				pro_namelist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_namelist;
+	}	
+	
+	public boolean hasExist(String pro_item) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from product where pro_item='");
+	sql1.append(pro_item);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	//根据proID从数据库中删除某项产品
+	public int deleteByproID(int proID)throws Exception {
+
+		String sql = "DELETE  FROM product WHERE proID='"+proID+"'";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}
+	
+	
+	public ProductBean selectProductByItem(String Pro_name,String Pro_item) throws Exception  {
+		
+		ProductBean product = new ProductBean();
+		String sql = "SELECT * FROM product WHERE pro_name=? AND pro_item = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, Pro_name);
+			pstmt.setString(2, Pro_item);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				product.setProID(rs.getInt(1));
+				product.setPro_sort(rs.getString(2));
+				product.setPro_name(rs.getString(3));
+				product.setPro_item(rs.getString(4));
+				product.setLimit_length(rs.getInt(5));
+				product.setLimit_height(rs.getInt(6));
+				product.setLimit_depth(rs.getInt(7));	
+				product.setPro_standard(rs.getString(8));
+				product.setPro_unit(rs.getString(9));
+				product.setPro_perunit(rs.getFloat(10));
+				product.setPro_mark(rs.getString(11));
+				product.setMethod(rs.getInt(12));
+				product.setPro_dosage(rs.getFloat(13));
+				product.setSuanliao(rs.getFloat(14));
+				product.setKailiao(rs.getFloat(15));
+				product.setMugong(rs.getFloat(16));
+				product.setDiqi(rs.getFloat(17));
+				product.setPendi(rs.getFloat(18));
+				product.setPenmian(rs.getFloat(19));
+				product.setWujin(rs.getFloat(20));
+				product.setAnzhuang(rs.getFloat(21));
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return product;
+		
+	}
+public ProductBean findByItem(String Pro_sort,String Pro_name,String Pro_item) throws Exception  {
+		
+		ProductBean product = new ProductBean();
+		String sql = "SELECT * FROM product WHERE pro_sort=? AND pro_name = ?AND pro_item=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, Pro_sort);
+			pstmt.setString(2, Pro_name);
+			pstmt.setString(3, Pro_item);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				product.setProID(rs.getInt(1));
+				product.setPro_sort(rs.getString(2));
+				product.setPro_name(rs.getString(3));
+				product.setPro_item(rs.getString(4));
+				product.setLimit_length(rs.getInt(5));
+				product.setLimit_height(rs.getInt(6));
+				product.setLimit_depth(rs.getInt(7));	
+				product.setPro_standard(rs.getString(8));
+				product.setPro_unit(rs.getString(9));
+				product.setPro_perunit(rs.getFloat(10));
+				product.setPro_mark(rs.getString(11));
+				product.setMethod(rs.getInt(12));
+				product.setPro_dosage(rs.getFloat(13));
+				product.setSuanliao(rs.getFloat(14));
+				product.setKailiao(rs.getFloat(15));
+				product.setMugong(rs.getFloat(16));
+				product.setDiqi(rs.getFloat(17));
+				product.setPendi(rs.getFloat(18));
+				product.setPenmian(rs.getFloat(19));
+				product.setWujin(rs.getFloat(20));
+				product.setAnzhuang(rs.getFloat(21));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return product;
+		
+	}
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM product ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+public ArrayList findPro_sort(String word)throws Exception 
+	{
+		ArrayList pro_sortlist = new ArrayList();
+		String sql = "SELECT  * FROM product where pro_sort = ? " ;
+		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, word);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{    ProductBean product=new ProductBean();
+				product.setProID(rs.getInt(1));
+				product.setPro_sort(rs.getString(2));
+				product.setPro_name(rs.getString(3));
+				product.setPro_item(rs.getString(4));
+				product.setLimit_length(rs.getInt(5));
+				product.setLimit_height(rs.getInt(6));
+				product.setLimit_depth(rs.getInt(7));	
+				product.setPro_standard(rs.getString(8));
+				product.setPro_unit(rs.getString(9));
+				product.setPro_perunit(rs.getFloat(10));
+				product.setPro_mark(rs.getString(11));
+				product.setMethod(rs.getInt(12));
+				product.setPro_dosage(rs.getFloat(13));
+				product.setSuanliao(rs.getFloat(14));
+				product.setKailiao(rs.getFloat(15));
+				product.setMugong(rs.getFloat(16));
+				product.setDiqi(rs.getFloat(17));
+				product.setPendi(rs.getFloat(18));
+				product.setPenmian(rs.getFloat(19));
+				product.setWujin(rs.getFloat(20));
+				product.setAnzhuang(rs.getFloat(21));
+				
+				pro_sortlist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_sortlist;
+	}	
+
+	
+	public ArrayList findPro_name1(String word)throws Exception 
+	{
+		ArrayList pro_namelist = new ArrayList();
+		String sql = "SELECT  * FROM product where pro_sort = ? " ;
+		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, word);
+			// 进行数据库查询操作Ss
+			rs= pstmt.executeQuery();
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				ProductBean product=new ProductBean();
+				product.setProID(rs.getInt(1));
+				product.setPro_sort(rs.getString(2));
+				product.setPro_name(rs.getString(3));
+				product.setPro_item(rs.getString(4));
+				product.setLimit_length(rs.getInt(5));
+				product.setLimit_height(rs.getInt(6));
+				product.setLimit_depth(rs.getInt(7));	
+				product.setPro_standard(rs.getString(8));
+				product.setPro_unit(rs.getString(9));
+				product.setPro_perunit(rs.getFloat(10));
+				product.setPro_mark(rs.getString(11));
+				product.setMethod(rs.getInt(12));
+				product.setPro_dosage(rs.getFloat(13));
+				product.setSuanliao(rs.getFloat(14));
+				product.setKailiao(rs.getFloat(15));
+				product.setMugong(rs.getFloat(16));
+				product.setDiqi(rs.getFloat(17));
+				product.setPendi(rs.getFloat(18));
+				product.setPenmian(rs.getFloat(19));
+				product.setWujin(rs.getFloat(20));
+				product.setAnzhuang(rs.getFloat(21));
+				
+				pro_namelist.add(product);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return pro_namelist;
+	}	
+
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}
+	
+	public int ClearTableContract()throws Exception {
+
+		String sql = "DELETE  FROM contract";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}*/
+
+public ArrayList selectProductByItemList(String Pro_sort,String Pro_name) throws Exception  {
+		ArrayList itemlist=new ArrayList();
+		ProductBean product = new ProductBean();
+		String sql = "SELECT * FROM product WHERE pro_sort=? AND pro_name = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, Pro_sort);
+			pstmt.setString(2, Pro_name);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+
+				product.setProID(rs.getInt(1));
+				product.setPro_sort(rs.getString(2));
+				product.setPro_name(rs.getString(3));
+				product.setPro_item(rs.getString(4));
+				product.setLimit_length(rs.getInt(5));
+				product.setLimit_height(rs.getInt(6));
+				product.setLimit_depth(rs.getInt(7));	
+				product.setPro_standard(rs.getString(8));
+				product.setPro_unit(rs.getString(9));
+				product.setPro_perunit(rs.getFloat(10));
+				product.setPro_mark(rs.getString(11));
+				product.setMethod(rs.getInt(12));
+				product.setPro_dosage(rs.getFloat(13));
+				product.setSuanliao(rs.getFloat(14));
+				product.setKailiao(rs.getFloat(15));
+				product.setMugong(rs.getFloat(16));
+				product.setDiqi(rs.getFloat(17));
+				product.setPendi(rs.getFloat(18));
+				product.setPenmian(rs.getFloat(19));
+				product.setWujin(rs.getFloat(20));
+				product.setAnzhuang(rs.getFloat(21));
+				
+			}
+			itemlist.add(product);
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return itemlist;
+		
+	}
+	
+	
+public ArrayList findPro_item1(String pro_sort ,String pro_name)throws Exception 
+{
+	ArrayList pro_itemlist = new ArrayList();
+	String sql = "SELECT * FROM product where pro_sort= ? and pro_name=?" ;
+	
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, pro_sort);
+		pstmt.setString(2, pro_name);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		// 循环计数器
+		int index = 0;
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+			ProductBean product=new ProductBean();
+			product.setProID(rs.getInt(1));
+			product.setPro_sort(rs.getString(2));
+			product.setPro_name(rs.getString(3));
+			product.setPro_item(rs.getString(4));
+			product.setLimit_length(rs.getInt(5));
+			product.setLimit_height(rs.getInt(6));
+			product.setLimit_depth(rs.getInt(7));	
+			product.setPro_standard(rs.getString(8));
+			product.setPro_unit(rs.getString(9));
+			product.setPro_perunit(rs.getFloat(10));
+			product.setPro_mark(rs.getString(11));
+			product.setMethod(rs.getInt(12));
+			product.setPro_dosage(rs.getFloat(13));
+			product.setSuanliao(rs.getFloat(14));
+			product.setKailiao(rs.getFloat(15));
+			product.setMugong(rs.getFloat(16));
+			product.setDiqi(rs.getFloat(17));
+			product.setPendi(rs.getFloat(18));
+			product.setPenmian(rs.getFloat(19));
+			product.setWujin(rs.getFloat(20));
+			product.setAnzhuang(rs.getFloat(21));
+			
+			pro_itemlist.add(product);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return pro_itemlist;
+}	
+	
+public ArrayList findPro_item2(String pro_sort,String pro_name)throws Exception 
+{
+	ArrayList pro_itemlist = new ArrayList();
+	String sql = "SELECT * FROM product where pro_sort= ? and pro_name=? " ;
+	
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, pro_sort);
+		pstmt.setString(2, pro_name);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		// 循环计数器
+		
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+			ProductBean product=new ProductBean();
+			product.setProID(rs.getInt(1));
+			product.setPro_sort(rs.getString(2));
+			product.setPro_name(rs.getString(3));
+			product.setPro_item(rs.getString(4));
+			product.setLimit_length(rs.getInt(5));
+			product.setLimit_height(rs.getInt(6));
+			product.setLimit_depth(rs.getInt(7));	
+			String tempsetPro_standard=rs.getString(8);
+			tempsetPro_standard=tempsetPro_standard.replaceAll("a","长").replaceAll("d","宽").replaceAll("h","深度").replaceAll("q","数量").replaceAll("\\*","X").replaceAll("\\*","x");
+			
+			product.setPro_standard(tempsetPro_standard);
+			product.setPro_unit(rs.getString(9));
+			product.setPro_perunit(rs.getFloat(10));
+			product.setPro_mark(rs.getString(11));
+			product.setMethod(rs.getInt(12));
+			product.setPro_dosage(rs.getFloat(13));
+			product.setSuanliao(rs.getFloat(14));
+			product.setKailiao(rs.getFloat(15));
+			product.setMugong(rs.getFloat(16));
+			product.setDiqi(rs.getFloat(17));
+			product.setPendi(rs.getFloat(18));
+			product.setPenmian(rs.getFloat(19));
+			product.setWujin(rs.getFloat(20));
+			product.setAnzhuang(rs.getFloat(21));
+			
+			pro_itemlist.add(product);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return pro_itemlist;
+}	
+	
+
+//根据proID从数据库中找出某项产品
+public ProductBean findByproID(int proID)throws Exception {
+	ProductBean product=new ProductBean();
+	String sql = "SELECT * FROM product WHERE proID='"+proID+"'";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		// 循环计数器
+		int index = 0;
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+			
+			product.setProID(rs.getInt(1));
+			product.setPro_sort(rs.getString(2));
+			product.setPro_name(rs.getString(3));
+			product.setPro_item(rs.getString(4));
+			product.setLimit_length(rs.getInt(5));
+			product.setLimit_height(rs.getInt(6));
+			product.setLimit_depth(rs.getInt(7));	
+			product.setPro_standard(rs.getString(8));
+			product.setPro_unit(rs.getString(9));
+			product.setPro_perunit(rs.getFloat(10));
+			product.setPro_mark(rs.getString(11));
+			product.setMethod(rs.getInt(12));
+			product.setPro_dosage(rs.getFloat(13));
+			product.setSuanliao(rs.getFloat(14));
+			product.setKailiao(rs.getFloat(15));
+			product.setMugong(rs.getFloat(16));
+			product.setDiqi(rs.getFloat(17));
+			product.setPendi(rs.getFloat(18));
+			product.setPenmian(rs.getFloat(19));
+			product.setWujin(rs.getFloat(20));
+			product.setAnzhuang(rs.getFloat(21));
+		
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return product;
+}	
+	
+
+//根据id进行更新
+public int updateProduct(int proID,String pro_sort,String pro_name,String pro_item,int limit_length,int limit_height,int limit_depth,String pro_standard,String pro_unit,float pro_perunit,String pro_mark,int method,float pro_dosage)throws Exception{
+	String sql = "UPDATE  product SET  pro_sort=?,pro_name=?,pro_item=?,limit_length=?, limit_height=?,limit_depth=?,pro_standard=?,pro_unit=?,pro_perunit=?,pro_mark=?,method=?,pro_dosage=? where proID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,pro_sort);
+		pstmt.setString(2, pro_name);
+		pstmt.setString(3, pro_item);
+		
+		pstmt.setInt(4, limit_length);
+		pstmt.setInt(5,limit_height);
+		pstmt.setInt(6,limit_depth);
+		
+		pstmt.setString(7,pro_standard);
+		pstmt.setString(8,pro_unit);
+		pstmt.setFloat(9,pro_perunit);
+		pstmt.setString(10, pro_mark);
+		pstmt.setInt(11, method);
+		pstmt.setFloat(12, pro_dosage);
+		
+		pstmt.setInt(13, proID);
+		
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+
+	
+//从数据库中找出新添加的记录
+public ArrayList findNewinsertPro(int size)throws Exception 
+{
+	ArrayList prolist = new ArrayList();
+	String sql = "SELECT  * FROM product order by proID DESC LIMIT "+size+"";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;
+	
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 循环计数器
+	
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+
+			ProductBean product=new ProductBean();
+			product.setProID(rs.getInt(1));
+			product.setPro_sort(rs.getString(2));
+			product.setPro_name(rs.getString(3));
+			product.setPro_item(rs.getString(4));
+			product.setLimit_length(rs.getInt(5));
+			product.setLimit_height(rs.getInt(6));
+			product.setLimit_depth(rs.getInt(7));	
+			product.setPro_standard(rs.getString(8));
+			product.setPro_unit(rs.getString(9));
+			product.setPro_perunit(rs.getFloat(10));
+			product.setPro_mark(rs.getString(11));
+			product.setMethod(rs.getInt(12));
+			product.setPro_dosage(rs.getFloat(13));
+			prolist.add(product);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return prolist;
+}
+
+
+//从数据库中模糊搜索产品名称
+public ArrayList findPro_name2(String word)throws Exception 
+{
+	ArrayList pro_namelist = new ArrayList();
+	String sql = "SELECT  pro_name FROM product where pro_name='" +word+"'"  ;
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;	
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+		// 循环计数器
+		int index = 0;
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+			// 循环到第index条
+			index++;
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+			// 获取结果集中的信息
+			String tmpPro_name=rs.getString(1);
+			// 进行编码转换
+			tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+			ProductBean product = new ProductBean();
+			product.setPro_name(tmpPro_name);
+			// 把对象添加到集合中
+			pro_namelist.add(product);
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return pro_namelist;
+}	
+
+
+
+//根据id进行更新工时
+public int updateProduct(int proID,String pro_sort,String pro_name,String pro_item,int limit_length,int limit_height,int limit_depth,String pro_standard,String pro_unit,float pro_perunit,String pro_mark,int method,float pro_dosage,float suanliao,float kailiao,float mugong ,float diqi,float pendi ,float penmian,float wujin ,float anzhuang)throws Exception{
+	String sql = "UPDATE  product SET  pro_sort=?,pro_name=?,pro_item=?,limit_length=?, limit_height=?,limit_depth=?,pro_standard=?,pro_unit=?,pro_perunit=?,pro_mark=?,method=?,pro_dosage=?,suanliao=?,kailiao=?,mugong=?,diqi=?,pendi=?,penmian=?,wujin=?,anzhuang=?  where proID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+
+		pstmt.setString(1, pro_sort);
+		pstmt.setString(2, pro_name);
+		pstmt.setString(3, pro_item);
+		pstmt.setInt(4, limit_length);
+		pstmt.setInt(5, limit_height);
+		pstmt.setInt(6, limit_depth);
+		pstmt.setString(7, pro_standard);
+		pstmt.setString(8, pro_unit);
+		pstmt.setFloat(9,pro_perunit);
+		pstmt.setString(10, pro_mark);
+		pstmt.setInt(11, method);
+		pstmt.setFloat(12,pro_dosage);
+		pstmt.setFloat(13,suanliao);
+		pstmt.setFloat(14,kailiao);
+		pstmt.setFloat(15,mugong);
+		pstmt.setFloat(16,diqi);
+		pstmt.setFloat(17,pendi);
+		pstmt.setFloat(18,penmian);
+		pstmt.setFloat(19,wujin);
+		pstmt.setFloat(20,anzhuang);
+		pstmt.setInt(21, proID);
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+
+
+
+
+
+
+	
+}

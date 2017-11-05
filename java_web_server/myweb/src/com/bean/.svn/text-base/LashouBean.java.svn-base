@@ -1,0 +1,91 @@
+package Table_bean;
+
+public class LashouBean {
+
+	//6个字段
+	private int lashouID;
+	private String lashou_name;
+	private float lashou_price;
+	private int lashou_sign;
+	private float mugong;
+	private float wujin;
+	
+	public LashouBean()
+	{
+		super();
+	}
+	/**
+	 * @return lashouID
+	 */
+	public int getLashouID() {
+		return lashouID;
+	}
+	/**
+	 * @param lashouID 要设置的lashouID
+	 */
+	public void setLashouID(int lashouID) {
+		this.lashouID = lashouID;
+	}
+	/**
+	 * @return lashou_name
+	 */
+	public String getLashou_name() {
+		return lashou_name;
+	}
+	/**
+	 * @param lashou_name 要设置的 lashou_name
+	 */
+	public void setLashou_name(String lashou_name) {
+		this.lashou_name = lashou_name;
+	}
+	
+	/**
+	 * @return lashou_price
+	 */
+	public float getLashou_price() {
+		return lashou_price;
+	}
+	/**
+	 * @param lashou_price 要设置的 lashou_price
+	 */
+	public void setLashou_price(float lashou_price) {
+		this.lashou_price = lashou_price;
+	}
+	/**
+	 * @return lashou_sign
+	 */
+	public int getLashou_sign() {
+		return lashou_sign;
+	}
+	/**
+	 * @param lashou_sign 要设置的lashou_sign
+	 */
+	public void setLashou_sign(int lashou_sign) {
+		this.lashou_sign = lashou_sign;
+	}
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+	
+}

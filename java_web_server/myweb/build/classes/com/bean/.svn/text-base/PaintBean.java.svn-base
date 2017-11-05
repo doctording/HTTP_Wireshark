@@ -1,0 +1,178 @@
+package Table_bean;
+
+public class PaintBean {
+
+	//11¸ö×Ö¶Î
+	private int paintID;
+	private String paint_name;
+	private float paint_ratio;
+	private float suanliao;//calculate_material; 
+	private float kailiao;//open_material;
+	private float mugong;//woodworking;
+	private float diqi;//primer;
+	private float pendi;//spray_bottom;
+	private float penmian;//spray_face;
+	private float wujin;//hardware;
+	private float anzhuang;//installation;
+	
+	public PaintBean()
+	{
+		super();
+	}
+
+	/**
+	 * @return the paintID
+	 */
+	public int getPaintID() {
+		return paintID;
+	}
+
+	/**
+	 * @param paintID the paintID to set
+	 */
+	public void setPaintID(int paintID) {
+		this.paintID = paintID;
+	}
+
+	/**
+	 * @return the paint_name
+	 */
+	public String getPaint_name() {
+		return paint_name;
+	}
+
+	/**
+	 * @param paint_name the paint_name to set
+	 */
+	public void setPaint_name(String paint_name) {
+		this.paint_name = paint_name;
+	}
+
+	/**
+	 * @return the paint_ratio
+	 */
+	public float getPaint_ratio() {
+		return paint_ratio;
+	}
+
+	/**
+	 * @param paint_ratio the paint_ratio to set
+	 */
+	public void setPaint_ratio(float paint_ratio) {
+		this.paint_ratio = paint_ratio;
+	}
+
+	/**
+	 * @return the suanliao
+	 */
+	public float getSuanliao() {
+		return suanliao;
+	}
+
+	/**
+	 * @param suanliao the suanliao to set
+	 */
+	public void setSuanliao(float suanliao) {
+		this.suanliao = suanliao;
+	}
+
+	/**
+	 * @return the kailiao
+	 */
+	public float getKailiao() {
+		return kailiao;
+	}
+
+	/**
+	 * @param kailiao the kailiao to set
+	 */
+	public void setKailiao(float kailiao) {
+		this.kailiao = kailiao;
+	}
+
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+
+	/**
+	 * @return the diqi
+	 */
+	public float getDiqi() {
+		return diqi;
+	}
+
+	/**
+	 * @param diqi the diqi to set
+	 */
+	public void setDiqi(float diqi) {
+		this.diqi = diqi;
+	}
+
+	/**
+	 * @return the pendi
+	 */
+	public float getPendi() {
+		return pendi;
+	}
+
+	/**
+	 * @param pendi the pendi to set
+	 */
+	public void setPendi(float pendi) {
+		this.pendi = pendi;
+	}
+
+	/**
+	 * @return the penmian
+	 */
+	public float getPenmian() {
+		return penmian;
+	}
+
+	/**
+	 * @param penmian the penmian to set
+	 */
+	public void setPenmian(float penmian) {
+		this.penmian = penmian;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+	/**
+	 * @return the anzhuang
+	 */
+	public float getAnzhuang() {
+		return anzhuang;
+	}
+
+	/**
+	 * @param anzhuang the anzhuang to set
+	 */
+	public void setAnzhuang(float anzhuang) {
+		this.anzhuang = anzhuang;
+	}
+
+	
+}

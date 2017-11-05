@@ -1,0 +1,593 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import Table_bean.MessageBean;
+import Table_bean.PostInfoBean;
+import Table_bean.UserInfoBean;
+import Time_bean.TimeInfoBean;
+
+
+public class Table_Postinfo {
+	
+	public static final int PAGE_NUM = 10;// 定义首页公告列表页面显示公告行数
+	
+	public Table_Postinfo()
+	{
+		super();
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM postinfo_admin ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		UserInfoBean userinfo= new UserInfoBean();
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}	
+	public int getlastPostID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM postinfo_admin order by(postID) desc";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		PostInfoBean userinfo= new PostInfoBean();
+		int lastpostid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastpostid=rs.getInt(1);
+        	
+
+		}
+
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+		
+		return lastpostid;	
+		
+	}
+
+	public ArrayList findTotalPost()throws Exception 
+	{
+		ArrayList postlist = new ArrayList();
+		String sql = "SELECT * FROM postinfo_admin order by(postID) desc  " ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpPostID=rs.getInt(1);
+				String tmpTitle=rs.getString(2);
+				// 进行编码转换
+				tmpTitle=new String(tmpTitle.getBytes("GBK"));
+				String tmpContent=rs.getString(3);
+				// 进行编码转换
+				tmpContent=new String(tmpContent.getBytes("GBK"));
+				String tmpwriterDate=rs.getString(4);
+				
+			
+				PostInfoBean postinfo = new PostInfoBean();
+				postinfo.setPostID(tmpPostID);
+				postinfo.setTitle(tmpTitle);
+				postinfo.setContent(tmpContent);
+				postinfo.setWriterDate(tmpwriterDate);
+				
+				
+				// 把对象添加到集合中
+				postlist.add(postinfo);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return postlist;
+	}
+	
+	public ArrayList findAllPost(int pageNo)throws Exception 
+	{
+		ArrayList postlist = new ArrayList();
+		String sql = "SELECT * FROM postinfo_admin order by(postID) desc " ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 要显示的页码，默认值为1
+			int iPageNo=1;
+			// 要显示的第一条记录,一页十条记录
+		        iPageNo=pageNo;
+			int begin = ( iPageNo-1)*10+1;
+			// 要显示的最后一条记录
+			int end = iPageNo*10;
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				//循环到第index条
+				index++;
+				
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				if(index < begin)
+				continue;
+				// 如果已经大于最后一条记录，则结束循环
+				if(index > end)
+				break;
+
+				// 获取结果集中的信息
+				int tmpPostID=rs.getInt(1);
+				String tmpTitle=rs.getString(2);
+				// 进行编码转换
+				tmpTitle=new String(tmpTitle.getBytes("GBK"));
+				String tmpContent=rs.getString(3);
+				// 进行编码转换
+				tmpContent=new String(tmpContent.getBytes("GBK"));
+				String tmpwriterDate=rs.getString(4);
+				
+			
+				PostInfoBean postinfo = new PostInfoBean();
+				postinfo.setPostID(tmpPostID);
+				postinfo.setTitle(tmpTitle);
+				postinfo.setContent(tmpContent);
+				postinfo.setWriterDate(tmpwriterDate);
+				
+				
+				// 把对象添加到集合中
+				postlist.add(postinfo);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return postlist;
+	}
+	
+	
+
+	public PostInfoBean findPostByID(String post_ID) throws Exception {
+		
+	    String sql = "SELECT * FROM postinfo_admin WHERE postID=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		PostInfoBean postinfo= new PostInfoBean();
+		int postID=Integer.parseInt(post_ID);
+		
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,postID);
+			// 进行数据库查询操作
+			 rs= pstmt.executeQuery();
+			if (rs.next()) {
+				// 查询出内容，之后将查询出的内容赋值给user对象
+				postinfo.setPostID(rs.getInt(1));
+				postinfo.setTitle(rs.getString(2));
+				postinfo.setContent(rs.getString(3));
+				postinfo.setWriterDate(rs.getString(4));
+				
+				
+			}
+			
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return postinfo;
+	}	
+	
+	public int insertNews(PostInfoBean post_info)throws Exception {
+		String sql = "INSERT INTO postinfo_admin(postID,title,content,writerdate) VALUES (?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		PostInfoBean postinfo= new PostInfoBean();
+		postinfo=post_info;
+		TimeInfoBean timeinfo = new TimeInfoBean();
+		String writerdate=timeinfo.getTime();
+		int insert_count=0;
+		insert_count=getlastPostID();
+		
+		postinfo.setPostID(insert_count+1);
+	
+			
+			
+	// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1,postinfo.getPostID());
+		pstmt.setString(2, postinfo.getTitle());
+		pstmt.setString(3, postinfo.getContent());
+		pstmt.setString(4,writerdate);
+		
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+		
+	}
+
+	//根据用户名从数据库中删除用户信息
+	public int deletePostbyID(int postID) throws Exception {
+		
+		String sql = "DELETE FROM postinfo_admin WHERE postID=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,postID);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+		}
+	
+	//模糊搜索的方法
+	//根据标题查询
+public ArrayList findPostByTitle(String word)throws Exception 
+{
+ArrayList postlist = new ArrayList();
+String sql = "SELECT * FROM postinfo_admin where title like  '%"+word+"%'" ;
+
+PreparedStatement pstmt = null;
+DataBaseConnection dbc = new DataBaseConnection();;
+ResultSet rs=null;	
+try {
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	
+	// 进行数据库查询操作
+	rs= pstmt.executeQuery();
+
+	// 对结果集进行遍历
+	while(rs.next())
+	{
+        int tmppostID=rs.getInt(1);
+		String tmptitle=rs.getString(2);
+		String tmpcontent=rs.getString(3);
+		String tmpwriterdate=rs.getString(4);
+		
+	
+		
+		// 进行编码转换
+		tmptitle=new String(tmptitle.getBytes("GBK"));
+		tmpcontent=new String(tmpcontent.getBytes("GBK"));
+		tmpwriterdate=new String(tmpwriterdate.getBytes("GBK"));
+		PostInfoBean postinfo= new PostInfoBean();
+		
+		postinfo.setPostID(tmppostID);
+		postinfo.setTitle(tmptitle);
+		postinfo.setContent(tmpcontent);
+		postinfo.setWriterDate(tmpwriterdate);
+		
+
+		// 把对象添加到集合中
+		postlist.add(postinfo);
+	}
+}
+catch (Exception e)
+{
+	throw new Exception("操作出现异常");
+}
+finally {
+	// 关闭数据库连接
+	rs.close();
+	pstmt.close();
+	dbc.close();
+}
+return postlist;
+}	
+
+//根据内容进行模糊查找
+public ArrayList findPostByContent(String word)throws Exception 
+{
+ArrayList postlist = new ArrayList();
+String sql = "SELECT * FROM postinfo_admin where content like  '%"+word+"%'" ;
+
+PreparedStatement pstmt = null;
+DataBaseConnection dbc = new DataBaseConnection();;
+ResultSet rs=null;	
+try {
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	
+	// 进行数据库查询操作
+	rs= pstmt.executeQuery();
+
+	// 对结果集进行遍历
+	while(rs.next())
+	{
+        int tmppostID=rs.getInt(1);
+		String tmptitle=rs.getString(2);
+		String tmpcontent=rs.getString(3);
+		String tmpwriterdate=rs.getString(4);
+		
+	
+		
+		// 进行编码转换
+		tmptitle=new String(tmptitle.getBytes("GBK"));
+		tmpcontent=new String(tmpcontent.getBytes("GBK"));
+		tmpwriterdate=new String(tmpwriterdate.getBytes("GBK"));
+		PostInfoBean postinfo= new PostInfoBean();
+		
+		postinfo.setPostID(tmppostID);
+		postinfo.setTitle(tmptitle);
+		postinfo.setContent(tmpcontent);
+		postinfo.setWriterDate(tmpwriterdate);
+		
+
+		// 把对象添加到集合中
+		postlist.add(postinfo);
+	}
+}
+catch (Exception e)
+{
+	throw new Exception("操作出现异常");
+}
+finally {
+	// 关闭数据库连接
+	rs.close();
+	pstmt.close();
+	dbc.close();
+}
+return postlist;
+}	
+
+//根据时间进行查找
+public ArrayList findPostByTime(String word)throws Exception 
+{
+ArrayList postlist = new ArrayList();
+String sql = "SELECT * FROM postinfo_admin where title like  '%"+word+"%'" ;
+
+PreparedStatement pstmt = null;
+DataBaseConnection dbc = new DataBaseConnection();;
+ResultSet rs=null;	
+try {
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	
+	// 进行数据库查询操作
+	rs= pstmt.executeQuery();
+
+	// 对结果集进行遍历
+	while(rs.next())
+	{
+        int tmppostID=rs.getInt(1);
+		String tmptitle=rs.getString(2);
+		String tmpcontent=rs.getString(3);
+		String tmpwriterdate=rs.getString(4);
+		
+	
+		
+		// 进行编码转换
+		tmptitle=new String(tmptitle.getBytes("GBK"));
+		tmpcontent=new String(tmpcontent.getBytes("GBK"));
+		tmpwriterdate=new String(tmpwriterdate.getBytes("GBK"));
+		PostInfoBean postinfo= new PostInfoBean();
+		
+		postinfo.setPostID(tmppostID);
+		postinfo.setTitle(tmptitle);
+		postinfo.setContent(tmpcontent);
+		postinfo.setWriterDate(tmpwriterdate);
+	
+
+		// 把对象添加到集合中
+		postlist.add(postinfo);
+	}
+}
+catch (Exception e)
+{
+	throw new Exception("操作出现异常");
+}
+finally {
+	// 关闭数据库连接
+	rs.close();
+	pstmt.close();
+	dbc.close();
+}
+return postlist;
+}	
+
+
+
+
+
+//根据时间进行批量删除
+public int deletemessageByTimerange(String timerange) throws Exception{
+
+String sql="delete from postinfo_admin where writerdate<='"+timerange+"'and writerdate>='2010-01-01 00:00:00'";
+PreparedStatement pstmt = null;
+DataBaseConnection dbc = new DataBaseConnection();;
+int delete_count=0;
+try{
+	// 连接数据库
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	
+	//执行
+	delete_count=pstmt.executeUpdate();
+		
+}catch(Exception e){
+	e.printStackTrace();
+}finally{
+	pstmt.close();
+	dbc.close();
+	
+}
+
+
+return delete_count;
+
+
+}
+
+
+public int updatepostById(int postID,String title,String content )throws Exception  {
+	
+	int update_count=0;
+     String sql="UPDATE postinfo_admin  SET title = '"+title+"',content ='"+content+"' WHERE postID ='"+postID+"'";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库		
+	dbc.DataBase_Connection();
+	pstmt = dbc.getConnection().prepareStatement(sql);
+	update_count=pstmt.executeUpdate();
+
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+	// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+    }	
+	return update_count;
+}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

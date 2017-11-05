@@ -1,0 +1,413 @@
+package jdbc;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+import javax.swing.text.html.HTMLDocument.Iterator;
+
+import Table_bean.*;
+
+public class Table_Factory_workers_add {
+
+	public Table_Factory_workers_add()
+	{
+		super();
+	}
+	
+	//获得元组个数
+	public int getCount() throws Exception {
+		String sql = "SELECT * FROM factory_workers_add order by id ; ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		int count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			while (rs != null && rs.next())
+				count++;
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return count;
+	}
+	
+	//得到所有的元組
+	public ArrayList getAll() throws Exception{
+		ArrayList list = new ArrayList();
+		String sql = "SELECT * FROM factory_workers_add order by factory_workers;";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpFacoryworkers = rs.getString(2);
+				// 进行编码转换
+				tmpFacoryworkers = new String(tmpFacoryworkers.getBytes("GBK"));
+
+				String tmpRank = rs.getString(3);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(4);
+				float tmpBasic_wage = rs.getFloat(5);
+				float tmpAllowance = rs.getFloat(6);
+				float tmpLiving_expenses = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				Factory_workers_addBean ff=new Factory_workers_addBean();
+				ff.setId(tmpID);
+				ff.setFactory_workers(tmpFacoryworkers);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setLiving_expenses(tmpLiving_expenses);
+				ff.setMonth_holidays(tmpMonth_holidays);
+				// 把对象添加到集合中
+				list.add(ff);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+	
+	// 根据id获取一個元组
+	public Factory_workers_addBean getBeanByID(int id) throws Exception {
+
+		Factory_workers_addBean ff = new Factory_workers_addBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from factory_workers_add where id='");
+		sql1.append(id);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpFacoryworkers = rs.getString(2);
+				// 进行编码转换
+				tmpFacoryworkers = new String(tmpFacoryworkers.getBytes("GBK"));
+
+				String tmpRank = rs.getString(3);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(4);
+				float tmpBasic_wage = rs.getFloat(5);
+				float tmpAllowance = rs.getFloat(6);
+				float tmpLiving_expenses = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				ff.setId(id);
+				ff.setFactory_workers(tmpFacoryworkers);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setLiving_expenses(tmpLiving_expenses);
+				ff.setMonth_holidays(tmpMonth_holidays);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return ff;
+	}
+	
+	//插入一个元组，id是自增的
+	public int insertBean(String factory_workers, String rank, float gongling,
+			float basic_wage, float allowance, float living_expenses,
+			float month_holidays) throws Exception {
+		// 注意：要先判断是否已经存在
+		String sql = "INSERT INTO factory_workers_add(factory_workers,rank, gongling,basic_wage,allowance,living_expenses,month_holidays) VALUES (?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			pstmt.setString(1, factory_workers);
+			pstmt.setString(2, rank);
+			pstmt.setFloat(3, gongling);
+			pstmt.setFloat(4, basic_wage);
+			pstmt.setFloat(5, allowance);
+			pstmt.setFloat(6, living_expenses);
+			pstmt.setFloat(7, month_holidays);
+
+			// 进行数据库插入操作
+			insert_count = pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+	
+	//根据id 删除一个元组
+	public int deleteBeanByid(int id) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from factory_workers_add where id='");
+		sql1.append(id);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	
+	//根据factory_workers 的名字得到一个元组
+	public Factory_workers_addBean getBeanByFactoryworker(String name)
+			throws Exception {
+
+		Factory_workers_addBean ff = new Factory_workers_addBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from factory_workers_add where factory_workers='");
+		sql1.append(name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpFacoryworkers = rs.getString(2);
+				// 进行编码转换
+				tmpFacoryworkers = new String(tmpFacoryworkers.getBytes("GBK"));
+
+				String tmpRank = rs.getString(3);
+				// 进行编码转换
+				tmpRank = new String(tmpRank.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(4);
+				float tmpBasic_wage = rs.getFloat(5);
+				float tmpAllowance = rs.getFloat(6);
+				float tmpLiving_expenses = rs.getFloat(7);
+				float tmpMonth_holidays = rs.getFloat(8);
+
+				ff.setId(tmpID);
+				ff.setFactory_workers(tmpFacoryworkers);
+				ff.setRank(tmpRank);
+				ff.setGongling(tmpGongling);
+				ff.setBasic_wage(tmpBasic_wage);
+				ff.setAllowance(tmpAllowance);
+				ff.setLiving_expenses(tmpLiving_expenses);
+				ff.setMonth_holidays(tmpMonth_holidays);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return ff;
+	}
+
+	// 根据 name删除(不为零表示成功)
+	public int deletebeanbyName(String name) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from factory_workers_add where factory_workers='");
+		sql1.append(name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	
+	//根据职工的id进行更新
+	public int UpdateBoli(int id,String factory_workers,String workerrank,float gongling,float basic_wage,float allowance,float living_expenses,float month_holidays)throws Exception {
+         String sql="update factory_workers_add set factory_workers=?,rank=?,gongling=?,basic_wage=?,allowance=?,living_expenses=?,month_holidays=? where id=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,factory_workers);
+			pstmt.setString(2, workerrank);
+			pstmt.setFloat(3, gongling);
+			pstmt.setFloat(4, basic_wage);
+			pstmt.setFloat(5, allowance);
+			pstmt.setFloat(6, living_expenses);
+			pstmt.setFloat(7, month_holidays);
+			pstmt.setInt(8,id);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*public static void main(String args[]) throws Exception {
+		Factory_wrokers_addBean bb = new Factory_wrokers_addBean();
+		Tabel_Factory_workers_add t = new Tabel_Factory_workers_add();
+
+		ArrayList list=t.getAll();
+		java.util.Iterator it= list.iterator();
+		while(it.hasNext()){
+			bb=(Factory_wrokers_addBean) it.next();
+			System.out.print(bb.getId());	System.out.print(bb.getFactory_workers());
+		}*/
+//		System.out.print(bb.getFactory_workers());
+//		System.out.print(bb.getRank());	
+//		System.out.print(bb.getId());	
+//	}
+	
+	/*public static void main(String args[]) throws Exception {
+			Factory_wrokers_addBean bb = new Factory_wrokers_addBean();
+			Tabel_Factory_workers_add t = new Tabel_Factory_workers_add();
+
+			String name="宋婶";
+			bb=t.getBeanByFactoryworker(name);
+			System.out.print(bb.getFactory_workers());
+			System.out.print(bb.getRank());	
+			System.out.print(bb.getId());	
+	}	*/
+	/*public static void main(String args[]) throws Exception {
+		Factory_wrokers_addBean bb = new Factory_wrokers_addBean();
+		Tabel_Factory_workers_add t = new Tabel_Factory_workers_add();
+
+			float a=(float) 1.1,b=(float) 1.3,c=(float) 1.4,d=(float) 1.5,e=(float) 1.6;
+		//t.insertBean("dd", "0",a,b,c,d,e );
+		t.deletebeanbyName("dd");
+		System.out.print(t.getCount());
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Factory_wrokers_addBean b=new Factory_wrokers_addBean();
+		Tabel_Factory_workers_add t=new Tabel_Factory_workers_add();
+		
+		b=t.getBeanByID(2);
+		System.out.print(b.getId()+"/"+b.getFactory_workers()+"/"+b.getRank());
+	}*/
+	
+	/*public static void main(String args[]) throws Exception{
+	Factory_wrokers_addBean b=new Factory_wrokers_addBean();
+	Tabel_Factory_workers_add t=new Tabel_Factory_workers_add();
+
+	System.out.print(t.getlastid());
+}*/
+}

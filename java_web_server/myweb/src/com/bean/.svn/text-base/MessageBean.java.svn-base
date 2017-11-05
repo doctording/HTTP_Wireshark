@@ -1,0 +1,98 @@
+package Table_bean;
+
+public class MessageBean {
+
+	private int messageID;
+	private String title;
+	private String content;
+	private String writer;
+	private String writedate;
+	private int count;
+	int scan;
+	public String getWritedate() {
+		return writedate;
+	}
+	public void setWritedate(String writedate) {
+		this.writedate = writedate;
+	}
+	public int getScan() {
+		return scan;
+	}
+	public void setScan(int scan) {
+		this.scan = scan;
+	}
+
+	
+	public MessageBean()
+	{
+		super();
+	}
+	/**
+	 * @return content
+	 */
+	public String getContent() {
+		return content;
+	}
+	/**
+	 * @return count
+	 */
+	public int getCount() {
+		return count;
+	}
+	/**
+	 * @return messageID
+	 */
+	public int getMessageID() {
+		return messageID;
+	}
+	/**
+	 * @return title
+	 */
+	public String getTitle() {
+		return title;
+	}
+	/**
+	 * @param content 要设置的 content
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+	/**
+	 * @param count 要设置的 count
+	 */
+	public void setCount(int count) {
+		this.count = count;
+	}
+	/**
+	 * @param messageID 要设置的 messageID
+	 */
+	public void setMessageID(int messageID) {
+		this.messageID = messageID;
+	}
+	/**
+	 * @param title 要设置的 title
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	/**
+	 * @param writeDate 要设置的 writeDate
+	 */
+	public void setWriteDate(String writedate) {
+		this.writedate = writedate;
+	}
+	/**
+	 * @return writer
+	 */
+	public String getWriter() {
+		return writer;
+	}
+	/**
+	 * @param writer 要设置的 writer
+	 */
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
+	
+	
+}

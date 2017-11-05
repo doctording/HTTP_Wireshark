@@ -1,0 +1,171 @@
+package jdbc;
+
+import java.util.List;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+
+import Table_bean.*;
+import Time_bean.*;
+
+public class Table_RevertMess {
+	
+	public Table_RevertMess()
+	{
+		super();
+	}
+
+	public ArrayList selectRevertByMessageID(int messageID) throws Exception 
+	{
+		ArrayList revertmesslist = new ArrayList();
+		String sql = "select * from revert_message where messageID = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, messageID);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+
+				RevertMessage revertmess = new RevertMessage();
+				revertmess.setRevertID(rs.getInt("revertID"));
+				revertmess.setMessageID(rs.getInt("messageID"));
+				revertmess.setContent(rs.getString("content"));
+				revertmess.setWriter(rs.getString("writer"));
+				revertmess.setWriteDate(rs.getString("writedate"));
+				
+				// 把对象添加到集合中
+				revertmesslist.add(revertmess);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+
+			
+	  return revertmesslist;
+	}
+	
+	public int insertRevert(RevertMessage revertmess)throws Exception 
+	{
+		String sql = "INSERT INTO revert_message(messageID,content,writer,writedate) VALUES (?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		int insert_count=0;
+			
+		// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1,revertmess.getMessageID());
+		pstmt.setString(2,revertmess.getContent());
+		pstmt.setString(3, revertmess.getWriter());
+		pstmt.setString(4, revertmess.getWriteDate());
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+		
+		
+	}
+	
+	public int ClearTableRevert()throws Exception {
+
+		String sql = "DELETE  FROM revert_message";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}
+	public int DeleteMessageByID(int messageID)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from revert_message where messageID='");
+		sql1.append(messageID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+}

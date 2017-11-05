@@ -1,0 +1,451 @@
+package Table_bean;
+
+public class ConstructionBean {
+
+	//48个字段
+	private String con_proID;
+	private String apply_name;
+	private float wood_price;
+	private float paint_price;
+	private float peijian_price;
+	private float yunfei;
+	private float gongfei;
+	private float guanlifei;
+	
+	private float suanliao_bas;//算料
+	private float suanliao_add;
+	private String suanliao_date;
+	private String suanliao_team;
+	private String suanliao_pre;
+	
+	private float kailiao_bas;//开料
+	private float kailiao_add;
+	private String kailiao_date;
+	private String kailiao_team;
+	private String kailiao_pre;
+	
+	private float mugong_bas;
+	private float mugong_add;
+	private String mugong_date;
+	private String mugong_team;
+	private String mugong_pre;
+	
+	private float diqi_bas;
+	private float diqi_add;
+	private String diqi_date;
+	private String diqi_team;
+	private String diqi_pre;
+	
+	private float penqi_bas;
+	private float penqi_add;
+	private String penqi_date;
+	private String penqi_team;
+	private String penqi_pre;
+	
+	private float mianqi_bas;
+	private float mianqi_add;
+	private String mianqi_date;
+	private String mianqi_team;
+	private String mianqi_pre;
+	
+	private float wujin_bas;
+	private float wujin_add;
+	private String wujin_date;
+	private String wujin_team;
+	private String wujin_pre;
+	
+	private float anzhuang_bas;
+	private float anzhuang_add;
+	private String anzhuang_date;
+	private String anzhuang_team;
+	private String anzhuang_pre;
+	
+	public ConstructionBean(){
+		super();
+}
+
+	public String getCon_proID() {
+		return con_proID;
+	}
+
+	public void setCon_proID(String con_proID) {
+		this.con_proID = con_proID;
+	}
+
+	public String getApply_name() {
+		return apply_name;
+	}
+
+	public void setApply_name(String applyName) {
+		apply_name = applyName;
+	}
+
+	public float getWood_price() {
+		return wood_price;
+	}
+
+	public void setWood_price(float woodPrice) {
+		wood_price = woodPrice;
+	}
+
+	public float getPaint_price() {
+		return paint_price;
+	}
+
+	public void setPaint_price(float paintPrice) {
+		paint_price = paintPrice;
+	}
+
+	public float getPeijian_price() {
+		return peijian_price;
+	}
+
+	public void setPeijian_price(float peijianPrice) {
+		peijian_price = peijianPrice;
+	}
+
+	public float getYunfei() {
+		return yunfei;
+	}
+
+	public void setYunfei(float yunfei) {
+		this.yunfei = yunfei;
+	}
+
+	public float getGongfei() {
+		return gongfei;
+	}
+
+	public void setGongfei(float gongfei) {
+		this.gongfei = gongfei;
+	}
+
+	public float getGuanlifei() {
+		return guanlifei;
+	}
+
+	public void setGuanlifei(float guanlifei) {
+		this.guanlifei = guanlifei;
+	}
+
+	public float getSuanliao_bas() {
+		return suanliao_bas;
+	}
+
+	public void setSuanliao_bas(float suanliaoBas) {
+		suanliao_bas = suanliaoBas;
+	}
+
+	public float getSuanliao_add() {
+		return suanliao_add;
+	}
+
+	public void setSuanliao_add(float suanliaoAdd) {
+		suanliao_add = suanliaoAdd;
+	}
+
+	public String getSuanliao_date() {
+		return suanliao_date;
+	}
+
+	public void setSuanliao_date(String suanliaoDate) {
+		suanliao_date = suanliaoDate;
+	}
+
+	public String getSuanliao_team() {
+		return suanliao_team;
+	}
+
+	public void setSuanliao_team(String suanliaoTeam) {
+		suanliao_team = suanliaoTeam;
+	}
+
+	public String getSuanliao_pre() {
+		return suanliao_pre;
+	}
+
+	public void setSuanliao_pre(String suanliaoPre) {
+		suanliao_pre = suanliaoPre;
+	}
+
+	public float getKailiao_bas() {
+		return kailiao_bas;
+	}
+
+	public void setKailiao_bas(float kailiaoBas) {
+		kailiao_bas = kailiaoBas;
+	}
+
+	public float getKailiao_add() {
+		return kailiao_add;
+	}
+
+	public void setKailiao_add(float kailiaoAdd) {
+		kailiao_add = kailiaoAdd;
+	}
+
+	public String getKailiao_date() {
+		return kailiao_date;
+	}
+
+	public void setKailiao_date(String kailiaoDate) {
+		kailiao_date = kailiaoDate;
+	}
+
+	public String getKailiao_team() {
+		return kailiao_team;
+	}
+
+	public void setKailiao_team(String kailiaoTeam) {
+		kailiao_team = kailiaoTeam;
+	}
+
+	public String getKailiao_pre() {
+		return kailiao_pre;
+	}
+
+	public void setKailiao_pre(String kailiaoPre) {
+		kailiao_pre = kailiaoPre;
+	}
+
+	public float getMugong_bas() {
+		return mugong_bas;
+	}
+
+	public void setMugong_bas(float mugongBas) {
+		mugong_bas = mugongBas;
+	}
+
+	public float getMugong_add() {
+		return mugong_add;
+	}
+
+	public void setMugong_add(float mugongAdd) {
+		mugong_add = mugongAdd;
+	}
+
+	public String getMugong_date() {
+		return mugong_date;
+	}
+
+	public void setMugong_date(String mugongDate) {
+		mugong_date = mugongDate;
+	}
+
+	public String getMugong_team() {
+		return mugong_team;
+	}
+
+	public void setMugong_team(String mugongTeam) {
+		mugong_team = mugongTeam;
+	}
+
+	public String getMugong_pre() {
+		return mugong_pre;
+	}
+
+	public void setMugong_pre(String mugongPre) {
+		mugong_pre = mugongPre;
+	}
+
+	public float getDiqi_bas() {
+		return diqi_bas;
+	}
+
+	public void setDiqi_bas(float diqiBas) {
+		diqi_bas = diqiBas;
+	}
+
+	public float getDiqi_add() {
+		return diqi_add;
+	}
+
+	public void setDiqi_add(float diqiAdd) {
+		diqi_add = diqiAdd;
+	}
+
+	public String getDiqi_date() {
+		return diqi_date;
+	}
+
+	public void setDiqi_date(String diqiDate) {
+		diqi_date = diqiDate;
+	}
+
+	public String getDiqi_team() {
+		return diqi_team;
+	}
+
+	public void setDiqi_team(String diqiTeam) {
+		diqi_team = diqiTeam;
+	}
+
+	public String getDiqi_pre() {
+		return diqi_pre;
+	}
+
+	public void setDiqi_pre(String diqiPre) {
+		diqi_pre = diqiPre;
+	}
+
+	public float getPenqi_bas() {
+		return penqi_bas;
+	}
+
+	public void setPenqi_bas(float penqiBas) {
+		penqi_bas = penqiBas;
+	}
+
+	public float getPenqi_add() {
+		return penqi_add;
+	}
+
+	public void setPenqi_add(float penqiAdd) {
+		penqi_add = penqiAdd;
+	}
+
+	public String getPenqi_date() {
+		return penqi_date;
+	}
+
+	public void setPenqi_date(String penqiDate) {
+		penqi_date = penqiDate;
+	}
+
+	public String getPenqi_team() {
+		return penqi_team;
+	}
+
+	public void setPenqi_team(String penqiTeam) {
+		penqi_team = penqiTeam;
+	}
+
+	public String getPenqi_pre() {
+		return penqi_pre;
+	}
+
+	public void setPenqi_pre(String penqiPre) {
+		penqi_pre = penqiPre;
+	}
+
+	public float getMianqi_bas() {
+		return mianqi_bas;
+	}
+
+	public void setMianqi_bas(float mianqiBas) {
+		mianqi_bas = mianqiBas;
+	}
+
+	public float getMianqi_add() {
+		return mianqi_add;
+	}
+
+	public void setMianqi_add(float mianqiAdd) {
+		mianqi_add = mianqiAdd;
+	}
+
+	public String getMianqi_date() {
+		return mianqi_date;
+	}
+
+	public void setMianqi_date(String mianqiDate) {
+		mianqi_date = mianqiDate;
+	}
+
+	public String getMianqi_team() {
+		return mianqi_team;
+	}
+
+	public void setMianqi_team(String mianqiTeam) {
+		mianqi_team = mianqiTeam;
+	}
+
+	public String getMianqi_pre() {
+		return mianqi_pre;
+	}
+
+	public void setMianqi_pre(String mianqiPre) {
+		mianqi_pre = mianqiPre;
+	}
+
+	public float getWujin_bas() {
+		return wujin_bas;
+	}
+
+	public void setWujin_bas(float wujinBas) {
+		wujin_bas = wujinBas;
+	}
+
+	public float getWujin_add() {
+		return wujin_add;
+	}
+
+	public void setWujin_add(float wujinAdd) {
+		wujin_add = wujinAdd;
+	}
+
+	public String getWujin_date() {
+		return wujin_date;
+	}
+
+	public void setWujin_date(String wujinDate) {
+		wujin_date = wujinDate;
+	}
+
+	public String getWujin_team() {
+		return wujin_team;
+	}
+
+	public void setWujin_team(String wujinTeam) {
+		wujin_team = wujinTeam;
+	}
+
+	public String getWujin_pre() {
+		return wujin_pre;
+	}
+
+	public void setWujin_pre(String wujinPre) {
+		wujin_pre = wujinPre;
+	}
+
+	public float getAnzhuang_bas() {
+		return anzhuang_bas;
+	}
+
+	public void setAnzhuang_bas(float anzhuangBas) {
+		anzhuang_bas = anzhuangBas;
+	}
+
+	public float getAnzhuang_add() {
+		return anzhuang_add;
+	}
+
+	public void setAnzhuang_add(float anzhuangAdd) {
+		anzhuang_add = anzhuangAdd;
+	}
+
+	public String getAnzhuang_date() {
+		return anzhuang_date;
+	}
+
+	public void setAnzhuang_date(String anzhuangDate) {
+		anzhuang_date = anzhuangDate;
+	}
+
+	public String getAnzhuang_team() {
+		return anzhuang_team;
+	}
+
+	public void setAnzhuang_team(String anzhuangTeam) {
+		anzhuang_team = anzhuangTeam;
+	}
+
+	public String getAnzhuang_pre() {
+		return anzhuang_pre;
+	}
+
+	public void setAnzhuang_pre(String anzhuangPre) {
+		anzhuang_pre = anzhuangPre;
+	}
+	
+}

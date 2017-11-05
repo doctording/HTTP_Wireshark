@@ -1,0 +1,540 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Paint {
+	
+	public Table_Paint()
+	{
+		super();
+	}
+	
+	//依靠最后ID来获取油漆个数
+	public int getlastPaintID()throws Exception 
+	{
+
+		String sql = "SELECT * FROM paint order by(paintID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int lastmessid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            if (rs.next())
+            	lastmessid=rs.getInt(1);
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}	
+		return lastmessid;			
+	}
+	
+	//添加油漆种类     
+	public int insertPaint(String paint_name,float paint_ratio,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin,float anzhuang)throws Exception  {
+		//注意：要先判断该油漆名是否已经存在
+		String sql = "INSERT INTO paint(paint_name,paint_ratio,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin,anzhuang) VALUES (?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		int paintID = 0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1, paint_name);
+		pstmt.setFloat(2,paint_ratio);
+		pstmt.setFloat(3,suanliao);
+		pstmt.setFloat(4,kailiao);
+		pstmt.setFloat(5,mugong);
+		pstmt.setFloat(6,diqi);
+		pstmt.setFloat(7,pendi);
+		pstmt.setFloat(8,penmian);
+		pstmt.setFloat(9,wujin);
+		pstmt.setFloat(10,anzhuang);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+	//从数据库中模糊搜索产品项目
+	public ArrayList findPaintlist(String word)throws Exception 
+	{
+		ArrayList paintnamelist = new ArrayList();
+		String sql ="SELECT * FROM paint  WHERE paint_name LIKE '%"+word+"%'" ;
+		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;	
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+int tmpPaintID=rs.getInt(1);
+				
+				String tmpPaint_name=rs.getString(2);
+				// 进行编码转换
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+				
+				float tmpPaint_ratio=rs.getFloat(3);
+				float tmpSuanliao=rs.getFloat(4);
+                float tmpKailiao=rs.getFloat(5);
+                float tmpMugong=rs.getFloat(6);
+                float tmpDiqi=rs.getFloat(7);
+                float tmpPendi=rs.getFloat(8);
+                float tmpPenmian=rs.getFloat(9);
+                float tmpWujin=rs.getFloat(10);
+                float tmpAnzhuang=rs.getFloat(11);
+				
+			
+			
+				PaintBean paint = new PaintBean();
+				paint.setPaintID(tmpPaintID);
+				paint.setPaint_name(tmpPaint_name);
+				paint.setPaint_ratio(tmpPaint_ratio);
+				paint.setSuanliao(tmpSuanliao);
+				paint.setKailiao(tmpKailiao);
+				paint.setMugong(tmpMugong);
+				paint.setDiqi(tmpDiqi);
+				paint.setPendi(tmpPendi);
+				paint.setPenmian(tmpPenmian);
+				paint.setWujin(tmpWujin);
+				paint.setAnzhuang(tmpAnzhuang);
+
+				// 把对象添加到集合中
+				paintnamelist.add(paint);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return paintnamelist;
+	}	
+	
+
+	
+	//获取所有油漆信息
+	public ArrayList findTotalPaint(String pageNo)throws Exception 
+	{
+		ArrayList paintlist = new ArrayList();
+		String sql = "SELECT * FROM paint order by(paintID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpPaintID=rs.getInt(1);
+				
+				String tmpPaint_name=rs.getString(2);
+				// 进行编码转换
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+				
+				float tmpPaint_ratio=rs.getFloat(3);
+				float tmpSuanliao=rs.getFloat(4);
+                float tmpKailiao=rs.getFloat(5);
+                float tmpMugong=rs.getFloat(6);
+                float tmpDiqi=rs.getFloat(7);
+                float tmpPendi=rs.getFloat(8);
+                float tmpPenmian=rs.getFloat(9);
+                float tmpWujin=rs.getFloat(10);
+                float tmpAnzhuang=rs.getFloat(11);
+				
+			
+			
+				PaintBean paint = new PaintBean();
+				paint.setPaintID(tmpPaintID);
+				paint.setPaint_name(tmpPaint_name);
+				paint.setPaint_ratio(tmpPaint_ratio);
+				paint.setSuanliao(tmpSuanliao);
+				paint.setKailiao(tmpKailiao);
+				paint.setMugong(tmpMugong);
+				paint.setDiqi(tmpDiqi);
+				paint.setPendi(tmpPendi);
+				paint.setPenmian(tmpPenmian);
+				paint.setWujin(tmpWujin);
+				paint.setAnzhuang(tmpAnzhuang);
+
+				// 把对象添加到集合中
+				paintlist.add(paint);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return paintlist;
+	}	
+	
+	
+	public boolean hasExist(String paint_name) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from paint where paint_name='");
+	sql1.append(paint_name);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	
+	public PaintBean selectPaintByName(String paint_name) throws Exception  {
+		
+		PaintBean paint = new PaintBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from paint where paint_name= '");
+		sql1.append(paint_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				paint.setPaintID(rs.getInt(1));
+				paint.setPaint_name(rs.getString(2));
+				paint.setPaint_ratio(rs.getFloat(3));
+				paint.setSuanliao(rs.getFloat(4));
+				paint.setKailiao(rs.getFloat(5));
+				paint.setMugong(rs.getFloat(6));
+				paint.setDiqi(rs.getFloat(7));
+				paint.setPendi(rs.getFloat(8));
+				paint.setPenmian(rs.getFloat(9));
+				paint.setWujin(rs.getFloat(10));
+				paint.setAnzhuang(rs.getFloat(11));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return paint;
+		
+	}
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM paint ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String contractID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}*/
+	
+	public int DeletePaint(String paint_name)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from paint where paint_name='");
+		sql1.append(paint_name);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+
+		
+
+	
+	
+public PaintBean selectPaintByID(int paintID) throws Exception  {
+		
+		PaintBean paintbean=new PaintBean();
+		String sql = "select * from paint where paintID = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1,paintID);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				paintbean.setPaintID(rs.getInt(1));
+				paintbean.setPaint_name(rs.getString(2));
+				paintbean.setPaint_ratio(rs.getFloat(3));
+
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+			
+				
+        return paintbean;
+		
+	}
+	
+	
+//根据id进行删除
+public int deletePaintById(int paintID)throws Exception {
+
+	StringBuffer sql1 = new StringBuffer();
+	sql1.append("DELETE from paint where paintID='");
+	sql1.append(paintID);
+	sql1.append("'");
+	String sql = sql1.toString();
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int delete_count=0;
+
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库更新操作
+		delete_count=pstmt.executeUpdate();			
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally
+	{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return delete_count;
+}
+	
+//根据id进行更新
+public int updatePaint(int paintID	,String paint_name,float paint_ratio ,float suanliao,float kailiao,float mugong ,float diqi,float pendi ,float penmian,float wujin ,float anzhuang )throws Exception{
+	String sql = "UPDATE  paint SET  paint_name=?,paint_ratio=?,suanliao=?,kailiao=?,mugong=?,diqi=?,pendi=?,penmian=?,wujin=?,anzhuang=? where paintID=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,paint_name);
+		pstmt.setFloat(2, paint_ratio);
+		pstmt.setFloat(3,suanliao );
+		pstmt.setFloat(4, kailiao);
+		pstmt.setFloat(5, mugong);
+		pstmt.setFloat(6, diqi);
+		
+		pstmt.setFloat(7, pendi);
+		pstmt.setFloat(8,penmian );
+		pstmt.setFloat(9, wujin);
+		pstmt.setFloat(10, anzhuang);
+		pstmt.setInt(11, paintID);
+		
+		
+		
+		
+		
+		// 进行数据库插入操作
+	 int count1=pstmt.executeUpdate();
+	 return count1;
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();}
+	}
+		
+	
+}

@@ -1,0 +1,116 @@
+package Table_bean;
+
+public class QuanxianBean {
+	//总管理员	总经理	副总经理	会计财务	仓库管理销售经理	
+	//销售代表   厂长	  副厂长	总设计师	  设计师	
+	private int id;
+	private String jiemian;
+	private String chaungkou;
+	private String jsppagename;//页面地址的xx.jsp 的那个xx名
+	private int zgly;
+	private int zjl;
+	private int fzjl;
+	private int kjcw;
+	private int ckgl;
+	private int cz;
+	private int fcz;
+	private int zsjs;
+	private int sjs;
+	private int xsjl;
+	private int xsdb;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getJiemian() {
+		return jiemian;
+	}
+	public void setJiemian(String jiemian) {
+		this.jiemian = jiemian;
+	}
+	public String getChaungkou() {
+		return chaungkou;
+	}
+	public void setChaungkou(String chaungkou) {
+		this.chaungkou = chaungkou;
+	}
+	
+	
+	public String getJsppagename() {
+		return jsppagename;
+	}
+	public void setJsppagename(String jsppagename) {
+		this.jsppagename = jsppagename;
+	}
+	public int getZgly() {
+		return zgly;
+	}
+	public void setZgly(int zgly) {
+		this.zgly = zgly;
+	}
+	public int getZjl() {
+		return zjl;
+	}
+	public void setZjl(int zjl) {
+		this.zjl = zjl;
+	}
+	public int getFzjl() {
+		return fzjl;
+	}
+	public void setFzjl(int fzjl) {
+		this.fzjl = fzjl;
+	}
+	public int getKjcw() {
+		return kjcw;
+	}
+	public void setKjcw(int kjcw) {
+		this.kjcw = kjcw;
+	}
+	public int getCkgl() {
+		return ckgl;
+	}
+	public void setCkgl(int ckgl) {
+		this.ckgl = ckgl;
+	}
+	public int getCz() {
+		return cz;
+	}
+	public void setCz(int cz) {
+		this.cz = cz;
+	}
+	
+	public int getFcz() {
+		return fcz;
+	}
+	public void setFcz(int fcz) {
+		this.fcz = fcz;
+	}
+	public int getZsjs() {
+		return zsjs;
+	}
+	public void setZsjs(int zsjs) {
+		this.zsjs = zsjs;
+	}
+	public int getSjs() {
+		return sjs;
+	}
+	public void setSjs(int sjs) {
+		this.sjs = sjs;
+	}
+	public int getXsjl() {
+		return xsjl;
+	}
+	public void setXsjl(int xsjl) {
+		this.xsjl = xsjl;
+	}
+	public int getXsdb() {
+		return xsdb;
+	}
+	public void setXsdb(int xsdb) {
+		this.xsdb = xsdb;
+	}
+	
+	
+}

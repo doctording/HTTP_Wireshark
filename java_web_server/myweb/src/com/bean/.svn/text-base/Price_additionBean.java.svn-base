@@ -1,0 +1,199 @@
+package Table_bean;
+
+public class Price_additionBean {
+
+	//12个字段
+	private int additionID;
+	private String addition_name;
+	private String addition_unit;
+	private float addition_price;
+	private float addition_cost;
+	private int addition_sign;//1--门拉手 ; 2--抽拉手 ; 3--抽滑轨; 4--镜子玻璃; 5:雕花; 6--其他
+	private float suanliao;//calculate_material; 
+	private float kailiao;//open_material;
+	private float mugong;//woodworking;
+	private float diqi;//primer;
+	private float pendi;//spray_bottom;
+	private float penmian;//spray_face;
+	private float wujin;//hardware;
+	
+	public Price_additionBean()
+	{
+		super();
+	}
+
+	/**
+	 * @return the additionID
+	 */
+	public int getAdditionID() {
+		return additionID;
+	}
+
+	/**
+	 * @param additionID the additionID to set
+	 */
+	public void setAdditionID(int additionID) {
+		this.additionID = additionID;
+	}
+
+	/**
+	 * @return the addition_name
+	 */
+	public String getAddition_name() {
+		return addition_name;
+	}
+
+	/**
+	 * @param addition_name the addition_name to set
+	 */
+	public void setAddition_name(String addition_name) {
+		this.addition_name = addition_name;
+	}
+	public String getAddition_unit() {
+		return addition_unit;
+	}
+
+	public void setAddition_unit(String addition_unit) {
+		this.addition_unit = addition_unit;
+	}
+	/**
+	 * @return the addition_price
+	 */
+	public float getAddition_price() {
+		return addition_price;
+	}
+
+	/**
+	 * @param addition_price the addition_price to set
+	 */
+	public void setAddition_price(float addition_price) {
+		this.addition_price = addition_price;
+	}
+
+	/**
+	 * @return the addition_cost
+	 */
+	public float getAddition_cost() {
+		return addition_cost;
+	}
+
+	/**
+	 * @param addition_cost the addition_cost to set
+	 */
+	public void setAddition_cost(float addition_cost) {
+		this.addition_cost = addition_cost;
+	}
+
+	/**
+	 * @return the addition_sign
+	 */
+	public int getAddition_sign() {
+		return addition_sign;
+	}
+
+	/**
+	 * @param addition_sign the addition_sign to set
+	 */
+	public void setAddition_sign(int addition_sign) {
+		this.addition_sign = addition_sign;
+	}
+
+	/**
+	 * @return the suanliao
+	 */
+	public float getSuanliao() {
+		return suanliao;
+	}
+
+	/**
+	 * @param suanliao the suanliao to set
+	 */
+	public void setSuanliao(float suanliao) {
+		this.suanliao = suanliao;
+	}
+
+	/**
+	 * @return the kailiao
+	 */
+	public float getKailiao() {
+		return kailiao;
+	}
+
+	/**
+	 * @param kailiao the kailiao to set
+	 */
+	public void setKailiao(float kailiao) {
+		this.kailiao = kailiao;
+	}
+
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+
+	/**
+	 * @return the diqi
+	 */
+	public float getDiqi() {
+		return diqi;
+	}
+
+	/**
+	 * @param diqi the diqi to set
+	 */
+	public void setDiqi(float diqi) {
+		this.diqi = diqi;
+	}
+
+	/**
+	 * @return the pendi
+	 */
+	public float getPendi() {
+		return pendi;
+	}
+
+	/**
+	 * @param pendi the pendi to set
+	 */
+	public void setPendi(float pendi) {
+		this.pendi = pendi;
+	}
+
+	/**
+	 * @return the penmian
+	 */
+	public float getPenmian() {
+		return penmian;
+	}
+
+	/**
+	 * @param penmian the penmian to set
+	 */
+	public void setPenmian(float penmian) {
+		this.penmian = penmian;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+	
+}

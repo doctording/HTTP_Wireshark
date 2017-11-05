@@ -1,0 +1,265 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import Table_bean.HeTongFanBen_Bean;
+
+public class Table_HeTongFanBen {
+
+
+		
+	//添加合同范本种类
+	public int insertHeTongFanBen(String content)throws Exception  {
+		//注意：要先判断该玻璃名是否已经存在
+		String sql = "insert into hetongfanben (hetongfanben) values(?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, content);
+		
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有合同范本
+	public ArrayList findTotalHeTongFanBen(int pageNo)throws Exception //返回一个ArrayList bolilist
+	{
+		ArrayList hetonglist = new ArrayList();
+		String sql = "SELECT * FROM hetongfanben order by(hetongID)" ;//对数据库的操作语句
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		int iPageNo=1;
+		// 要显示的第一条记录,一页十条记录
+	        iPageNo=pageNo;
+		int begin = ( iPageNo-1)*1+1;
+		// 要显示的最后一条记录
+		int end = iPageNo*1;
+		int index = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+				if(index < begin)
+					continue;
+					// 如果已经大于最后一条记录，则结束循环
+					if(index > end)
+					break;
+
+				// 获取结果集中的信息
+				int tmpHeTongID=rs.getInt(1);
+				
+				String tmpHeTongFanben=rs.getString(2);
+				// 进行编码转换
+				tmpHeTongFanben = new String(tmpHeTongFanben.getBytes("GBK"));
+				
+				HeTongFanBen_Bean bean = new HeTongFanBen_Bean();
+				bean.setHetongID(tmpHeTongID);
+				bean.setHetongfanben(tmpHeTongFanben);
+				// 把对象添加到集合中
+				hetonglist.add(bean);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return hetonglist;
+	}	
+	
+	
+	
+	public HeTongFanBen_Bean selectBoliByName(int id) throws Exception  {
+		
+		HeTongFanBen_Bean bean = new HeTongFanBen_Bean();
+		String sql="select *from hetongfanben where hetongID=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, id);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				bean.setHetongID(rs.getInt(1));
+				bean.setHetongfanben(rs.getString(2));
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return bean;
+		
+	}
+
+	
+	public int UpdateHeTongFanBen(int id,String content)throws Exception {
+		String sql="update hetongfanben set hetongfanben=? where hetongID=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			pstmt.setString(1, content);
+			pstmt.setInt(2, id);
+			
+			// 进行数据库更新操作
+			int update_count = pstmt.executeUpdate();	
+			return update_count;
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		
+	}	
+	
+	public int DeleteHengTongFanBen(int id)throws Exception {
+
+		String sql="delete from hetongfanben where hetongID=?";
+		
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, id);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+	
+	
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM hetongfanben ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/1+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

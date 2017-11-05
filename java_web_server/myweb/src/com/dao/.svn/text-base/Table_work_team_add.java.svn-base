@@ -1,0 +1,682 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import Table_bean.*;
+
+public class Table_work_team_add {
+
+	public Table_work_team_add() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	// 获得元组个数
+	public int getCount() throws Exception {
+		String sql = "SELECT * FROM work_team_add order by id ; ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		int count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			while (rs != null && rs.next())
+				count++;
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return count;
+	}
+		
+	// 得到所有的元組
+	public ArrayList getAll() throws Exception {
+		ArrayList list = new ArrayList();
+		String sql = "SELECT * from work_team_add ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpWorkteam = rs.getString(2);
+				// 进行编码转换
+				tmpWorkteam = new String(tmpWorkteam.getBytes("GBK"));
+
+				String tmpName = rs.getString(3);
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(4);
+				float tmpDaigongInjury = rs.getFloat(5);
+				float tmpLivingExpenses = rs.getFloat(6);
+				float tmpMonth_holidays = rs.getFloat(7);
+				float tmpMonthexpenses = rs.getFloat(8);
+
+				Work_team_addBean ff = new Work_team_addBean();
+				ff.setId(tmpID);
+				ff.setWork_team(tmpWorkteam);
+				ff.setGroup_members(tmpName);
+				ff.setGongling(tmpGongling);
+				ff.setDaigong_injury(tmpDaigongInjury);
+				ff.setLiving_expenses(tmpLivingExpenses);
+				ff.setMonth_holidays(tmpMonth_holidays);
+				ff.setMonth_expenses(tmpMonthexpenses);
+				// 把对象添加到集合中
+				list.add(ff);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+			
+		// 找到工作组
+		public ArrayList getWorkteam( ) throws Exception {
+			ArrayList list = new ArrayList();	
+			String sql = "select * from work_team_add where work_team=group_members";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+
+			ResultSet rs = null;
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					// 获取结果集中的信息
+					int tmpID = rs.getInt(1);
+
+					String tmpWorkteam = rs.getString(2);
+					// 进行编码转换
+					tmpWorkteam = new String(tmpWorkteam.getBytes("GBK"));
+
+					String tmpName = rs.getString(3);
+					// 进行编码转换
+					tmpName = new String(tmpName.getBytes("GBK"));
+
+					float tmpGongling = rs.getFloat(4);
+					float tmpDaigongInjury = rs.getFloat(5);
+					float tmpLivingExpenses = rs.getFloat(6);
+					float tmpMonth_holidays = rs.getFloat(7);
+					float tmpMonthexpenses = rs.getFloat(8);
+
+					Work_team_addBean ff = new Work_team_addBean();
+					ff.setId(tmpID);
+					ff.setWork_team(tmpWorkteam);
+					ff.setGroup_members(tmpName);
+					ff.setGongling(tmpGongling);
+					ff.setDaigong_injury(tmpDaigongInjury);
+					ff.setLiving_expenses(tmpLivingExpenses);
+					ff.setMonth_holidays(tmpMonth_holidays);
+					ff.setMonth_expenses(tmpMonthexpenses);
+					// 把对象添加到集合中
+					list.add(ff);
+				}
+			} catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return list;
+		}
+			
+	// 通过工作组找到该工作组的所有成员
+	public ArrayList getByWorkteam(String workteam) throws Exception {
+		ArrayList list = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select *from work_team_add where work_team='");
+		sql1.append(workteam);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				// 获取结果集中的信息
+				int tmpID = rs.getInt(1);
+
+				String tmpWorkteam = rs.getString(2);
+				// 进行编码转换
+				tmpWorkteam = new String(tmpWorkteam.getBytes("GBK"));
+
+				String tmpName = rs.getString(3);
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				float tmpGongling = rs.getFloat(4);
+				float tmpDaigongInjury = rs.getFloat(5);
+				float tmpLivingExpenses = rs.getFloat(6);
+				float tmpMonth_holidays = rs.getFloat(7);
+				float tmpMonthexpenses = rs.getFloat(8);
+
+				Work_team_addBean ff = new Work_team_addBean();
+				ff.setId(tmpID);
+				ff.setWork_team(tmpWorkteam);
+				ff.setGroup_members(tmpName);
+				ff.setGongling(tmpGongling);
+				ff.setDaigong_injury(tmpDaigongInjury);
+				ff.setLiving_expenses(tmpLivingExpenses);
+				ff.setMonth_holidays(tmpMonth_holidays);
+				ff.setMonth_expenses(tmpMonthexpenses);
+				// 把对象添加到集合中
+				list.add(ff);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return list;
+	}
+
+	// 根据id获取一個元组
+		public Work_team_addBean getBeanByID(int id) throws Exception {
+
+			Work_team_addBean ff = new Work_team_addBean();
+			StringBuffer sql1 = new StringBuffer();
+			sql1.append("select * from work_team_add where id='");
+			sql1.append(id);
+			sql1.append("'");
+			String sql = sql1.toString();
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			ResultSet rs = null;
+
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					// 获取结果集中的信息
+					int tmpID = rs.getInt(1);
+
+					String tmpWorkteam = rs.getString(2);
+					// 进行编码转换
+					tmpWorkteam = new String(tmpWorkteam.getBytes("GBK"));
+
+					String tmpName = rs.getString(3);
+					// 进行编码转换
+					tmpName = new String(tmpName.getBytes("GBK"));
+
+					float tmpGongling = rs.getFloat(4);
+					float tmpDaigongInjury = rs.getFloat(5);
+					float tmpLivingExpenses = rs.getFloat(6);
+					float tmpMonth_holidays = rs.getFloat(7);
+					float tmpMonthexpenses = rs.getFloat(8);
+                    float tmpSalary =rs.getFloat(9);
+                    float tmpRatio = rs.getFloat(10);
+                    int tmpSign =rs.getInt(11);
+					ff.setId(tmpID);
+					ff.setWork_team(tmpWorkteam);
+					ff.setGroup_members(tmpName);
+					ff.setGongling(tmpGongling);
+					ff.setDaigong_injury(tmpDaigongInjury);
+					ff.setLiving_expenses(tmpLivingExpenses);
+					ff.setMonth_holidays(tmpMonth_holidays);
+					ff.setMonth_expenses(tmpMonthexpenses);
+					ff.setSalary(tmpSalary);
+					ff.setRatio(tmpRatio);
+					ff.setSign(tmpSign);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return ff;
+		}
+		// 插入一个元组，id是自增的
+		public int insertBean(String work_team, String group_members,float gongling,
+				float daigong_injury, float living_expenses,float month_holidays,
+				float monthly_expenses) throws Exception {
+			// 注意：要先判断是否已经存在
+			String sql = "INSERT INTO work_team_add(work_team,group_members,gongling,daigong_injury,living_expenses,month_holidays,monthly_expenses)" +
+					" VALUES (?,?,?,?,?,?,?)";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			int insert_count = 0;
+			// 下面是针对数据库的具体操作
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+
+				pstmt.setString(1,work_team);
+				pstmt.setString(2, group_members);
+				pstmt.setFloat(3, gongling);
+				pstmt.setFloat(4, daigong_injury);
+				pstmt.setFloat(5, living_expenses);
+				pstmt.setFloat(6, month_holidays);
+				pstmt.setFloat(7, monthly_expenses);
+
+				// 进行数据库插入操作
+				insert_count = pstmt.executeUpdate();
+			}
+
+			catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				pstmt.close();
+				dbc.close();
+			}
+			return insert_count;
+		}
+			
+		// 根据id 删除一个元组
+		public int deleteBeanByid(int id) throws Exception {
+
+			StringBuffer sql1 = new StringBuffer();
+			sql1.append("DELETE from work_team_add where id='");
+			sql1.append(id);
+			sql1.append("'");
+			String sql = sql1.toString();
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			int delete_count = 0;
+
+			// 下面是针对数据库的具体操作
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库更新操作
+				delete_count = pstmt.executeUpdate();
+			} catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				pstmt.close();
+				dbc.close();
+			}
+			return delete_count;
+		}
+		
+		
+		// 通过工作名来分组
+		public ArrayList getByDistinctWorkteam() throws Exception {
+			ArrayList list = new ArrayList();
+			String sql = "select * from work_team_add group by work_team order by id";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+
+			ResultSet rs = null;
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					// 获取结果集中的信息
+					int tmpID = rs.getInt(1);
+
+					String tmpWorkteam = rs.getString(2);
+					// 进行编码转换
+					tmpWorkteam = new String(tmpWorkteam.getBytes("GBK"));
+
+					String tmpName = rs.getString(3);
+					// 进行编码转换
+					tmpName = new String(tmpName.getBytes("GBK"));
+
+					float tmpGongling = rs.getFloat(4);
+					float tmpDaigongInjury = rs.getFloat(5);
+					float tmpLivingExpenses = rs.getFloat(6);
+					float tmpMonth_holidays = rs.getFloat(7);
+					float tmpMonthexpenses = rs.getFloat(8);
+
+					Work_team_addBean ff = new Work_team_addBean();
+					ff.setId(tmpID);
+					ff.setWork_team(tmpWorkteam);
+					ff.setGroup_members(tmpName);
+					ff.setGongling(tmpGongling);
+					ff.setDaigong_injury(tmpDaigongInjury);
+					ff.setLiving_expenses(tmpLivingExpenses);
+					ff.setMonth_holidays(tmpMonth_holidays);
+					ff.setMonth_expenses(tmpMonthexpenses);
+					// 把对象添加到集合中
+					list.add(ff);
+				}
+			} catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return list;
+		}
+			
+		//根据工作组的id进行更新
+		public int UpdateWorkTeam(int id,String work_team,String grop_menbers,float gongling,float daigong_injury,float living_expenses,float month_holidays,float month_expenses)throws Exception {
+	         String sql="update work_team_add set work_team=?,group_members=?,gongling=?,daigong_injury=?,living_expenses=?,month_holidays=?,monthly_expenses=? where id=?";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			int update_count=0;
+
+			// 下面是针对数据库的具体操作
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				pstmt.setString(1,work_team);
+				pstmt.setString(2, grop_menbers);
+				pstmt.setFloat(3, gongling);
+				pstmt.setFloat(4, daigong_injury);
+				pstmt.setFloat(5, living_expenses);
+				pstmt.setFloat(6, month_holidays);
+				pstmt.setFloat(7, month_expenses);
+				pstmt.setInt(8,id);
+				// 进行数据库更新操作
+				update_count=pstmt.executeUpdate();			
+			}
+			catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+			finally
+			{
+				// 关闭数据库连接
+				pstmt.close();
+				dbc.close();
+			}
+			return update_count;
+		}	
+		
+		
+		
+		// 插入一个元组，id是自增的
+		public int insertBean(String work_team, String group_members,float salary,float ratio,int sign) throws Exception {
+			// 注意：要先判断是否已经存在
+			String sql = "INSERT INTO work_team_add(work_team,group_members,salary,ratio,sign)" +
+					" VALUES (?,?,?,?,?)";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			int insert_count = 0;
+			// 下面是针对数据库的具体操作
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+
+				pstmt.setString(1,work_team);
+				pstmt.setString(2, group_members);
+				pstmt.setFloat(3, salary);
+				pstmt.setFloat(4, ratio);
+				pstmt.setInt(5, sign);
+				
+				// 进行数据库插入操作
+				insert_count = pstmt.executeUpdate();
+			}
+
+			catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				pstmt.close();
+				dbc.close();
+			}
+			return insert_count;
+		}
+		
+		
+		public ArrayList getAll1() throws Exception {
+			ArrayList list = new ArrayList();
+			String sql = "SELECT * from work_team_add ";
+
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+
+			ResultSet rs = null;
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					// 获取结果集中的信息
+					
+
+					Work_team_addBean ff = new Work_team_addBean();
+					ff.setId(rs.getInt(1));
+					ff.setWork_team(rs.getString(2));
+					ff.setGroup_members(rs.getString(3));
+					ff.setSalary(rs.getFloat("salary"));
+					ff.setRatio(rs.getFloat("ratio"));
+					ff.setSign(rs.getInt("sign"));
+				
+					// 把对象添加到集合中
+					list.add(ff);
+				}
+			} catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return list;
+		}
+		
+		// 通过工作名来分组
+		public ArrayList getByDistinctWorkteam1() throws Exception {
+			ArrayList list = new ArrayList();
+			String sql = "select * from work_team_add group by work_team order by id";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+
+			ResultSet rs = null;
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					// 获取结果集中的信息
+					
+					Work_team_addBean ff = new Work_team_addBean();
+					ff.setId(rs.getInt(1));
+					ff.setWork_team(rs.getString(2));
+					ff.setGroup_members(rs.getString(3));
+					ff.setSalary(rs.getFloat("salary"));
+					ff.setRatio(rs.getFloat("ratio"));
+					ff.setSign(rs.getInt("sign"));
+					// 把对象添加到集合中
+					list.add(ff);
+				}
+			} catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return list;
+		}
+		
+		public ArrayList getByWorkteam1(String workteam) throws Exception {
+			ArrayList list = new ArrayList();
+			StringBuffer sql1 = new StringBuffer();
+			sql1.append("select *from work_team_add where work_team='");
+			sql1.append(workteam);
+			sql1.append("'");
+			String sql = sql1.toString();
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+
+			ResultSet rs = null;
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+				while (rs.next()) {
+					// 获取结果集中的信息
+					Work_team_addBean ff = new Work_team_addBean();
+					ff.setId(rs.getInt(1));
+					ff.setWork_team(rs.getString(2));
+					ff.setGroup_members(rs.getString(3));
+					ff.setSalary(rs.getFloat("salary"));
+					ff.setRatio(rs.getFloat("ratio"));
+					ff.setSign(rs.getInt("sign"));
+					list.add(ff);
+				}
+			} catch (Exception e) {
+				throw new Exception("操作出现异常");
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return list;
+		}
+		
+		// 根据id获取一個元组
+		public Work_team_addBean getBeanByMember(String group_menbers) throws Exception {
+
+			Work_team_addBean ff = new Work_team_addBean();
+			StringBuffer sql1 = new StringBuffer();
+			sql1.append("select * from work_team_add where group_menbers='");
+			sql1.append(group_menbers);
+			sql1.append("'");
+			String sql = sql1.toString();
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			ResultSet rs = null;
+
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				// 进行数据库查询操作
+				rs = pstmt.executeQuery();
+
+				if (rs.next()) {
+					// 获取结果集中的信息
+					ff.setId(rs.getInt(1));
+					ff.setWork_team(rs.getString(2));
+					ff.setGroup_members(rs.getString(3));
+					ff.setGongling(rs.getFloat(4));
+					ff.setDaigong_injury(rs.getFloat(5));
+					ff.setLiving_expenses(rs.getFloat(6));
+					ff.setMonth_holidays(rs.getFloat(7));
+					ff.setMonth_expenses(rs.getFloat(8));
+					ff.setSalary(rs.getFloat(9));
+					ff.setRatio(rs.getFloat(10));
+					ff.setSign(rs.getInt(11));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				// 关闭数据库连接
+				rs.close();
+				pstmt.close();
+				dbc.close();
+			}
+			return ff;
+		}
+		
+		
+		
+		public int UpdateWorkTeam1(int id,String work_team,String grop_menbers,float salary,float ratio,int sign)throws Exception {
+	         String sql="update work_team_add set work_team=?,group_members=?,salary=?,ratio=?,sign=? where id=?";
+			PreparedStatement pstmt = null;
+			DataBaseConnection dbc = new DataBaseConnection();
+			int update_count=0;
+
+			// 下面是针对数据库的具体操作
+			try {
+				// 连接数据库
+				dbc.DataBase_Connection();
+				pstmt = dbc.getConnection().prepareStatement(sql);
+				pstmt.setString(1,work_team);
+				pstmt.setString(2, grop_menbers);
+				pstmt.setFloat(3, salary);
+				pstmt.setFloat(4, ratio);
+				pstmt.setInt(5, sign);
+				pstmt.setInt(6,id);
+				// 进行数据库更新操作
+				update_count=pstmt.executeUpdate();			
+			}
+			catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+			finally
+			{
+				// 关闭数据库连接
+				pstmt.close();
+				dbc.close();
+			}
+			return update_count;
+		}	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+}

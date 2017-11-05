@@ -1,0 +1,207 @@
+package Table_bean;
+
+public class StyleBean {
+
+	//13¸ö×Ö¶Î
+	private int styleID;
+	private String style_name;
+	private float style_ratio;
+	private float price_discount;
+	private float lowest_discount;
+	private float suanliao;//calculate_material; 
+	private float kailiao;//open_material;
+	private float mugong;//woodworking;
+	private float diqi;//primer;
+	private float pendi;//spray_bottom;
+	private float penmian;//spray_face;
+	private float wujin;//hardware;	
+	private float anzhuang;//installation;
+	
+	public StyleBean()
+	{
+		super();
+	}
+
+	/**
+	 * @return the styleID
+	 */
+	public int getStyleID() {
+		return styleID;
+	}
+
+	/**
+	 * @param styleID the styleID to set
+	 */
+	public void setStyleID(int styleID) {
+		this.styleID = styleID;
+	}
+
+	/**
+	 * @return the style_name
+	 */
+	public String getStyle_name() {
+		return style_name;
+	}
+
+	/**
+	 * @param style_name the style_name to set
+	 */
+	public void setStyle_name(String style_name) {
+		this.style_name = style_name;
+	}
+
+	/**
+	 * @return the style_ratio
+	 */
+	public float getStyle_ratio() {
+		return style_ratio;
+	}
+
+	/**
+	 * @param style_ratio the style_ratio to set
+	 */
+	public void setStyle_ratio(float style_ratio) {
+		this.style_ratio = style_ratio;
+	}
+
+	/**
+	 * @return the price_discount
+	 */
+	public float getPrice_discount() {
+		return price_discount;
+	}
+
+	/**
+	 * @param price_discount the price_discount to set
+	 */
+	public void setPrice_discount(float price_discount) {
+		this.price_discount = price_discount;
+	}
+
+	/**
+	 * @return the lowest_discount
+	 */
+	public float getLowest_discount() {
+		return lowest_discount;
+	}
+
+	/**
+	 * @param lowest_discount the lowest_discount to set
+	 */
+	public void setLowest_discount(float lowest_discount) {
+		this.lowest_discount = lowest_discount;
+	}
+
+	/**
+	 * @return the suanliao
+	 */
+	public float getSuanliao() {
+		return suanliao;
+	}
+
+	/**
+	 * @param suanliao the suanliao to set
+	 */
+	public void setSuanliao(float suanliao) {
+		this.suanliao = suanliao;
+	}
+
+	/**
+	 * @return the kailiao
+	 */
+	public float getKailiao() {
+		return kailiao;
+	}
+
+	/**
+	 * @param kailiao the kailiao to set
+	 */
+	public void setKailiao(float kailiao) {
+		this.kailiao = kailiao;
+	}
+
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+
+	/**
+	 * @return the diqi
+	 */
+	public float getDiqi() {
+		return diqi;
+	}
+
+	/**
+	 * @param diqi the diqi to set
+	 */
+	public void setDiqi(float diqi) {
+		this.diqi = diqi;
+	}
+
+	/**
+	 * @return the pendi
+	 */
+	public float getPendi() {
+		return pendi;
+	}
+
+	/**
+	 * @param pendi the pendi to set
+	 */
+	public void setPendi(float pendi) {
+		this.pendi = pendi;
+	}
+
+	/**
+	 * @return the penmian
+	 */
+	public float getPenmian() {
+		return penmian;
+	}
+
+	/**
+	 * @param penmian the penmian to set
+	 */
+	public void setPenmian(float penmian) {
+		this.penmian = penmian;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+	/**
+	 * @return the anzhunag
+	 */
+	public float getAnzhuang() {
+		return anzhuang;
+	}
+
+	/**
+	 * @param anzhunag the anzhunag to set
+	 */
+	public void setAnzhuang(float anzhunag) {
+		this.anzhuang = anzhunag;
+	}
+
+}

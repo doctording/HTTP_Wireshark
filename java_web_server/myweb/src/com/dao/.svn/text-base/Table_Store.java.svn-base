@@ -1,0 +1,358 @@
+package jdbc;
+
+import java.sql.*;
+import java.util.*;
+import Table_bean.*;
+
+public class Table_Store {
+
+	public Table_Store() {
+		// TODO Auto-generated constructor stub
+	}
+
+	//获取店的个数=lastid
+	public int getStoreNumber()throws Exception 
+	{
+		String sql = "SELECT * FROM store order by(storeID) ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		;
+		ResultSet rs = null;
+		int  lastid = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			
+			while(rs!=null&&rs.next())
+				lastid++;
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return lastid;
+	}	
+	//id自动递增 插入店名即可
+	public int insertStore(String storename) throws Exception {
+		// 注意：要先判断该店名是否已经存在
+		String sql = "INSERT INTO store(storename) VALUES (?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count = 0;
+		//int storeID = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, storename);
+			// 进行数据库插入操作
+			insert_count = pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+	//判断店名是否已存在
+	public boolean hasExist(String storename) throws Exception {
+		boolean find = false;
+		// 连接对象
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		dbc.DataBase_Connection();
+		// 结果集对象
+		ResultSet rs = null;
+		// 查询语句
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from store where storename='");
+		sql1.append(storename);
+		sql1.append("'");
+		String sql = sql1.toString();
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while(rs!=null&&rs.next())
+				find = true;
+		} catch (Exception e) {
+		} finally {
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		// 返回是否找到
+		return find;
+	}
+	//通过店名删除店
+	public int DeleteStoreByName(String storename)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from store where storename='");
+		sql1.append(storename);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+	//通过店的ID删除店
+	public int DeleteStoreByID(int storeID)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from store where storeID=");
+		sql1.append(storeID);
+		sql1.append(";");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+	// 获取所有店的信息
+	public ArrayList findTotalStore() throws Exception // 返回一个ArrayList
+	{
+		ArrayList storelist = new ArrayList();
+		String sql = "SELECT * FROM store order by(storeID)";// 对数据库的操作语句
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+	
+		ResultSet rs = null;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while (rs.next()) {
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpStoreID = rs.getInt(1);
+
+				String tmpStoreName = rs.getString(2);
+				// 进行编码转换
+				tmpStoreName = new String(tmpStoreName.getBytes("GBK"));
+
+				StoreBean store = new StoreBean();// 定义StoreBean的store对象
+				store.setStoreID(tmpStoreID);
+				store.setStorename(tmpStoreName);
+
+				// 把对象添加到集合中
+				storelist.add(store);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return storelist;// 返回storelist
+	}
+	//根据id(不可修改) 修改店名
+	public int Updatestore(int storeID,String storename)throws Exception {
+		
+		// 进行编码转换
+		//String StoreName=new String(storename.getBytes("GBK"));
+		
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("UPDATE store SET storename='");
+		sql1.append(storename);
+		sql1.append("'");
+		sql1.append("where storeID=");
+		sql1.append(storeID);
+		sql1.append(";");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	//根据店名找到相应的店(storeBean)
+	public StoreBean selectStoreByName(String storename) throws Exception  {
+		
+		StoreBean store = new StoreBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from store where storename='");
+		sql1.append(storename);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				// 获取结果集中的信息
+				int tmpStoreID = rs.getInt(1);
+
+				String tmpStoreName = rs.getString(2);
+				// 进行编码转换
+				tmpStoreName = new String(tmpStoreName.getBytes("GBK"));
+
+				store.setStoreID(tmpStoreID);
+				store.setStorename(tmpStoreName);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return store;		
+	}
+	//根据店ID找到相应的店(storeBean)
+	public StoreBean selectStoreByID(int storeID) throws Exception {
+
+		StoreBean store = new StoreBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from store where storeID='");
+		sql1.append(storeID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				// 获取结果集中的信息
+				int tmpStoreID = rs.getInt(1);
+
+				String tmpStoreName = rs.getString(2);
+				// 进行编码转换
+				tmpStoreName = new String(tmpStoreName.getBytes("GBK"));
+
+				store.setStoreID(tmpStoreID);
+				store.setStorename(tmpStoreName);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return store;
+	}
+	/*public static void main(String args[]) throws Exception{
+		Table_Store t=new Table_Store();
+		System.out.println(t.getStoreNumber());
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Table_Store t=new Table_Store();
+		System.out.println(t.hasExist("国度店"));
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Table_Store t=new Table_Store();
+		ArrayList tt=t.findTotalStore();
+		Iterator it=tt.iterator();
+		while(it.hasNext()){
+			StoreBean store=(StoreBean) it.next();
+			System.out.println(store.getStoreID());
+			System.out.println(store.getStorename());
+		}
+	}*/
+}

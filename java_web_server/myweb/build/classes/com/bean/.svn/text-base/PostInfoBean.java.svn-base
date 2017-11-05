@@ -1,0 +1,60 @@
+package Table_bean;
+
+public class PostInfoBean {
+
+	private int postID;
+	private String title;
+	private String content;
+	private String writerDate;
+	
+
+	/**
+	 * @return content
+	 */
+	public String getContent() {
+		return content;
+	}
+	/**
+	 * @param content 要设置的 content
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+	/**
+	 * @return postID
+	 */
+	public int getPostID() {
+		return postID;
+	}
+	/**
+	 * @param newsID 要设置的 newsID
+	 */
+	public void setPostID(int postID) {
+		this.postID = postID;
+	}
+	/**
+	 * @return title
+	 */
+	public String getTitle() {
+		return title;
+	}
+	/**
+	 * @param title 要设置的 title
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	/**
+	 * @return writerDate
+	 */
+	public String getWriterDate() {
+		return writerDate;
+	}
+	/**
+	 * @param writerDate 要设置的 writerDate
+	 */
+	public void setWriterDate(String writerDate) {
+		this.writerDate = writerDate;
+	}
+	
+}

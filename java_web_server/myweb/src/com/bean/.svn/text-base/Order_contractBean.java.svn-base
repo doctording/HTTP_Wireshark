@@ -1,0 +1,351 @@
+package Table_bean;
+
+public class Order_contractBean {
+
+	private int contractID;
+	private String contract_num;
+	private String username;
+	private String customer_name;
+	private String customer_tel;
+	private String customer_add;
+	private String customer_mark;
+	private float total_price;
+	private float total_disc;
+	private float disc_price;
+	private float contract_price;
+	private float deposit;
+	private int inset;
+	private int rate;
+	private int state;
+	private int order_state;
+	private String contract_mark;
+	private String date;
+	private float step1_price;
+	private float step2_price;
+	private float step3_price;
+	private float fundofend;
+	private String complete_time;
+    private String shejishi;
+	public Order_contractBean() {
+		super();
+	}
+
+	/**
+	 * @return contractID
+	 */
+	public int getContractID() {
+		return contractID;
+	}
+
+	/**
+	 * @param contractID
+	 *            要设置的contractID
+	 */
+	public void setContractID(int contractID) {
+		this.contractID = contractID;
+	}
+
+	/**
+	 * @return contract_num
+	 */
+	public String getContract_num() {
+		return contract_num;
+	}
+
+	/**
+	 * @param contract_num
+	 *            要设置的 contract_num
+	 */
+	public void setContract_num(String contract_num) {
+		this.contract_num = contract_num;
+	}
+
+	/**
+	 * @return username
+	 */
+	public String getUsername() {
+		return username;
+	}
+
+	/**
+	 * @param username
+	 *            要设置的username
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return customer_name
+	 */
+	public String getCustomer_name() {
+		return customer_name;
+	}
+
+	/**
+	 * @param customer_name
+	 *            要设置的 customer_name
+	 */
+	public void setCustomer_name(String customer_name) {
+		this.customer_name = customer_name;
+	}
+
+	/**
+	 * @return customer_tel
+	 */
+	public String getCustomer_tel() {
+		return customer_tel;
+	}
+
+	/**
+	 * @param customer_tel
+	 *            要设置的customer_tel
+	 */
+	public void setCustomer_tel(String customer_tel) {
+		this.customer_tel = customer_tel;
+	}
+
+	/**
+	 * @return customer_add
+	 */
+	public String getCustomer_add() {
+		return customer_add;
+	}
+
+	/**
+	 * @param customer_add
+	 *            要设置的 customer_add
+	 */
+	public void setCustomer_add(String customer_add) {
+		this.customer_add = customer_add;
+	}
+
+	/**
+	 * @return customer_mark
+	 */
+	public String getCustomer_mark() {
+		return customer_mark;
+	}
+
+	/**
+	 * @param customer_mark
+	 *            要设置的 customer_mark
+	 */
+	public void setCustomer_mark(String customer_mark) {
+		this.customer_mark = customer_mark;
+	}
+
+	/**
+	 * @return total_price
+	 */
+	public float getTotal_price() {
+		return total_price;
+	}
+
+	/**
+	 * @param total_price
+	 *            要设置的 total_price
+	 */
+	public void setTotal_price(float total_price) {
+		this.total_price = total_price;
+	}
+
+	/**
+	 * @return total_disc
+	 */
+	public float getTotal_disc() {
+		return total_disc;
+	}
+
+	/**
+	 * @param total_disc
+	 *            要设置的 total_disc
+	 */
+	public void setTotal_disc(float total_disc) {
+		this.total_disc = total_disc;
+	}
+
+	/**
+	 * @return disc_price
+	 */
+	public float getDisc_price() {
+		return disc_price;
+	}
+
+	/**
+	 * @param disc_price
+	 *            要设置的 disc_price
+	 */
+	public void setDisc_price(float disc_price) {
+		this.disc_price = disc_price;
+	}
+
+	/**
+	 * @return contract_price
+	 */
+	public float getContract_price() {
+		return contract_price;
+	}
+
+	/**
+	 * @param contract_price
+	 *            要设置的 contract_price
+	 */
+	public void setContract_price(float contract_price) {
+		this.contract_price = contract_price;
+	}
+
+	/**
+	 * @return deposit
+	 */
+	public float getDeposit() {
+		return deposit;
+	}
+
+	/**
+	 * @param deposit
+	 *            要设置的deposit
+	 */
+	public void setDeposit(float deposit) {
+		this.deposit = deposit;
+	}
+
+	/**
+	 * @return insert
+	 */
+	public int getInset() {
+		return inset;
+	}
+
+	/**
+	 * @param insert
+	 *            要设置的 insert
+	 */
+	public void setInset(int inset) {
+		this.inset = inset;
+	}
+
+	/**
+	 * @return rate
+	 */
+	public int getRate() {
+		return rate;
+	}
+
+	/**
+	 * @param rate
+	 *            要设置的 rate
+	 */
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+
+	/**
+	 * @return state
+	 */
+	public int getState() {
+		return state;
+	}
+
+	/**
+	 * @param state
+	 *            要设置的 state
+	 */
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	/**
+	 * @return order_state
+	 */
+	public int getOrder_state() {
+		return order_state;
+	}
+
+	/**
+	 * @param order_state
+	 *            要设置的 order_state
+	 */
+	public void setOrder_state(int order_state) {
+		this.order_state = order_state;
+	}
+
+	/**
+	 * @return contract_mark
+	 */
+	public String getContract_mark() {
+		return contract_mark;
+	}
+
+	/**
+	 * @param contract_mark
+	 *            要设置的 contract_mark
+	 */
+	public void setContract_mark(String contract_mark) {
+		this.contract_mark = contract_mark;
+	}
+
+	/**
+	 * @return date
+	 */
+	public String getDate() {
+		return date;
+	}
+
+	/**
+	 * @param date
+	 *            要设置的 date
+	 */
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getShejishi() {
+		return shejishi;
+	}
+
+	public void setShejishi(String shejishi) {
+		this.shejishi = shejishi;
+	}
+
+	public float getStep1_price() {
+		return step1_price;
+	}
+
+	public void setStep1_price(float step1Price) {
+		step1_price = step1Price;
+	}
+
+	public float getStep2_price() {
+		return step2_price;
+	}
+
+	public void setStep2_price(float step2Price) {
+		step2_price = step2Price;
+	}
+
+	public float getStep3_price() {
+		return step3_price;
+	}
+
+	public void setStep3_price(float step3Price) {
+		step3_price = step3Price;
+	}
+
+	public float getFundofend() {
+		return fundofend;
+	}
+
+	public void setFundofend(float fundofend) {
+		this.fundofend = fundofend;
+	}
+
+	public String getComplete_time() {
+		return complete_time;
+	}
+
+	public void setComplete_time(String completeTime) {
+		complete_time = completeTime;
+	}
+
+}

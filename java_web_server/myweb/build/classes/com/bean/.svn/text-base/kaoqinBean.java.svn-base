@@ -1,0 +1,41 @@
+package Table_bean;
+
+public class kaoqinBean {
+
+	public kaoqinBean() {
+		// TODO Auto-generated constructor stub
+	}
+
+//id 自增  姓名  考勤日期   考勤状态
+	private int id;
+	private String name;
+	private int kaoqin_date;
+	private String state;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public int getKaoqin_date() {
+		return kaoqin_date;
+	}
+	public void setKaoqin_date(int kaoqin_date) {
+		this.kaoqin_date = kaoqin_date;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+
+}

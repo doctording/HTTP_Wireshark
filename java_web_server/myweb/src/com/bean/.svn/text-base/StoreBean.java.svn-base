@@ -1,0 +1,28 @@
+package Table_bean;
+
+public class StoreBean {
+	//现在就这2个属性
+	private int storeID ;//
+	private String storename;//店名
+	
+	public StoreBean() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public int getStoreID() {
+		return storeID;
+	}
+
+	public void setStoreID(int storeID) {
+		this.storeID = storeID;
+	}
+
+	public String getStorename() {
+		return storename;
+	}
+
+	public void setStorename(String storename) {
+		this.storename = storename;
+	}
+	
+}

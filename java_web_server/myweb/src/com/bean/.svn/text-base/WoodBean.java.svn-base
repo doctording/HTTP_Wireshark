@@ -1,0 +1,207 @@
+package Table_bean;
+
+public class WoodBean {
+
+	//13¸ö×Ö¶Î
+	private int woodID;
+	private String wood_name;
+	private float wood_ratio;
+	private float wood_disc_ratio;
+	private float wood_warning;
+	private float suanliao;//calculate_material; 
+	private float kailiao;//open_material;
+	private float mugong;//woodworking;
+	private float diqi;//primer;
+	private float pendi;//spray_bottom;
+	private float penmian;//spray_face;
+	private float wujin;//hardware;	
+	private float anzhuang;//installation;
+	
+	public WoodBean()
+	{
+		super();
+	}
+
+	/**
+	 * @return the woodID
+	 */
+	public int getWoodID() {
+		return woodID;
+	}
+
+	/**
+	 * @param woodID the woodID to set
+	 */
+	public void setWoodID(int woodID) {
+		this.woodID = woodID;
+	}
+
+	/**
+	 * @return the wood_name
+	 */
+	public String getWood_name() {
+		return wood_name;
+	}
+
+	/**
+	 * @param wood_name the wood_name to set
+	 */
+	public void setWood_name(String wood_name) {
+		this.wood_name = wood_name;
+	}
+
+	/**
+	 * @return the wood_ratio
+	 */
+	public float getWood_ratio() {
+		return wood_ratio;
+	}
+
+	/**
+	 * @param wood_ratio the wood_ratio to set
+	 */
+	public void setWood_ratio(float wood_ratio) {
+		this.wood_ratio = wood_ratio;
+	}
+
+	/**
+	 * @return the wood_disc_ratio
+	 */
+	public float getWood_disc_ratio() {
+		return wood_disc_ratio;
+	}
+
+	/**
+	 * @param wood_disc_ratio the wood_disc_ratio to set
+	 */
+	public void setWood_disc_ratio(float wood_disc_ratio) {
+		this.wood_disc_ratio = wood_disc_ratio;
+	}
+
+	/**
+	 * @return the wood_warning
+	 */
+	public float getWood_warning() {
+		return wood_warning;
+	}
+
+	/**
+	 * @param wood_warning the wood_warning to set
+	 */
+	public void setWood_warning(float wood_warning) {
+		this.wood_warning = wood_warning;
+	}
+
+	/**
+	 * @return the suanliao
+	 */
+	public float getSuanliao() {
+		return suanliao;
+	}
+
+	/**
+	 * @param suanliao the suanliao to set
+	 */
+	public void setSuanliao(float suanliao) {
+		this.suanliao = suanliao;
+	}
+
+	/**
+	 * @return the kailiao
+	 */
+	public float getKailiao() {
+		return kailiao;
+	}
+
+	/**
+	 * @param kailiao the kailiao to set
+	 */
+	public void setKailiao(float kailiao) {
+		this.kailiao = kailiao;
+	}
+
+	/**
+	 * @return the mugong
+	 */
+	public float getMugong() {
+		return mugong;
+	}
+
+	/**
+	 * @param mugong the mugong to set
+	 */
+	public void setMugong(float mugong) {
+		this.mugong = mugong;
+	}
+
+	/**
+	 * @return the diqi
+	 */
+	public float getDiqi() {
+		return diqi;
+	}
+
+	/**
+	 * @param diqi the diqi to set
+	 */
+	public void setDiqi(float diqi) {
+		this.diqi = diqi;
+	}
+
+	/**
+	 * @return the pendi
+	 */
+	public float getPendi() {
+		return pendi;
+	}
+
+	/**
+	 * @param pendi the pendi to set
+	 */
+	public void setPendi(float pendi) {
+		this.pendi = pendi;
+	}
+
+	/**
+	 * @return the penmian
+	 */
+	public float getPenmian() {
+		return penmian;
+	}
+
+	/**
+	 * @param penmian the penmian to set
+	 */
+	public void setPenmian(float penmian) {
+		this.penmian = penmian;
+	}
+
+	/**
+	 * @return the wujin
+	 */
+	public float getWujin() {
+		return wujin;
+	}
+
+	/**
+	 * @param wujin the wujin to set
+	 */
+	public void setWujin(float wujin) {
+		this.wujin = wujin;
+	}
+
+	/**
+	 * @return the anzhunag
+	 */
+	public float getAnzhuang() {
+		return anzhuang;
+	}
+
+	/**
+	 * @param anzhunag the anzhunag to set
+	 */
+	public void setAnzhuang(float anzhunag) {
+		this.anzhuang = anzhunag;
+	}
+	
+}

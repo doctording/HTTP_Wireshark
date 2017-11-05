@@ -1,0 +1,672 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import Table_bean.*;
+
+
+public class Table_Price_addition {
+	
+	public Table_Price_addition()
+	{
+		super();
+	}
+	
+	//添加附加款种类     
+	public int insertAddition(String addition_name,String addition_unit,float addition_price,float addition_cost,int addition_sign,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin)throws Exception  {
+		//注意：要先判断该附加款名是否已经存在
+		String sql = "INSERT INTO addition(additionID,addition_name,addition_unit,addition_price,addition_cost,addition_sign,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		int additionID = 0;
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, additionID);
+		pstmt.setString(2, addition_name);
+		pstmt.setString(3,addition_unit);
+		pstmt.setFloat(4,addition_price);
+		pstmt.setFloat(5,addition_cost);
+		pstmt.setInt(6,addition_sign);
+		pstmt.setFloat(7, suanliao);
+		pstmt.setFloat(8, kailiao);
+		pstmt.setFloat(9, mugong);
+		pstmt.setFloat(10, diqi);
+		pstmt.setFloat(11, pendi);
+		pstmt.setFloat(12, penmian);
+		pstmt.setFloat(13, wujin);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//获取所有附加款信息
+	public ArrayList findTotalAddition(String pageNo)throws Exception 
+	{
+		ArrayList additionlist = new ArrayList();
+		String sql = "SELECT * FROM addition order by(additionID)" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpAdditionID=rs.getInt(1);
+				
+				String tmpAddition_name=rs.getString(2);
+				// 进行编码转换
+				tmpAddition_name=new String(tmpAddition_name.getBytes("GBK"));
+				
+				String tmpAddition_unit=rs.getString(3);
+				// 进行编码转换
+				tmpAddition_unit=new String(tmpAddition_unit.getBytes("GBK"));
+				
+				float tmpAddition_price=rs.getFloat(4);
+				float tmpAddition_cost=rs.getFloat(5);
+				int tmpAddition_sign=rs.getInt(6);
+				float tmpSuanliao=rs.getFloat(7);
+				float tmpKailiao=rs.getFloat(8);
+				float tmpMugong=rs.getFloat(9);
+				float tmpDiqi=rs.getFloat(10);
+				float tmpPendi=rs.getFloat(11);
+				float tmpPenmian=rs.getFloat(12);
+				float tmpWujin=rs.getFloat(13);
+			
+			
+				Price_additionBean addition = new Price_additionBean();
+				addition.setAdditionID(tmpAdditionID);
+				addition.setAddition_name(tmpAddition_name);
+				addition.setAddition_unit(tmpAddition_unit);
+				addition.setAddition_price(tmpAddition_price);
+				addition.setAddition_price(tmpAddition_cost);
+				addition.setAddition_sign(tmpAddition_sign);
+				addition.setSuanliao(tmpSuanliao);
+				addition.setKailiao(tmpKailiao);
+				addition.setMugong(tmpMugong);
+				addition.setDiqi(tmpDiqi);
+				addition.setPendi(tmpPendi);
+				addition.setPenmian(tmpPenmian);
+				addition.setWujin(tmpWujin);
+				// 把对象添加到集合中
+				additionlist.add(addition);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return additionlist;
+	}	
+	
+	
+	public boolean hasExist(String addition_name,int addition_sign) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from addition where addition_name='");
+	sql1.append(addition_name);
+	sql1.append("' AND addition_sign='");
+	sql1.append(addition_sign);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+	
+	//获取门附加款或者抽附加款(门附加款addition_sign字段=1;抽附加款addition_sign字段=2)
+public ArrayList selectAdditionBySign(int addition_sign) throws Exception  {
+		
+		ArrayList additionlist = new ArrayList();
+		String sql = "select * from price_addition where addition_sign =? " ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, addition_sign);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			int index = 0;
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpAdditionID=rs.getInt(1);
+				
+				String tmpAddition_name=rs.getString(2);
+				// 进行编码转换
+				tmpAddition_name=new String(tmpAddition_name.getBytes("GBK"));
+				
+				String tmpAddition_unit=rs.getString(3);
+				// 进行编码转换
+				tmpAddition_unit=rs.getString(3);
+				
+				float tmpAddition_cost=rs.getFloat(4);
+				float tmpAddition_price=rs.getFloat(5);
+				int tmpAddition_sign=rs.getInt(6);
+				float tmpSuanliao=rs.getFloat(7);
+				float tmpKailiao=rs.getFloat(8);
+				float tmpMugong=rs.getFloat(9);
+				float tmpDiqi=rs.getFloat(10);
+				float tmpPendi=rs.getFloat(11);
+				float tmpPenmian=rs.getFloat(12);
+				float tmpWujin=rs.getFloat(13);
+			
+			
+				Price_additionBean addition = new Price_additionBean();
+				addition.setAdditionID(tmpAdditionID);
+				addition.setAddition_name(tmpAddition_name);
+				addition.setAddition_unit(tmpAddition_unit);
+				addition.setAddition_price(tmpAddition_price);
+				addition.setAddition_cost(tmpAddition_cost);
+				addition.setAddition_sign(tmpAddition_sign);
+				addition.setSuanliao(tmpSuanliao);
+				addition.setKailiao(tmpKailiao);
+				addition.setMugong(tmpMugong);
+				addition.setDiqi(tmpDiqi);
+				addition.setPendi(tmpPendi);
+				addition.setPenmian(tmpPenmian);
+				addition.setWujin(tmpWujin);
+
+				// 把对象添加到集合中
+				additionlist.add(addition);
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return additionlist;
+	}	
+public Price_additionBean  selectAddition(String addition_name,int addition_sign) throws Exception  {
+	
+	Price_additionBean addition = new Price_additionBean();
+	String sql = "select * from price_addition where addition_name =? AND addition_sign =?" ;
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();;
+	ResultSet rs=null;
+	
+	// 下面是针对数据库的具体操作
+	try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, addition_name);
+		pstmt.setInt(2, addition_sign);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+
+		// 循环计数器
+		// 对结果集进行遍历
+		while(rs.next())
+		{
+			// 循环到第index条
+			
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+			// 获取结果集中的信息
+			int tmpAdditionID=rs.getInt(1);
+			
+			String tmpAddition_name=rs.getString(2);
+			// 进行编码转换
+			tmpAddition_name=new String(tmpAddition_name.getBytes("GBK"));
+			
+			String tmpAddition_unit=rs.getString(3);
+			// 进行编码转换
+			tmpAddition_unit=new String(tmpAddition_unit.getBytes("GBK"));
+			
+
+			float tmpAddition_price=rs.getFloat(4);
+			float tmpAddition_cost=rs.getFloat(5);
+			int tmpAddition_sign=rs.getInt(6);
+			float tmpSuanliao=rs.getFloat(7);
+			float tmpKailiao=rs.getFloat(8);
+			float tmpMugong=rs.getFloat(9);
+			float tmpDiqi=rs.getFloat(10);
+			float tmpPendi=rs.getFloat(11);
+			float tmpPenmian=rs.getFloat(12);
+			float tmpWujin=rs.getFloat(13);
+
+		
+			
+			addition.setAdditionID(tmpAdditionID);
+			addition.setAddition_name(tmpAddition_name);
+			addition.setAddition_unit(tmpAddition_unit);
+			addition.setAddition_price(tmpAddition_price);
+			addition.setAddition_cost(tmpAddition_cost);
+			addition.setAddition_sign(tmpAddition_sign);
+			addition.setSuanliao(tmpSuanliao);
+			addition.setKailiao(tmpKailiao);
+			addition.setMugong(tmpMugong);
+			addition.setDiqi(tmpDiqi);
+			addition.setPendi(tmpPendi);
+			addition.setPenmian(tmpPenmian);
+			addition.setWujin(tmpWujin);
+		
+		}
+	}
+	catch (Exception e)
+	{
+		throw new Exception("操作出现异常");
+	}
+	finally {
+		// 关闭数据库连接
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	return addition;
+}	
+
+	public Integer getPageCount()throws Exception 
+	{
+		int pageCount=1;
+		String sql = "SELECT * FROM price_addition ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取用户的个数
+			int count=0;
+			while(rs.next()){
+				count++;
+			}
+						
+			// 计算总页数
+			pageCount = (count-1)/10+1;
+			
+		} 
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		
+		return new Integer(pageCount);
+		
+	}
+
+	//修改与更新附加款数据表数据(附加款名不允许修改)
+	public int UpdateAddition(String addition_name,String addition_unit,float addition_price,float addition_cost,int addition_sign,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin)throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("UPDATE addition SET addition_unit='");
+		sql1.append(addition_unit);
+		sql1.append("' , addition_price='");		
+		sql1.append(addition_price);
+		sql1.append("' , addition_cost='");
+		sql1.append(addition_cost);
+		sql1.append("' , suanliao='");
+		sql1.append(suanliao);
+		sql1.append("' , kailiao='");
+		sql1.append(kailiao);
+		sql1.append("' , mugong='");
+		sql1.append(mugong);
+		sql1.append("' , diqi='");
+		sql1.append(diqi);
+		sql1.append("' , pendi='");
+		sql1.append(pendi);
+		sql1.append("' , penmian='");
+		sql1.append(penmian);
+		sql1.append("' , wujin='");
+		sql1.append(wujin);
+		sql1.append("'WHERE addition_name='");
+		sql1.append(addition_name);
+		sql1.append("'AND addition_sign='");
+		sql1.append(addition_sign);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+	
+	public int DeleteAddition(String addition_name,int addition_sign)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from addition where addition_name='");
+		sql1.append(addition_name);
+		sql1.append("'AND addition_sign='");
+		sql1.append(addition_sign);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+public Price_additionBean  selectAdditionById(int additionID) throws Exception  {
+		
+		Price_additionBean addition = new Price_additionBean();
+		String sql = "select * from price_addition where additionID=?" ;
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setInt(1, additionID);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+
+			// 循环计数器
+			// 对结果集进行遍历
+			while(rs.next())
+			{
+				// 循环到第index条
+				
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				int tmpAdditionID=rs.getInt(1);
+				
+				String tmpAddition_name=rs.getString(2);
+				// 进行编码转换
+				tmpAddition_name=new String(tmpAddition_name.getBytes("GBK"));
+				
+				String tmpAddition_unit=rs.getString(2);
+				// 进行编码转换
+				tmpAddition_unit=new String(tmpAddition_unit.getBytes("GBK"));
+				
+				float tmpAddition_price=rs.getFloat(4);
+				float tmpAddition_cost=rs.getFloat(5);
+				int tmpAddition_sign=rs.getInt(6);
+				float tmpsuanliao=rs.getFloat(7);
+				float tmpkailiao=rs.getFloat(8);
+				float tmpmugong=rs.getFloat(9);
+				float tmpdiqi=rs.getFloat(10);
+				float tmppendi=rs.getFloat(11);
+				float tmppenmian=rs.getFloat(12);
+				float tmpwujin=rs.getFloat(13);
+				
+				
+				
+			
+			
+				
+				addition.setAdditionID(tmpAdditionID);
+				addition.setAddition_name(tmpAddition_name);
+				addition.setAddition_unit(tmpAddition_unit);
+				addition.setAddition_price(tmpAddition_price);
+				addition.setAddition_cost(tmpAddition_cost);
+				addition.setAddition_sign(tmpAddition_sign);
+				addition.setSuanliao(tmpsuanliao);
+				addition.setKailiao(tmpkailiao);
+				addition.setMugong(tmpmugong);
+				addition.setDiqi(tmpdiqi);
+				addition.setPendi(tmppendi);
+				addition.setPenmian(tmppenmian);
+				addition.setWujin(tmpwujin);
+				
+
+			
+			}
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return addition;
+	}	
+
+	
+	
+	//根据id进行更新
+	public int updateadditonById(int additionID,String addition_name,String addition_unit,float addition_cost,float addition_price,int addition_sign,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin)throws Exception{
+		String sql = "UPDATE price_addition SET addition_name=?,addition_unit=?,addition_cost=?,addition_price=?, addition_sign=?,suanliao=?,kailiao=?,mugong=?,diqi=?,pendi=?,penmian=?,wujin=? where additionID=? ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		try{
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			pstmt.setString(1,addition_name);
+			pstmt.setString(2, addition_unit);
+			pstmt.setFloat(3, addition_cost);
+			pstmt.setFloat(4, addition_price);
+			
+			pstmt.setInt(5, addition_sign);
+			pstmt.setFloat(6, suanliao);
+			pstmt.setFloat(7, kailiao);
+			pstmt.setFloat(8, mugong);
+			pstmt.setFloat(9, diqi);
+			pstmt.setFloat(10, pendi);
+			pstmt.setFloat(11, penmian);
+			pstmt.setFloat(12, wujin);
+			
+			pstmt.setInt(13,additionID);
+	
+			// 进行数据库插入操作
+		 int count1=pstmt.executeUpdate();
+		 return count1;
+		}
+		catch(Exception e){
+			throw new Exception("出现异常");
+		}
+		finally{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();}
+		}
+
+	
+	
+	//添加附加款种类     
+	public int insertAddition1(String addition_name,String addition_unit,float addition_price,float addition_cost,int addition_sign,float suanliao,float kailiao,float mugong,float diqi,float pendi,float penmian,float wujin)throws Exception  {
+		//注意：要先判断该附加款名是否已经存在
+		String sql = "INSERT INTO price_addition(addition_name,addition_unit,addition_price,addition_cost,addition_sign,suanliao,kailiao,mugong,diqi,pendi,penmian,wujin) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+	
+				// 下面是针对数据库的具体操作
+		try {
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1, addition_name);
+		pstmt.setString(2,addition_unit);
+		pstmt.setFloat(3,addition_price);
+		pstmt.setFloat(4,addition_cost);
+		pstmt.setInt(5,addition_sign);
+		
+		pstmt.setFloat(6, suanliao);
+		pstmt.setFloat(7, kailiao);
+		pstmt.setFloat(8, mugong);
+		pstmt.setFloat(9, diqi);
+		pstmt.setFloat(10, pendi);
+		pstmt.setFloat(11, penmian);
+		pstmt.setFloat(12, wujin);
+		// 进行数据库插入操作
+		insert_count=pstmt.executeUpdate();
+		}
+
+		catch (Exception e) {
+		throw new Exception("操作出现异常");
+		} finally 
+		{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+		}
+		return insert_count;		
+	}
+
+	
+	//根据id进行删除
+	public int DeleteAdditionById(int additionID)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("DELETE from price_addition where additionID='");
+		sql1.append(additionID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+}

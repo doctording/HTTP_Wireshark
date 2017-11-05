@@ -1,0 +1,504 @@
+package jdbc;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+
+
+import Time_bean.*;//时间
+import Table_bean.*;//bean
+
+public class Table_Kaoqin {
+
+	public Table_Kaoqin()
+	{
+		super();
+	}
+	
+	//根据name date或者是唯一选择一个元组
+	public kaoqinBean getOneBeanByNameDate(String name,int kaoqin_date) throws Exception  {
+		
+		kaoqinBean kaoqin = new kaoqinBean();
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("select * from kaoqin where name='");
+		sql1.append(name);
+		sql1.append("'");
+		sql1.append(" and kaoqin_date='");
+		sql1.append(kaoqin_date);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				kaoqin.setId(rs.getInt(1));
+				kaoqin.setName(rs.getString("name"));
+				kaoqin.setKaoqin_date(rs.getInt("kaoqin_date"));
+				kaoqin.setState(rs.getString("state"));
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return kaoqin;		
+	}
+	
+	// 向kaoqin表里插入一条记录，即插入一个人某一天的出勤情况
+	public int insertoneBean(String name, int kaoqin_date, String state)
+			throws Exception {
+		// 注意：要先判断该油漆名是否已经存在
+		String sql = "INSERT INTO kaoqin(name,kaoqin_date,state) VALUES (?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count = 0;
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			pstmt.setString(1, name);
+			pstmt.setInt(2, kaoqin_date);
+			pstmt.setString(3, state);
+			// 进行数据库插入操作
+			insert_count = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+		
+	//根据name date唯一删除一个元组
+	public int deleteOneBean(String name,int kaoqin_date)throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("delete from kaoqin where name='");
+		sql1.append(name);
+		sql1.append("'");
+		sql1.append(" and kaoqin_date='");
+		sql1.append(kaoqin_date);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}	
+	
+	// 根据name删除一个人的所有记录 不要轻易使用
+	public int deleteAllByName(String name) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("delete from kaoqin where name='");
+		sql1.append(name);
+		sql1.append("';");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+		
+	// 根据kaoqin_date 删除某一天的所有人的考勤信息（返回删除记录的条数）
+	public int deleteADayKaoqin(int kaoqin_date) throws Exception {
+
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("delete from kaoqin where kaoqin_date=");
+		sql1.append("'");
+		sql1.append(kaoqin_date);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return delete_count;
+	}
+	
+	// 修改与更新一个人某一天的状态
+	public int updateKaoqin(String name, int kaoqin_date, String state)
+			throws Exception {
+		StringBuffer sql1 = new StringBuffer();
+		sql1.append("UPDATE kaoqin SET state='");
+		sql1.append(state);
+		sql1.append("' where name='");
+		sql1.append(name);
+		sql1.append("' and kaoqin_date='");
+		sql1.append(kaoqin_date);
+		sql1.append("'");
+		String sql = sql1.toString();
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int update_count = 0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			update_count = pstmt.executeUpdate();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return update_count;
+	}	
+		
+	//得到某年某月所有人的考勤 
+	public ArrayList getAYearMonthKaoqinBean(int year,int month) throws Exception{
+		//如2013 11   20131100-20131200之间的所有信息   
+		int t1=year*10000+month*100 ;
+		int t2=year*10000+(month+1)*100 ;
+		
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM kaoqin WHERE kaoqin_date>'"+t1+"' and kaoqin_date<'"+t2+"';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId=rs.getInt("id");
+				
+				String tmpName = rs.getString("name");
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				int tmpKaoqin_date=rs.getInt("kaoqin_date");
+
+				String tmpState = rs.getString("state");
+				// 进行编码转换
+				tmpState = new String(tmpState.getBytes("GBK"));
+
+
+				kaoqinBean user=new kaoqinBean();
+				
+				user.setId(tmpId);
+				user.setName(tmpName);
+				user.setKaoqin_date(tmpKaoqin_date);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+	
+	// 得到一个人的所有考勤信息 顺序按时间由小到大
+	public ArrayList getKaoqinBeanByName(String name) throws Exception {
+
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM kaoqin WHERE name='" + name + "' order by kaoqin_date;";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpName = rs.getString("name");
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				int tmpKaoqin_date = rs.getInt("kaoqin_date");
+
+				String tmpState = rs.getString("state");
+				// 进行编码转换
+				tmpState = new String(tmpState.getBytes("GBK"));
+
+				kaoqinBean user = new kaoqinBean();
+				user.setId(tmpId);
+				user.setName(tmpName);
+				user.setKaoqin_date(tmpKaoqin_date);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+	
+	// 得到一个人 某年某月的所有考勤信息
+	public ArrayList getKaoqinBeanByName(String name, int year, int month)
+			throws Exception {
+		int t1 = year * 10000 + month * 100;
+		int t2 = year * 10000 + (month + 1) * 100;
+
+		ArrayList userlist = new ArrayList();
+		String sql = "SELECT * FROM kaoqin WHERE name='" + name
+				+ "' and kaoqin_date>'" + t1 + "' and kaoqin_date<'" + t2
+				+ "';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpName = rs.getString("name");
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				int tmpKaoqin_date = rs.getInt("kaoqin_date");
+
+				String tmpState = rs.getString("state");
+				// 进行编码转换
+				tmpState = new String(tmpState.getBytes("GBK"));
+
+				kaoqinBean user = new kaoqinBean();
+				user.setId(tmpId);
+				user.setName(tmpName);
+				user.setKaoqin_date(tmpKaoqin_date);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+ 
+	// 得到一个人 某年某月的考勤类别
+	public ArrayList getKaoqinStyle(String name, int year, int month,int type)
+			throws Exception {
+		int t1 = year * 10000 + month * 100;
+		int t2 = year * 10000 + (month + 1) * 100;
+
+		ArrayList userlist = new ArrayList();
+		String sql1="";
+		switch(type){
+		case 0:sql1="";break;
+		case 1:sql1="0";break;//请假1天
+		case 2:sql1="5";break;//请假半天
+		case 3:sql1="*";break;//节假日
+		case 4:sql1="补";break;//待工补助一天
+		case 5:sql1="半";break;//待工补助半天
+		case 6:sql1="伤";break;}//工伤待工补助一天
+		String sql = "SELECT * FROM kaoqin WHERE name='" + name
+				+ "' and kaoqin_date>'" + t1 + "' and kaoqin_date<'" + t2
+				+ "'"+"and state='"+sql1+"';";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		ResultSet rs = null;
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				int tmpId = rs.getInt("id");
+
+				String tmpName = rs.getString("name");
+				// 进行编码转换
+				tmpName = new String(tmpName.getBytes("GBK"));
+
+				int tmpKaoqin_date = rs.getInt("kaoqin_date");
+
+				String tmpState = rs.getString("state");
+				// 进行编码转换
+				tmpState = new String(tmpState.getBytes("GBK"));
+
+				kaoqinBean user = new kaoqinBean();
+				user.setId(tmpId);
+				user.setName(tmpName);
+				user.setKaoqin_date(tmpKaoqin_date);
+				user.setState(tmpState);
+				// 把对象添加到集合中
+				userlist.add(user);
+			}
+		} catch (Exception e) {
+			throw new Exception("操作出现异常");
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return userlist;
+	}
+
+	
+	/*public static void main(String args[]) throws Exception{
+		Table_Kaoqin t=new Table_Kaoqin();
+		kaoqinBean kb=new kaoqinBean();
+		int c=t.updateKaoqin("刘羽",20121204 , "伤");
+		System.out.println(c);
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Table_Kaoqin t=new Table_Kaoqin();
+		kaoqinBean kb=new kaoqinBean();
+		int c=t.deleteAllByName("ding");
+		System.out.println(c);
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Table_Kaoqin t=new Table_Kaoqin();
+		kaoqinBean kb=new kaoqinBean();
+		ArrayList kaoqinlist=t.getKaoqinBeanByName("刘羽");
+		java.util.Iterator it=kaoqinlist.iterator();
+		while(it.hasNext()){
+			kb=(kaoqinBean) it.next();
+			System.out.println(kb.getId());
+			System.out.println(kb.getName());
+			System.out.println(kb.getKaoqin_date());
+			System.out.println(kb.getState());
+		}
+		
+	}*/
+	
+	/*public static void main(String args[]) throws Exception{
+		Table_Kaoqin t=new Table_Kaoqin();
+		kaoqinBean kb=new kaoqinBean();
+		t.Deletekaoqin("刘羽", 20131124);
+	}*/
+	/*public static void main(String args[]) throws Exception{
+		Table_Kaoqin t=new Table_Kaoqin();
+		kaoqinBean kb=new kaoqinBean();
+		kb=t.getBeanByNameDate("刘羽", 20131124);
+		System.out.println(kb.getName());
+		System.out.println(kb.getKaoqin_date());
+		System.out.println(kb.getState());
+		
+	}*/
+/*	public static void main(String args[]) throws Exception{
+		Table_Kaoqin t=new Table_Kaoqin();
+		kaoqinBean kb=new kaoqinBean();
+		String name="刘羽";int datee=20131130;
+		
+		//int count=t.getAllNameNumber();
+		//System.out.println(count);
+		boolean is=t.hasExitByNameDate(name, datee);
+		if(!is){
+			int count=t.insert(name, datee, "*");
+			System.out.println(count);
+		}
+//		System.out.println(count);
+//			while(it.hasNext()){
+//			String s=it.next();
+//			System.out.println(s);
+//			System.out.println(kb.getName());
+//			System.out.println(kb.getDate());
+//			System.out.println(kb.getState());
+//   	}
+		ArrayList kaoqinlist=t.findTotalByName(name);
+		java.util.Iterator it= kaoqinlist.iterator();
+		while(it.hasNext()){
+			kb=(kaoqinBean) it.next();
+			System.out.print(kb.getName()+" ");
+			System.out.print(kb.getDatee()+" ");
+			System.out.print(kb.getState());
+			System.out.println();
+		}		
+//	}
+	}*/
+}

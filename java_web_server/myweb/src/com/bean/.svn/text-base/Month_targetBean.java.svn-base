@@ -1,0 +1,47 @@
+package Table_bean;
+
+public class Month_targetBean {
+	private int monthID;
+	private int month;
+	private float target;
+	private int sign;
+
+	public Month_targetBean()
+	{
+		super();
+		
+}
+
+	public int getMonthID() {
+		return monthID;
+	}
+
+	public void setMonthID(int monthID) {
+		this.monthID = monthID;
+	}
+
+	public int getMonth() {
+		return month;
+	}
+
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+	public float getTarget() {
+		return target;
+	}
+
+	public void setTarget(float target) {
+		this.target = target;
+	}
+
+	public int getSign() {
+		return sign;
+	}
+
+	public void setSign(int sign) {
+		this.sign = sign;
+	}
+	
+}

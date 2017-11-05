@@ -1,0 +1,129 @@
+package Table_bean;
+
+public class Month_teamBean {
+
+	private int monthID;
+	private String team;
+	private String name;
+	private String date;
+	private float gongfei;
+	private float income;
+	private float rework;
+	private float dai_shang;
+	private float onduty;
+	private float daigong;
+	private float gongshang;
+	private float absence;
+	private float absence_add;
+	private float total;
+	private float expend;
+	private float month_daily;
+	private float remain;
+	public Month_teamBean()
+	{
+		super();
+}
+	public int getMonthID() {
+		return monthID;
+	}
+	public void setMonthID(int monthID) {
+		this.monthID = monthID;
+	}
+	public String getTeam() {
+		return team;
+	}
+	public void setTeam(String team) {
+		this.team = team;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public float getGongfei() {
+		return gongfei;
+	}
+	public void setGongfei(float gongfei) {
+		this.gongfei = gongfei;
+	}
+	public float getIncome() {
+		return income;
+	}
+	public void setIncome(float income) {
+		this.income = income;
+	}
+	public float getRework() {
+		return rework;
+	}
+	public void setRework(float rework) {
+		this.rework = rework;
+	}
+	public float getDai_shang() {
+		return dai_shang;
+	}
+	public void setDai_shang(float daiShang) {
+		dai_shang = daiShang;
+	}
+	public float getOnduty() {
+		return onduty;
+	}
+	public void setOnduty(float onduty) {
+		this.onduty = onduty;
+	}
+	public float getDaigong() {
+		return daigong;
+	}
+	public void setDaigong(float daigong) {
+		this.daigong = daigong;
+	}
+	public float getGongshang() {
+		return gongshang;
+	}
+	public void setGongshang(float gongshang) {
+		this.gongshang = gongshang;
+	}
+	public float getAbsence() {
+		return absence;
+	}
+	public void setAbsence(float absence) {
+		this.absence = absence;
+	}
+	public float getAbsence_add() {
+		return absence_add;
+	}
+	public void setAbsence_add(float absenceAdd) {
+		absence_add = absenceAdd;
+	}
+	public float getTotal() {
+		return total;
+	}
+	public void setTotal(float total) {
+		this.total = total;
+	}
+	public float getExpend() {
+		return expend;
+	}
+	public void setExpend(float expend) {
+		this.expend = expend;
+	}
+	public float getMonth_daily() {
+		return month_daily;
+	}
+	public void setMonth_daily(float monthDaily) {
+		month_daily = monthDaily;
+	}
+	public float getRemain() {
+		return remain;
+	}
+	public void setRemain(float remain) {
+		this.remain = remain;
+	}
+	
+}

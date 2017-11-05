@@ -1,0 +1,3313 @@
+package jdbc;
+
+import java.net.URLDecoder;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+
+
+import Table_bean.*;
+import Time_bean.*;
+
+
+public class Table_Order_con_pro {
+	
+	private float tmpRepair_price;
+
+
+	public Table_Order_con_pro()
+	{
+		super();
+	}
+	
+  	public int getlastCon_proID(String contract_num)throws Exception 
+	{
+
+		String sql = "SELECT * FROM order_con_pro WHERE contract_num = '"+contract_num+"' ";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();;
+		ResultSet rs=null;
+		Order_con_proBean order_con_proinfo= new Order_con_proBean();
+		int lastid=0;
+		
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			// 获取公告的个数
+            while (rs.next()){
+            	lastid++;
+            }
+		}
+		catch (Exception e)
+			{
+				throw new Exception("操作出现异常");
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+			}
+		return lastid;		
+	}
+	
+public int insertOrder_con_pro(String contract_num)throws Exception{
+		String sql = "INSERT INTO order_con_pro(con_proID,contract_num,pro_name,pro_item,style_name,wood_name,paint_name,length,height,depth,amount,totals,pro_price,discount,price,add_price,con_pro_mark,state) SELECT * FROM con_pro WHERE `contract_num`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int insert_count=0;
+		try{
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,contract_num);
+			insert_count=pstmt.executeUpdate();
+		}
+		catch(Exception e){
+			throw new Exception("出现异常");
+		}
+		finally{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		return insert_count;
+	}
+
+public int insertOneOrder_con_pro(String contract_num,String pro_name,String pro_item,String style_name,String wood_name,String paint_name,float length,float height,float depth,int amount,float totals,float pro_price,float discount,float price,String con_pro_mark,String retreat_reason,String repair_reason,String dispose,float repair_price,String responsibility,float bear_lines,int construction_project,String construction_people,String completetime,String allcompletetime)throws Exception{
+	String sql = "INSERT INTO `order_con_pro` (`con_proID`, `contract_num`, `pro_name`, `pro_item`, `style_name`, `wood_name`, `paint_name`, `length`, `height`, `depth`, `amount`, `totals`, `pro_price`, `discount`, `price`,  `add_price`, `con_pro_mark`, `state`,`retreat_reason`,`repair_reason`,`dispose`,`repair_price`,`responsibility`,`bear_lines`,`construction_project`,`construction_people`,`completetime`,`allcompletetime`)  VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	int state=1;
+	float add_price=0;
+	String id=String.valueOf(getlastCon_proID(contract_num)+1);
+	if((getlastCon_proID(contract_num)+1)<10){
+		id='0'+id;
+	}
+	String con_proID=contract_num+id;
+	int insert_count=0;
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		pstmt.setString(1,con_proID);
+		pstmt.setString(2,contract_num);
+		pstmt.setString(3,pro_name);
+		pstmt.setString(4,pro_item);
+		pstmt.setString(5,style_name);
+		pstmt.setString(6,wood_name);
+		pstmt.setString(7,paint_name);
+		pstmt.setFloat(8,length);
+		pstmt.setFloat(9,height);
+		pstmt.setFloat(10,depth);
+		pstmt.setInt(11,amount);
+		pstmt.setFloat(12,totals);
+		pstmt.setFloat(13,pro_price);
+		pstmt.setFloat(14,discount);
+		pstmt.setFloat(15,price);
+		pstmt.setFloat(16,add_price);
+		pstmt.setString(17,con_pro_mark);
+		pstmt.setInt(18,state);
+		pstmt.setString(19,retreat_reason);
+		pstmt.setString(20,repair_reason);
+		pstmt.setString(21,dispose);
+		pstmt.setFloat(22,repair_price);
+		pstmt.setString(23,responsibility);
+		pstmt.setFloat(24,bear_lines);
+		pstmt.setInt(25,construction_project);
+		pstmt.setString(26,construction_people);
+		pstmt.setString(27,completetime);
+		pstmt.setString(28,allcompletetime);
+		
+		
+		// 进行数据库插入操作
+		insert_count = pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return insert_count;
+}
+
+//删除合同里全部产品
+public void deleteOrder_con_pro(String contract_num)throws Exception{
+	String sql = "DELETE FROM order_con_pro WHERE `contract_num`=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+	
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,contract_num);
+		
+	 pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+}
+	
+//删除合同里某一产品
+public int deleteOne_Order_con_pro(String con_proID)throws Exception{
+	String sql = "DELETE FROM order_con_pro WHERE `con_proID`=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+	int deleteOne=0;
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,con_proID);
+		
+		deleteOne=pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	return deleteOne;
+}
+
+//修改更新order_con_pro表
+public void updateAllcompletetime(String con_proID,String allcompletetime)throws Exception{
+	String sql = "UPDATE  `order_con_pro` SET `allcompletetime`=? WHERE `con_proID`=?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,allcompletetime);
+		pstmt.setString(2,con_proID);
+		
+		
+		// 进行数据库插入操作
+	 pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	
+}
+public void saveState(String con_proID,int state)throws Exception{
+	String sql = "UPDATE order_con_pro SET `state`=? WHERE con_proID like ?";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	float add_price=0;
+	try{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1,state);
+		pstmt.setString(2,con_proID+"%");
+		
+		
+		// 进行数据库插入操作
+	 pstmt.executeUpdate();
+	}
+	catch(Exception e){
+		throw new Exception("出现异常");
+	}
+	finally{
+		// 关闭数据库连接
+		pstmt.close();
+		dbc.close();
+	}
+	
+}
+
+public ArrayList findTotalOrder_con_pro() throws Exception{
+	ArrayList con_prolist = new ArrayList();
+	String sql = "select * from order_con_pro  order by(con_proID)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+		
+	try{
+		//连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		
+		//数据库查询操作
+		rs = pstmt.executeQuery();
+		int index = 0;
+		while(rs.next())
+		{
+			// 循环到第index条
+			index++;
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+			// 获取结果集中的信息
+			String tmpCon_proID=rs.getString(1);
+			
+			String tmpContract_num=rs.getString(2);
+			tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+			
+			String tmpPro_name=rs.getString(3);
+			tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+			
+			String tmpPro_item=rs.getString(4);
+			tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+			
+			String tmpStyle_name=rs.getString(5);
+			tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+			
+			String tmpWood_name=rs.getString(6);
+			tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+			
+			String tmpPaint_name=rs.getString(7);
+			tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+							
+			float tmpLength=rs.getFloat(8);
+			float tmpHeight=rs.getFloat(9);
+			float tmpDepth=rs.getFloat(10);
+			int tmpAmount=rs.getInt(11);
+			float tmpTotals=rs.getFloat(12);
+			float tmpPro_price=rs.getFloat(13);
+			float tmpDiscount=rs.getFloat(14);
+			float tmpPrice=rs.getFloat(15);
+			float tmpAdd_price=rs.getFloat(16);
+
+			String tmpCon_pro_mark=rs.getString(17);
+			tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+			
+			int tmpState=rs.getInt(18);
+			
+			String tmpRetreat_reason=rs.getString(19);
+			tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+			
+			String tmpRepair_reason=rs.getString(20);
+			tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+			
+			String tmpDispose=rs.getString(21);
+			tmpDispose=new String(tmpDispose.getBytes("GBK"));
+			
+			float tmpRepair_price=rs.getFloat(22);
+			
+			String tmpResponsibility=rs.getString(23);
+			tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+			
+			float tmpBear_lines=rs.getFloat(24);
+			
+			int tmpConstruction_project=rs.getInt(25);
+			
+			String tmpConstruction_people=rs.getString(26);
+			tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+			
+			String tmpCompletetime=rs.getString(27);
+			tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+			
+			String tmpAllcompletetime=rs.getString(28);
+			tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+			// 进行编码转换
+						
+			Order_con_proBean order_con_pro = new Order_con_proBean();
+			order_con_pro.setCon_proID(tmpCon_proID);
+			order_con_pro.setContract_num(tmpContract_num);
+			order_con_pro.setPro_name(tmpPro_name);
+			order_con_pro.setPro_item(tmpPro_item);
+			order_con_pro.setStyle_name(tmpStyle_name);
+			order_con_pro.setWood_name(tmpWood_name);
+			order_con_pro.setPaint_name(tmpPaint_name);			
+			order_con_pro.setLength(tmpLength);
+			order_con_pro.setHeight(tmpHeight);
+			order_con_pro.setDepth(tmpDepth);
+			order_con_pro.setAmount(tmpAmount);
+			order_con_pro.setTotals(tmpTotals);
+			order_con_pro.setPro_price(tmpPro_price);
+			order_con_pro.setDiscount(tmpDiscount);
+			order_con_pro.setPrice(tmpPrice);
+			order_con_pro.setAdd_price(tmpAdd_price);
+			order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+			order_con_pro.setState(tmpState);
+			order_con_pro.setRetreat_reason(tmpRetreat_reason);
+			order_con_pro.setRepair_reason(tmpRepair_reason);
+			order_con_pro.setDispose(tmpDispose);
+			order_con_pro.setRepair_price(tmpRepair_price);
+			order_con_pro.setResponsibility(tmpResponsibility);
+			order_con_pro.setBear_lines(tmpBear_lines);
+			order_con_pro.setConstruction_project(tmpConstruction_project);
+			order_con_pro.setConstruction_people(tmpConstruction_people);
+			order_con_pro.setCompletetime(tmpCompletetime);
+			order_con_pro.setAllcompletetime(tmpAllcompletetime);
+			// 把对象添加到集合中
+			con_prolist.add(order_con_pro);
+		}
+	}
+	catch (Exception e){
+		throw new Exception("操作异常");
+	}
+	//关闭数据库
+	finally{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+		return con_prolist;
+}	
+public ArrayList findTotalOrder_con_pro(String contract_num) throws Exception{
+	ArrayList con_prolist = new ArrayList();
+	String sql = "select * from order_con_pro where contract_num = ? order by(con_proID)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+		
+	try{
+		//连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,contract_num);
+		//数据库查询操作
+		rs = pstmt.executeQuery();
+		int index = 0;
+		while(rs.next())
+		{
+			// 循环到第index条
+			index++;
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+			// 获取结果集中的信息
+			String tmpCon_proID=rs.getString(1);
+			
+			String tmpContract_num=rs.getString(2);
+			tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+			
+			String tmpPro_name=rs.getString(3);
+			tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+			
+			String tmpPro_item=rs.getString(4);
+			tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+			
+			String tmpStyle_name=rs.getString(5);
+			tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+			
+			String tmpWood_name=rs.getString(6);
+			tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+			
+			String tmpPaint_name=rs.getString(7);
+			tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+							
+			float tmpLength=rs.getFloat(8);
+			float tmpHeight=rs.getFloat(9);
+			float tmpDepth=rs.getFloat(10);
+			int tmpAmount=rs.getInt(11);
+			float tmpTotals=rs.getFloat(12);
+			float tmpPro_price=rs.getFloat(13);
+			float tmpDiscount=rs.getFloat(14);
+			float tmpPrice=rs.getFloat(15);
+			float tmpAdd_price=rs.getFloat(16);
+
+			String tmpCon_pro_mark=rs.getString(17);
+			tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+			
+			int tmpState=rs.getInt(18);
+			
+			String tmpRetreat_reason=rs.getString(19);
+			tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+			
+			String tmpRepair_reason=rs.getString(20);
+			tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+			
+			String tmpDispose=rs.getString(21);
+			tmpDispose=new String(tmpDispose.getBytes("GBK"));
+			
+			float tmpRepair_price=rs.getFloat(22);
+			
+			String tmpResponsibility=rs.getString(23);
+			tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+			
+			float tmpBear_lines=rs.getFloat(24);
+			
+			int tmpConstruction_project=rs.getInt(25);
+			
+			String tmpConstruction_people=rs.getString(26);
+			tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+			
+			String tmpCompletetime=rs.getString(27);
+			tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+			
+			String tmpAllcompletetime=rs.getString(28);
+			tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+			// 进行编码转换
+						
+			Order_con_proBean order_con_pro = new Order_con_proBean();
+			order_con_pro.setCon_proID(tmpCon_proID);
+			order_con_pro.setContract_num(tmpContract_num);
+			order_con_pro.setPro_name(tmpPro_name);
+			order_con_pro.setPro_item(tmpPro_item);
+			order_con_pro.setStyle_name(tmpStyle_name);
+			order_con_pro.setWood_name(tmpWood_name);
+			order_con_pro.setPaint_name(tmpPaint_name);			
+			order_con_pro.setLength(tmpLength);
+			order_con_pro.setHeight(tmpHeight);
+			order_con_pro.setDepth(tmpDepth);
+			order_con_pro.setAmount(tmpAmount);
+			order_con_pro.setTotals(tmpTotals);
+			order_con_pro.setPro_price(tmpPro_price);
+			order_con_pro.setDiscount(tmpDiscount);
+			order_con_pro.setPrice(tmpPrice);
+			order_con_pro.setAdd_price(tmpAdd_price);
+			order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+			order_con_pro.setState(tmpState);
+			order_con_pro.setRetreat_reason(tmpRetreat_reason);
+			order_con_pro.setRepair_reason(tmpRepair_reason);
+			order_con_pro.setDispose(tmpDispose);
+			order_con_pro.setRepair_price(tmpRepair_price);
+			order_con_pro.setResponsibility(tmpResponsibility);
+			order_con_pro.setBear_lines(tmpBear_lines);
+			order_con_pro.setConstruction_project(tmpConstruction_project);
+			order_con_pro.setConstruction_people(tmpConstruction_people);
+			order_con_pro.setCompletetime(tmpCompletetime);
+			order_con_pro.setAllcompletetime(tmpAllcompletetime);
+			// 把对象添加到集合中
+			con_prolist.add(order_con_pro);
+		}
+	}
+	catch (Exception e){
+		throw new Exception("操作异常");
+	}
+	//关闭数据库
+	finally{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+		return con_prolist;
+}	
+
+public ArrayList findTotalOrder_con_pro(String contract_num,String searchType,String searchValue) throws Exception{
+	ArrayList con_prolist = new ArrayList();
+	String sql = "select * from order_con_pro where contract_num = ? ";
+	if(searchValue!=""&&searchValue!=null){
+		searchValue=URLDecoder.decode(searchValue,"UTF-8");
+	if (searchType.equals("5")) {
+		sql += " and pro_name ='" + searchValue + "'";
+	} else if (searchType.equals("6")) {
+		sql += " and pro_item ='" + searchValue + "'";
+	}
+	}
+	sql+="order by(con_proID)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+		
+	try{
+		//连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,contract_num);
+		//数据库查询操作
+		rs = pstmt.executeQuery();
+		int index = 0;
+		while(rs.next())
+		{
+			// 循环到第index条
+			index++;
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+			// 获取结果集中的信息
+			String tmpCon_proID=rs.getString(1);
+			
+			String tmpContract_num=rs.getString(2);
+			tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+			
+			String tmpPro_name=rs.getString(3);
+			tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+			
+			String tmpPro_item=rs.getString(4);
+			tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+			
+			String tmpStyle_name=rs.getString(5);
+			tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+			
+			String tmpWood_name=rs.getString(6);
+			tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+			
+			String tmpPaint_name=rs.getString(7);
+			tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+							
+			float tmpLength=rs.getFloat(8);
+			float tmpHeight=rs.getFloat(9);
+			float tmpDepth=rs.getFloat(10);
+			int tmpAmount=rs.getInt(11);
+			float tmpTotals=rs.getFloat(12);
+			float tmpPro_price=rs.getFloat(13);
+			float tmpDiscount=rs.getFloat(14);
+			float tmpPrice=rs.getFloat(15);
+			float tmpAdd_price=rs.getFloat(16);
+
+			String tmpCon_pro_mark=rs.getString(17);
+			tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+			
+			int tmpState=rs.getInt(18);
+			
+			String tmpRetreat_reason=rs.getString(19);
+			tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+			
+			String tmpRepair_reason=rs.getString(20);
+			tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+			
+			String tmpDispose=rs.getString(21);
+			tmpDispose=new String(tmpDispose.getBytes("GBK"));
+			
+			float tmpRepair_price=rs.getFloat(22);
+			
+			String tmpResponsibility=rs.getString(23);
+			tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+			
+			float tmpBear_lines=rs.getFloat(24);
+			
+			int tmpConstruction_project=rs.getInt(25);
+			
+			String tmpConstruction_people=rs.getString(26);
+			tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+			
+			String tmpCompletetime=rs.getString(27);
+			tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+			
+			String tmpAllcompletetime=rs.getString(28);
+			tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+			// 进行编码转换
+						
+			Order_con_proBean order_con_pro = new Order_con_proBean();
+			order_con_pro.setCon_proID(tmpCon_proID);
+			order_con_pro.setContract_num(tmpContract_num);
+			order_con_pro.setPro_name(tmpPro_name);
+			order_con_pro.setPro_item(tmpPro_item);
+			order_con_pro.setStyle_name(tmpStyle_name);
+			order_con_pro.setWood_name(tmpWood_name);
+			order_con_pro.setPaint_name(tmpPaint_name);			
+			order_con_pro.setLength(tmpLength);
+			order_con_pro.setHeight(tmpHeight);
+			order_con_pro.setDepth(tmpDepth);
+			order_con_pro.setAmount(tmpAmount);
+			order_con_pro.setTotals(tmpTotals);
+			order_con_pro.setPro_price(tmpPro_price);
+			order_con_pro.setDiscount(tmpDiscount);
+			order_con_pro.setPrice(tmpPrice);
+			order_con_pro.setAdd_price(tmpAdd_price);
+			order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+			order_con_pro.setState(tmpState);
+			order_con_pro.setRetreat_reason(tmpRetreat_reason);
+			order_con_pro.setRepair_reason(tmpRepair_reason);
+			order_con_pro.setDispose(tmpDispose);
+			order_con_pro.setRepair_price(tmpRepair_price);
+			order_con_pro.setResponsibility(tmpResponsibility);
+			order_con_pro.setBear_lines(tmpBear_lines);
+			order_con_pro.setConstruction_project(tmpConstruction_project);
+			order_con_pro.setConstruction_people(tmpConstruction_people);
+			order_con_pro.setCompletetime(tmpCompletetime);
+			order_con_pro.setAllcompletetime(tmpAllcompletetime);
+			// 把对象添加到集合中
+			con_prolist.add(order_con_pro);
+		}
+	}
+	catch (Exception e){
+		throw new Exception("操作异常");
+	}
+	//关闭数据库
+	finally{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+		return con_prolist;
+}	
+
+public ArrayList findTotalOrder_con_proBypage(String contract_num,int page) throws Exception{
+	ArrayList con_prolist = new ArrayList();
+	String sql = "select * from order_con_pro where contract_num = ? order by(con_proID)";
+	PreparedStatement pstmt = null;
+	DataBaseConnection dbc = new DataBaseConnection();
+	ResultSet rs = null;
+		
+	try{
+		//连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setString(1,contract_num);
+		//数据库查询操作
+		rs = pstmt.executeQuery();
+		int index = 0;
+		while(rs.next())
+		{
+			// 循环到第index条
+			index++;
+			if(index<3*page+1&&index>3*(page-1)){
+			
+			// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+			// 获取结果集中的信息
+			String tmpCon_proID=rs.getString(1);
+			
+			String tmpContract_num=rs.getString(2);
+			tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+			
+			String tmpPro_name=rs.getString(3);
+			tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+			
+			String tmpPro_item=rs.getString(4);
+			tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+			
+			String tmpStyle_name=rs.getString(5);
+			tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+			
+			String tmpWood_name=rs.getString(6);
+			tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+			
+			String tmpPaint_name=rs.getString(7);
+			tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+							
+			float tmpLength=rs.getFloat(8);
+			float tmpHeight=rs.getFloat(9);
+			float tmpDepth=rs.getFloat(10);
+			int tmpAmount=rs.getInt(11);
+			float tmpTotals=rs.getFloat(12);
+			float tmpPro_price=rs.getFloat(13);
+			float tmpDiscount=rs.getFloat(14);
+			float tmpPrice=rs.getFloat(15);
+			float tmpAdd_price=rs.getFloat(16);
+
+			String tmpCon_pro_mark=rs.getString(17);
+			tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+			
+			int tmpState=rs.getInt(18);
+			
+			String tmpRetreat_reason=rs.getString(19);
+			tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+			
+			String tmpRepair_reason=rs.getString(20);
+			tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+			
+			String tmpDispose=rs.getString(21);
+			tmpDispose=new String(tmpDispose.getBytes("GBK"));
+			
+			float tmpRepair_price=rs.getFloat(22);
+			
+			String tmpResponsibility=rs.getString(23);
+			tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+			
+			float tmpBear_lines=rs.getFloat(24);
+			
+			int tmpConstruction_project=rs.getInt(25);
+			
+			String tmpConstruction_people=rs.getString(26);
+			tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+			
+			String tmpCompletetime=rs.getString(27);
+			tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+			
+			String tmpAllcompletetime=rs.getString(28);
+			tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+			// 进行编码转换
+						
+			Order_con_proBean order_con_pro = new Order_con_proBean();
+			order_con_pro.setCon_proID(tmpCon_proID);
+			order_con_pro.setContract_num(tmpContract_num);
+			order_con_pro.setPro_name(tmpPro_name);
+			order_con_pro.setPro_item(tmpPro_item);
+			order_con_pro.setStyle_name(tmpStyle_name);
+			order_con_pro.setWood_name(tmpWood_name);
+			order_con_pro.setPaint_name(tmpPaint_name);			
+			order_con_pro.setLength(tmpLength);
+			order_con_pro.setHeight(tmpHeight);
+			order_con_pro.setDepth(tmpDepth);
+			order_con_pro.setAmount(tmpAmount);
+			order_con_pro.setTotals(tmpTotals);
+			order_con_pro.setPro_price(tmpPro_price);
+			order_con_pro.setDiscount(tmpDiscount);
+			order_con_pro.setPrice(tmpPrice);
+			order_con_pro.setAdd_price(tmpAdd_price);
+			order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+			order_con_pro.setState(tmpState);
+			order_con_pro.setRetreat_reason(tmpRetreat_reason);
+			order_con_pro.setRepair_reason(tmpRepair_reason);
+			order_con_pro.setDispose(tmpDispose);
+			order_con_pro.setRepair_price(tmpRepair_price);
+			order_con_pro.setResponsibility(tmpResponsibility);
+			order_con_pro.setBear_lines(tmpBear_lines);
+			order_con_pro.setConstruction_project(tmpConstruction_project);
+			order_con_pro.setConstruction_people(tmpConstruction_people);
+			order_con_pro.setCompletetime(tmpCompletetime);
+			order_con_pro.setAllcompletetime(tmpAllcompletetime);
+			// 把对象添加到集合中
+			con_prolist.add(order_con_pro);
+		}}
+	}
+	catch (Exception e){
+		throw new Exception("操作异常");
+	}
+	//关闭数据库
+	finally{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+		return con_prolist;
+}	
+		
+	
+	public Order_con_proBean selectOrder_con_proByContract_num(String contract_num) throws Exception  {
+		
+		Order_con_proBean order_con_pro = new Order_con_proBean();
+		String sql = "select * from order_con_pro where contract_num = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, contract_num);
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			if(rs.next()){
+				order_con_pro.setCon_proID(rs.getString("Con_proID"));
+				order_con_pro.setContract_num(rs.getString("Contract_num"));
+				order_con_pro.setPro_name(rs.getString("Pro_name"));
+				order_con_pro.setPro_item(rs.getString("Pro_item"));
+				order_con_pro.setStyle_name(rs.getString("Style_name"));
+				order_con_pro.setWood_name(rs.getString("Wood_name"));
+				order_con_pro.setPaint_name(rs.getString("Paint_name"));
+				order_con_pro.setLength(rs.getFloat("Length"));
+				order_con_pro.setHeight(rs.getFloat("Height"));
+				order_con_pro.setDepth(rs.getFloat("Depth"));
+				order_con_pro.setAmount(rs.getInt("Amount"));
+				order_con_pro.setTotals(rs.getFloat("Totals"));
+				order_con_pro.setPro_price(rs.getFloat("Pro_price"));
+				order_con_pro.setDiscount(rs.getFloat("Discount"));
+				order_con_pro.setPrice(rs.getFloat("Price"));
+				order_con_pro.setAdd_price(rs.getFloat("add_price"));
+				order_con_pro.setCon_pro_mark(rs.getString("Con_pro_mark"));
+				order_con_pro.setState(rs.getInt("State"));
+				order_con_pro.setRetreat_reason(rs.getString("Retreat_reason"));
+				order_con_pro.setRepair_reason(rs.getString("Repair_reason"));
+				order_con_pro.setDispose(rs.getString("Dispose"));
+				order_con_pro.setRepair_price(rs.getFloat("Repair_price"));
+				order_con_pro.setResponsibility(rs.getString("Responsibility"));
+				order_con_pro.setBear_lines(rs.getFloat("Bear_lines"));
+				order_con_pro.setConstruction_project(rs.getInt("Construction_project"));
+				order_con_pro.setConstruction_people(rs.getString("Construction_people"));
+				order_con_pro.setCompletetime(rs.getString("Completetime"));
+				order_con_pro.setAllcompletetime(rs.getString("Allcompletetime"));
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return order_con_pro;
+	}
+	
+	public ArrayList selectByContract_num(String contract_num)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where contract_num='");
+		sql1.append(contract_num);
+		sql1.append("'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	public Order_con_proBean selectByID(String con_proID)throws Exception  {
+		Order_con_proBean order_con_pro = new Order_con_proBean();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where con_proID = '");
+		sql1.append(con_proID);
+		sql1.append("'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return order_con_pro;
+		
+	}	
+	public ArrayList selectBycon_proID(String con_proID)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where con_proID like '");
+		sql1.append(con_proID);
+		sql1.append("%'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	public ArrayList selectByRespon(String name)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where responsibility like '");
+		sql1.append(name);
+		sql1.append("%'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	
+	public boolean hasExist(String contract_num) throws Exception
+	{
+	boolean find=false;
+	// 连接对象
+	DataBaseConnection dbc = new DataBaseConnection();;
+	dbc.DataBase_Connection();
+	// 结果集对象
+	ResultSet rs=null;
+	// 查询语句
+	StringBuffer sql1 = new StringBuffer();
+	PreparedStatement pstmt = null;
+	sql1.append("select * from order_con_pro where contract_num='");
+	sql1.append(contract_num);
+	sql1.append("'");
+	String sql = sql1.toString();
+	
+	try
+	{
+		// 连接数据库
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		// 进行数据库查询操作
+		rs= pstmt.executeQuery();
+	if(rs.next())
+	find = true;
+	else
+	find = false;
+	}catch(Exception e)
+	{
+	}
+	finally
+	{
+		rs.close();
+		pstmt.close();
+		dbc.close();
+	}
+	// 返回查找的结果
+	return find;
+	}
+
+	
+	/* 回复数更新 ,回复数删除
+	 * public int updateCount(String con_proID)throws Exception  {
+		
+		int update_count=0;
+		
+		String sql="update message set count=count+1 where messageID= ? ";
+
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库		
+		dbc.DataBase_Connection();
+		pstmt = dbc.getConnection().prepareStatement(sql);
+		pstmt.setInt(1, Integer.parseInt(messageID));
+		update_count=pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+		// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+	    }	
+		return update_count;
+	}
+	
+	public int ClearTableCon_pro()throws Exception {
+
+		String sql = "DELETE  FROM con_pro";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		int delete_count=0;
+
+		// 下面是针对数据库的具体操作
+		try {
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			// 进行数据库更新操作
+			delete_count=pstmt.executeUpdate();
+			
+		}
+		catch (Exception e)
+		{
+			throw new Exception("操作出现异常");
+		}
+		finally
+		{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+
+		}
+		return delete_count;
+	}*/
+	
+	
+	//根据工单中产品状态列示
+	public ArrayList selectByState(String contract_num,int state)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND state='");
+		sql1.append(state);
+		sql1.append("'");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	
+	public ArrayList selectByState(String contract_num, int state,
+			String searchType, String searchValue) throws Exception {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND state='");
+		sql1.append(state);
+		sql1.append("'");
+		String sql = sql1.toString();
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+		if (searchType.equals("5")) {
+			sql += " and pro_name ='" + searchValue + "'";
+		} else if (searchType.equals("6")) {
+			sql += " and pro_item ='" + searchValue + "'";
+		}
+		}
+		System.out.println(sql);
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// 获取结果集中的信息
+				String tmpCon_proID = rs.getString(1);
+
+				String tmpContract_num = rs.getString(2);
+				tmpContract_num = new String(tmpContract_num.getBytes("GBK"));
+
+				String tmpPro_name = rs.getString(3);
+				tmpPro_name = new String(tmpPro_name.getBytes("GBK"));
+
+				String tmpPro_item = rs.getString(4);
+				tmpPro_item = new String(tmpPro_item.getBytes("GBK"));
+
+				String tmpStyle_name = rs.getString(5);
+				tmpStyle_name = new String(tmpStyle_name.getBytes("GBK"));
+
+				String tmpWood_name = rs.getString(6);
+				tmpWood_name = new String(tmpWood_name.getBytes("GBK"));
+
+				String tmpPaint_name = rs.getString(7);
+				tmpPaint_name = new String(tmpPaint_name.getBytes("GBK"));
+
+				float tmpLength = rs.getFloat(8);
+				float tmpHeight = rs.getFloat(9);
+				float tmpDepth = rs.getFloat(10);
+				int tmpAmount = rs.getInt(11);
+				float tmpTotals = rs.getFloat(12);
+				float tmpPro_price = rs.getFloat(13);
+				float tmpDiscount = rs.getFloat(14);
+				float tmpPrice = rs.getFloat(15);
+				float tmpAdd_price = rs.getFloat(16);
+
+				String tmpCon_pro_mark = rs.getString(17);
+				tmpCon_pro_mark = new String(tmpCon_pro_mark.getBytes("GBK"));
+
+				int tmpState = rs.getInt(18);
+
+				String tmpRetreat_reason = rs.getString(19);
+				tmpRetreat_reason = new String(
+						tmpRetreat_reason.getBytes("GBK"));
+
+				String tmpRepair_reason = rs.getString(20);
+				tmpRepair_reason = new String(tmpRepair_reason.getBytes("GBK"));
+
+				String tmpDispose = rs.getString(21);
+				tmpDispose = new String(tmpDispose.getBytes("GBK"));
+
+				float tmpRepair_price = rs.getFloat(22);
+
+				String tmpResponsibility = rs.getString(23);
+				tmpResponsibility = new String(
+						tmpResponsibility.getBytes("GBK"));
+
+				float tmpBear_lines = rs.getFloat(24);
+
+				int tmpConstruction_project = rs.getInt(25);
+
+				String tmpConstruction_people = rs.getString(26);
+				tmpConstruction_people = new String(
+						tmpConstruction_people.getBytes("GBK"));
+
+				String tmpCompletetime = rs.getString(27);
+				tmpCompletetime = new String(tmpCompletetime.getBytes("GBK"));
+
+				String tmpAllcompletetime = rs.getString(28);
+				tmpAllcompletetime = new String(
+						tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return con_prolist;
+
+	}
+
+	
+	public ArrayList State1or3(String contract_num)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where (contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND state='1' )OR (state='3' AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("')");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	
+	public ArrayList State1or3(String contract_num, String searchType,
+			String searchValue) throws Exception {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("SELECT * FROM order_con_pro WHERE  state IN('1','2','3')  AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("'");
+		String sql = sql1.toString();
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+		if (searchType.equals("5")) {
+			sql += " and pro_name ='" + searchValue + "'";
+		} else if (searchType.equals("6")) {
+			sql += " and pro_item ='" + searchValue + "'";
+		}
+		}
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+
+			// 进行数据库查询操作
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				// 获取结果集中的信息
+				String tmpCon_proID = rs.getString(1);
+
+				String tmpContract_num = rs.getString(2);
+				tmpContract_num = new String(tmpContract_num.getBytes("GBK"));
+
+				String tmpPro_name = rs.getString(3);
+				tmpPro_name = new String(tmpPro_name.getBytes("GBK"));
+
+				String tmpPro_item = rs.getString(4);
+				tmpPro_item = new String(tmpPro_item.getBytes("GBK"));
+
+				String tmpStyle_name = rs.getString(5);
+				tmpStyle_name = new String(tmpStyle_name.getBytes("GBK"));
+
+				String tmpWood_name = rs.getString(6);
+				tmpWood_name = new String(tmpWood_name.getBytes("GBK"));
+
+				String tmpPaint_name = rs.getString(7);
+				tmpPaint_name = new String(tmpPaint_name.getBytes("GBK"));
+
+				float tmpLength = rs.getFloat(8);
+				float tmpHeight = rs.getFloat(9);
+				float tmpDepth = rs.getFloat(10);
+				int tmpAmount = rs.getInt(11);
+				float tmpTotals = rs.getFloat(12);
+				float tmpPro_price = rs.getFloat(13);
+				float tmpDiscount = rs.getFloat(14);
+				float tmpPrice = rs.getFloat(15);
+				float tmpAdd_price = rs.getFloat(16);
+
+				String tmpCon_pro_mark = rs.getString(17);
+				tmpCon_pro_mark = new String(tmpCon_pro_mark.getBytes("GBK"));
+
+				int tmpState = rs.getInt(18);
+
+				String tmpRetreat_reason = rs.getString(19);
+				tmpRetreat_reason = new String(
+						tmpRetreat_reason.getBytes("GBK"));
+
+				String tmpRepair_reason = rs.getString(20);
+				tmpRepair_reason = new String(tmpRepair_reason.getBytes("GBK"));
+
+				String tmpDispose = rs.getString(21);
+				tmpDispose = new String(tmpDispose.getBytes("GBK"));
+
+				float tmpRepair_price = rs.getFloat(22);
+
+				String tmpResponsibility = rs.getString(23);
+				tmpResponsibility = new String(
+						tmpResponsibility.getBytes("GBK"));
+
+				float tmpBear_lines = rs.getFloat(24);
+
+				int tmpConstruction_project = rs.getInt(25);
+
+				String tmpConstruction_people = rs.getString(26);
+				tmpConstruction_people = new String(
+						tmpConstruction_people.getBytes("GBK"));
+
+				String tmpCompletetime = rs.getString(27);
+				tmpCompletetime = new String(tmpCompletetime.getBytes("GBK"));
+
+				String tmpAllcompletetime = rs.getString(28);
+				tmpAllcompletetime = new String(
+						tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+		return con_prolist;
+	}
+
+
+	
+	public ArrayList Stateshigong(String contract_num,String searchType,
+			String searchValue)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND ( state BETWEEN '4'  AND '11' OR  state BETWEEN '17' AND '24'  OR  state BETWEEN '14' AND '15'  OR  state BETWEEN '27' AND '28')");
+		String sql = sql1.toString();
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+			if (searchType.equals("5")) {
+				sql += " and pro_name ='" + searchValue + "'";
+			} else if (searchType.equals("6")) {
+				sql += " and pro_item ='" + searchValue + "'";
+			}
+			}
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	public ArrayList Stateshigong(String contract_num)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where (contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND state>'3' AND state<'12' )OR ( state>'16' AND state<'25' AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("')OR ( state>'13' AND state<'16' AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("')OR ( state>'26' AND state<'29' AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("')");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+	public ArrayList Statefanxiu(String contract_num,String searchType, String searchValue)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND (state BETWEEN '17'AND '24'  OR  state BETWEEN  '27' AND  '28')");
+		String sql = sql1.toString();
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+		if (searchType.equals("5")) {
+			sql += " and pro_name ='" + searchValue + "'";
+		} else if (searchType.equals("6")) {
+			sql += " and pro_item ='" + searchValue + "'";
+		}
+		}
+		System.out.println(sql);
+		
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}	
+	public ArrayList Statechuku(String contract_num,String searchType, String searchValue)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND (state BETWEEN '12'AND '13'  OR  state BETWEEN  '25' AND  '26')");
+		String sql = sql1.toString();
+		if(searchValue!=""&&searchValue!=null){
+			searchValue=URLDecoder.decode(searchValue,"UTF-8");
+		if (searchType.equals("5")) {
+			sql += " and pro_name ='" + searchValue + "'";
+		} else if (searchType.equals("6")) {
+			sql += " and pro_item ='" + searchValue + "'";
+		}
+		}
+		System.out.println(sql);
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+
+	public ArrayList Statefanxiu(String contract_num)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where (contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND  state>'16' AND state<'25') OR ( state>'26' AND state<'29' AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("')");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}	
+	public ArrayList Statechuku(String contract_num)throws Exception  {
+		ArrayList con_prolist = new ArrayList();
+		StringBuffer sql1 = new StringBuffer();
+		PreparedStatement pstmt = null;
+		sql1.append("select * from order_con_pro where (contract_num='");
+		sql1.append(contract_num);
+		sql1.append("' AND state>'11' AND state<'14' )OR ( state>'24' AND state<'27' AND contract_num='");
+		sql1.append(contract_num);
+		sql1.append("')");
+		String sql = sql1.toString();
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs=null;
+		try {
+
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			
+			// 进行数据库查询操作
+			rs= pstmt.executeQuery();
+			
+			while(rs.next()){
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e) {
+				e.printStackTrace();
+			}
+		finally {
+			// 关闭数据库连接
+			rs.close();
+			pstmt.close();
+			dbc.close();	
+			}
+        return con_prolist;
+		
+	}
+
+	public void insertOrder_con_pro_reason(String contract_num,String reason)throws Exception{
+		String sql = "UPDATE order_con_pro SET `retreat_reason`=? WHERE con_proID like ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		float add_price=0;
+		try{
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,reason);
+			pstmt.setString(2,contract_num+"%");
+			
+			// 进行数据库插入操作
+		 pstmt.executeUpdate();
+		}
+		catch(Exception e){
+			throw new Exception("出现异常");
+		}
+		finally{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		
+	}
+
+	public String insertByRepair(Order_con_proBean bean) throws Exception {
+		String sql = " insert order_con_pro(con_proID,contract_num,pro_name,pro_item,"
+				+ "wood_name,style_name,paint_name,con_pro_mark,repair_reason,"
+				+ "dispose,repair_price,responsibility,bear_lines,completetime,chudingfanan,state) "
+				+ "values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		String con_proID = "";
+		try {
+			dbc.DataBase_Connection();
+			String cut = getConProID(dbc, bean.getContract_num());
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			con_proID = bean.getContract_num() + cut + "01";
+			pstmt.setString(1, con_proID);
+			String tmpPro_name=bean.getPro_name();
+			tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+			String tmpContract_num=bean.getContract_num();
+			tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+			String tmpWood_name=bean.getWood_name();
+			tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+			String tmpPaint_name=bean.getPaint_name();
+			tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+			String tmpStyle_name=bean.getStyle_name();
+			tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+			String tmpCon_pro_mark=bean.getCon_pro_mark();
+			tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+			String tmpRepair_reason=bean.getRepair_reason();
+			tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+			String tmpDispose=bean.getDispose();
+			tmpDispose=new String(tmpDispose.getBytes("GBK"));
+			String tmpResponsibility=bean.getResponsibility();
+			tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+			String tmpCompletetime=bean.getCompletetime();
+			tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+			String tmpChuDingFanAn=bean.getChuDingFanAn();
+			tmpChuDingFanAn=new String(tmpChuDingFanAn.getBytes("GBK"));
+			
+			
+			pstmt.setString(2, bean.getContract_num());
+			pstmt.setString(3, tmpPro_name);
+			pstmt.setString(4, tmpPro_name);
+			pstmt.setString(5, tmpWood_name);
+			pstmt.setString(6, tmpStyle_name);
+			pstmt.setString(7, tmpPaint_name);
+			pstmt.setString(8, tmpCon_pro_mark);
+			pstmt.setString(9, tmpRepair_reason);
+			pstmt.setString(10, tmpDispose);
+			pstmt.setFloat(11, bean.getRepair_price());
+			pstmt.setString(12, tmpResponsibility);
+			pstmt.setFloat(13, bean.getBear_lines());
+			pstmt.setString(14, tmpCompletetime);
+			pstmt.setString(15, tmpChuDingFanAn);
+			pstmt.setString(16, "17");
+			pstmt.execute();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常", e);
+		} finally {
+			pstmt.close();
+			dbc.close();
+		}
+		return con_proID;
+	}
+	public String updateByRepair(Order_con_proBean bean) throws Exception {
+		String sql = " update order_con_pro SET `repair_reason`=?,"
+				+ "`dispose`=?,`repair_price`=?,`responsibility`=?,`bear_lines`=?,`completetime`=?,`chudingfanan`=?,`state`=?"
+				+ "WHERE `con_proID`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		String con_proID = "";
+		try {
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, bean.getRepair_reason());
+			pstmt.setString(2, bean.getDispose());
+			pstmt.setFloat(3, bean.getRepair_price());
+			pstmt.setString(4, bean.getResponsibility());
+			pstmt.setFloat(5, bean.getBear_lines());
+			pstmt.setString(6, bean.getCompletetime());
+			pstmt.setString(7, bean.getChuDingFanAn());
+			pstmt.setString(8, "17");
+			pstmt.setString(9, bean.getCon_proID());
+			pstmt.execute();
+		} catch (Exception e) {
+			throw new Exception("操作出现异常", e);
+		} finally {
+			pstmt.close();
+			dbc.close();
+		}
+		return con_proID;
+	}
+	public void updateCon_pro(String con_proID,String contract_num,String pro_name,String pro_item,String style_name,String wood_name,String paint_name,float length,float height,float depth,int amount,float totals,float pro_price,float discount,float price,String con_pro_mark)throws Exception{
+		String sql = "UPDATE  `order_con_pro` SET `contract_num`=?, `pro_name`=?, `pro_item`=?, `style_name`=?, `wood_name`=?, `paint_name`=?, `length`=?, `height`=?, `depth`=?, `amount`=?, `totals`=?, `pro_price`=?, `discount`=?, `price`=?, `add_price`=?, `con_pro_mark`=?  WHERE `con_proID`=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		float add_price=0;
+		
+		try{
+			// 连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,contract_num);
+			pstmt.setString(2,pro_name);
+			pstmt.setString(3,pro_item);
+			pstmt.setString(4,style_name);
+			pstmt.setString(5,wood_name);
+			pstmt.setString(6,paint_name);
+			pstmt.setFloat(7,length);
+			pstmt.setFloat(8,height);
+			pstmt.setFloat(9,depth);
+			pstmt.setInt(10,amount);
+			pstmt.setFloat(11,totals);
+			pstmt.setFloat(12,pro_price);
+			pstmt.setFloat(13,discount);
+			pstmt.setFloat(14,price);
+			pstmt.setFloat(15,add_price);
+			pstmt.setString(16,con_pro_mark);
+			pstmt.setString(17,con_proID);
+			
+			// 进行数据库插入操作
+		 pstmt.executeUpdate();
+		}
+		catch(Exception e){
+			throw new Exception("出现异常");
+		}
+		finally{
+			// 关闭数据库连接
+			pstmt.close();
+			dbc.close();
+		}
+		
+	}
+	public String getConProID(DataBaseConnection dbc, String contractNum) {
+		String sql = "SELECT COUNT(1) cut FROM order_con_pro WHERE contract_num=?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int cut = 0;
+		String result = "";
+		try {
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1, contractNum);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				cut = rs.getInt("cut");
+			}
+		} catch (Exception e) {
+		} finally {
+			try {
+				pstmt.close();
+			} catch (Exception e) {
+			}
+		}
+		cut = cut + 1;
+		if (cut < 10) {
+			result = "0" + cut;
+		} else {
+			result = String.valueOf(cut);
+		}
+		return result;
+	}
+	public ArrayList findDistnOrdercon_pro(String contract_num) throws Exception{
+		ArrayList con_prolist = new ArrayList();
+		String sql = "select distinct  pro_name  from order_con_pro where contract_num = ?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+			
+		try{
+			//连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,contract_num);
+			//数据库查询操作
+			rs = pstmt.executeQuery();
+			int index = 0;
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				
+		
+				String tmpPro_name=rs.getString(1);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				Order_con_proBean con_pro = new Order_con_proBean();
+				con_pro.setPro_name(tmpPro_name);
+			
+				// 把对象添加到集合中
+				con_prolist.add(con_pro);
+			}
+		}
+		catch (Exception e){
+			throw new Exception("操作异常");
+		}
+		//关闭数据库
+		finally{
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+			return con_prolist;
+	}	public ArrayList findOrder_con_pro(String contract_num,String pro_name) throws Exception{
+		ArrayList con_prolist = new ArrayList();
+		String sql = "select * from order_con_pro where contract_num = ? AND pro_name=?";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+			
+		try{
+			//连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,contract_num);
+			pstmt.setString(2,pro_name);
+			//数据库查询操作
+			rs = pstmt.executeQuery();
+			int index = 0;
+			while(rs.next())
+			{
+String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+				
+			}
+		}
+		catch (Exception e){
+			throw new Exception("操作异常");
+		}
+		//关闭数据库
+		finally{
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+			return con_prolist;
+	}	
+	
+	
+	public ArrayList findOrder_con_pro(String contract_num) throws Exception{
+		ArrayList con_prolist = new ArrayList();
+		String sql = "select * from order_con_pro where contract_num = ? order by(pro_name)";
+		PreparedStatement pstmt = null;
+		DataBaseConnection dbc = new DataBaseConnection();
+		ResultSet rs = null;
+			
+		try{
+			//连接数据库
+			dbc.DataBase_Connection();
+			pstmt = dbc.getConnection().prepareStatement(sql);
+			pstmt.setString(1,contract_num);
+			//数据库查询操作
+			rs = pstmt.executeQuery();
+			int index = 0;
+			while(rs.next())
+			{
+				// 循环到第index条
+				index++;
+				// 如果还没有到要显示的第一条记录，则不处理，继续遍历
+
+				// 获取结果集中的信息
+				String tmpCon_proID=rs.getString(1);
+				
+				String tmpContract_num=rs.getString(2);
+				tmpContract_num=new String(tmpContract_num.getBytes("GBK"));
+				
+				String tmpPro_name=rs.getString(3);
+				tmpPro_name=new String(tmpPro_name.getBytes("GBK"));
+				
+				String tmpPro_item=rs.getString(4);
+				tmpPro_item=new String(tmpPro_item.getBytes("GBK"));
+				
+				String tmpStyle_name=rs.getString(5);
+				tmpStyle_name=new String(tmpStyle_name.getBytes("GBK"));
+				
+				String tmpWood_name=rs.getString(6);
+				tmpWood_name=new String(tmpWood_name.getBytes("GBK"));
+				
+				String tmpPaint_name=rs.getString(7);
+				tmpPaint_name=new String(tmpPaint_name.getBytes("GBK"));
+								
+				float tmpLength=rs.getFloat(8);
+				float tmpHeight=rs.getFloat(9);
+				float tmpDepth=rs.getFloat(10);
+				int tmpAmount=rs.getInt(11);
+				float tmpTotals=rs.getFloat(12);
+				float tmpPro_price=rs.getFloat(13);
+				float tmpDiscount=rs.getFloat(14);
+				float tmpPrice=rs.getFloat(15);
+				float tmpAdd_price=rs.getFloat(16);
+
+				String tmpCon_pro_mark=rs.getString(17);
+				tmpCon_pro_mark=new String(tmpCon_pro_mark.getBytes("GBK"));
+				
+				int tmpState=rs.getInt(18);
+				
+				String tmpRetreat_reason=rs.getString(19);
+				tmpRetreat_reason=new String(tmpRetreat_reason.getBytes("GBK"));
+				
+				String tmpRepair_reason=rs.getString(20);
+				tmpRepair_reason=new String(tmpRepair_reason.getBytes("GBK"));
+				
+				String tmpDispose=rs.getString(21);
+				tmpDispose=new String(tmpDispose.getBytes("GBK"));
+				
+				float tmpRepair_price=rs.getFloat(22);
+				
+				String tmpResponsibility=rs.getString(23);
+				tmpResponsibility=new String(tmpResponsibility.getBytes("GBK"));
+				
+				float tmpBear_lines=rs.getFloat(24);
+				
+				int tmpConstruction_project=rs.getInt(25);
+				
+				String tmpConstruction_people=rs.getString(26);
+				tmpConstruction_people=new String(tmpConstruction_people.getBytes("GBK"));
+				
+				String tmpCompletetime=rs.getString(27);
+				tmpCompletetime=new String(tmpCompletetime.getBytes("GBK"));
+				
+				String tmpAllcompletetime=rs.getString(28);
+				tmpAllcompletetime=new String(tmpAllcompletetime.getBytes("GBK"));
+				// 进行编码转换
+							
+				Order_con_proBean order_con_pro = new Order_con_proBean();
+				order_con_pro.setCon_proID(tmpCon_proID);
+				order_con_pro.setContract_num(tmpContract_num);
+				order_con_pro.setPro_name(tmpPro_name);
+				order_con_pro.setPro_item(tmpPro_item);
+				order_con_pro.setStyle_name(tmpStyle_name);
+				order_con_pro.setWood_name(tmpWood_name);
+				order_con_pro.setPaint_name(tmpPaint_name);			
+				order_con_pro.setLength(tmpLength);
+				order_con_pro.setHeight(tmpHeight);
+				order_con_pro.setDepth(tmpDepth);
+				order_con_pro.setAmount(tmpAmount);
+				order_con_pro.setTotals(tmpTotals);
+				order_con_pro.setPro_price(tmpPro_price);
+				order_con_pro.setDiscount(tmpDiscount);
+				order_con_pro.setPrice(tmpPrice);
+				order_con_pro.setAdd_price(tmpAdd_price);
+				order_con_pro.setCon_pro_mark(tmpCon_pro_mark);
+				order_con_pro.setState(tmpState);
+				order_con_pro.setRetreat_reason(tmpRetreat_reason);
+				order_con_pro.setRepair_reason(tmpRepair_reason);
+				order_con_pro.setDispose(tmpDispose);
+				order_con_pro.setRepair_price(tmpRepair_price);
+				order_con_pro.setResponsibility(tmpResponsibility);
+				order_con_pro.setBear_lines(tmpBear_lines);
+				order_con_pro.setConstruction_project(tmpConstruction_project);
+				order_con_pro.setConstruction_people(tmpConstruction_people);
+				order_con_pro.setCompletetime(tmpCompletetime);
+				order_con_pro.setAllcompletetime(tmpAllcompletetime);
+				// 把对象添加到集合中
+				con_prolist.add(order_con_pro);
+			}
+		}
+		catch (Exception e){
+			throw new Exception("操作异常");
+		}
+		//关闭数据库
+		finally{
+			rs.close();
+			pstmt.close();
+			dbc.close();
+		}
+			return con_prolist;
+	}	
+	
+	
+}
